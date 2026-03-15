@@ -69,7 +69,16 @@
     "resetAll": "Reset all data",
     "resetConfirm": "This action is irreversible. Continue?",
     "modePro": "Pro Mode",
-    "modeProSoon": "Feature coming soon"
+    "modeProSoon": "Feature coming soon",
+    "notifications": "Notifications",
+    "mealReminders": "Meal reminders",
+    "mealRemindersDesc": "Lunch, dinner, and streak danger",
+    "notifEnabled": "Enabled ✓",
+    "notifEnable": "Enable",
+    "notifDenied": "Notifications blocked. Enable them in your browser settings.",
+    "notifPromptTitle": "Enable meal reminders?",
+    "notifPromptEnable": "Enable",
+    "notifPromptLater": "Later"
   },
   "nutriScore": {
     "calculated": "Nutritional score calculated",
@@ -173,6 +182,13 @@
       "ingredients": "different ingredients",
       "lightDinners": "light dinners"
     }
+  },
+  "tierlist": {
+    "title": "My Tier List",
+    "subtitle": "Your meals ranked by pleasure and nutrition",
+    "noData": "Validate and rate at least 3 meals to see your Tier List!",
+    "export": "Export",
+    "meals": "meals"
   },
   "onboarding": {
     "back": "Back",

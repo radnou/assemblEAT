@@ -69,7 +69,16 @@
     "resetAll": "Réinitialiser toutes les données",
     "resetConfirm": "Cette action est irréversible. Continuer ?",
     "modePro": "Mode Pro",
-    "modeProSoon": "Fonctionnalité bientôt disponible"
+    "modeProSoon": "Fonctionnalité bientôt disponible",
+    "notifications": "Notifications",
+    "mealReminders": "Rappels de repas",
+    "mealRemindersDesc": "Midi, soir, et streak en danger",
+    "notifEnabled": "Activé ✓",
+    "notifEnable": "Activer",
+    "notifDenied": "Notifications bloquées. Activez-les dans les paramètres de votre navigateur.",
+    "notifPromptTitle": "Activer les rappels de repas ?",
+    "notifPromptEnable": "Activer",
+    "notifPromptLater": "Plus tard"
   },
   "nutriScore": {
     "calculated": "Score nutritionnel calculé",
@@ -173,6 +182,13 @@
       "ingredients": "ingrédients différents",
       "lightDinners": "dîners légers"
     }
+  },
+  "tierlist": {
+    "title": "Ma Tier List",
+    "subtitle": "Tes repas classés par plaisir et nutrition",
+    "noData": "Valide et note au moins 3 repas pour voir ta Tier List !",
+    "export": "Exporter",
+    "meals": "repas"
   },
   "onboarding": {
     "back": "Retour",

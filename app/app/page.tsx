@@ -9,7 +9,7 @@ import { useTranslations, useLocale } from 'next-intl';
 import type { MealFeedback, MealType } from '@/types';
 import { AppTour } from '@/components/tour/AppTour';
 import Link from 'next/link';
-import { Flame } from 'lucide-react';
+import { Flame, Trophy } from 'lucide-react';
 
 export default function Dashboard() {
   const t = useTranslations('dashboard');
@@ -159,14 +159,21 @@ export default function Dashboard() {
         </div>
       )}
 
-      {/* Roast my diet CTA */}
-      <div className="flex justify-center pt-2">
+      {/* Roast my diet + Tier List CTAs */}
+      <div className="flex gap-3 justify-center pt-2 flex-wrap">
         <Link
           href="/app/roast"
           className="inline-flex items-center gap-2 bg-gray-900 hover:bg-gray-800 text-white text-sm font-semibold px-5 py-3 rounded-2xl shadow-lg transition-all hover:scale-105 active:scale-95"
         >
           <Flame size={18} className="text-orange-400" />
           🔥 Roast my diet
+        </Link>
+        <Link
+          href="/app/tierlist"
+          className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-gradient-to-r from-yellow-400 to-orange-400 text-white text-sm font-semibold shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95"
+        >
+          <Trophy size={18} />
+          🏆 Ma Tier List
         </Link>
       </div>
 
