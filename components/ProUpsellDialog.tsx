@@ -13,6 +13,14 @@ const featureIcons: Record<FeatureFlag, typeof Share2> = {
   ADVANCED_REPERTOIRE: Utensils,
   WEEKLY_STATS: BarChart3,
   MULTI_PROFILE: Users,
+  PRACTITIONER_THREAD: Users,
+  PRACTITIONER_GOALS: BarChart3,
+  SMART_SUGGESTIONS: Utensils,
+  PHOTO_JOURNAL: Share2,
+  GROCERY_LIST: Utensils,
+  CLOUD_SYNC: Share2,
+  FRIDGE_MODE: Utensils,
+  FRIEND_COMPARE: Users,
 };
 
 interface ProUpsellDialogProps {

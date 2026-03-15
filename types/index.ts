@@ -16,7 +16,15 @@ export type FeatureFlag =
   | 'SHARE_WITH_DIETITIAN'
   | 'ADVANCED_REPERTOIRE'
   | 'WEEKLY_STATS'
-  | 'MULTI_PROFILE';
+  | 'MULTI_PROFILE'
+  | 'PRACTITIONER_THREAD'
+  | 'PRACTITIONER_GOALS'
+  | 'SMART_SUGGESTIONS'
+  | 'PHOTO_JOURNAL'
+  | 'GROCERY_LIST'
+  | 'CLOUD_SYNC'
+  | 'FRIDGE_MODE'
+  | 'FRIEND_COMPARE';
 
 export type SubscriptionPlan = 'free' | 'pro';
 
@@ -136,4 +144,73 @@ export interface UserSettings {
     antiRedundancy: boolean;
     starchWarning: boolean;
   };
+}
+
+// ─── User Profile ────────────────────────────────────
+
+export interface UserProfile extends UserSettings {
+  avatarEmoji: string;
+  objective: 'balanced' | 'time_saving' | 'weight_loss' | 'more_protein' | 'less_meat';
+  diets: string[];
+  allergies: string[];
+  householdSize: number;
+  cookingTime: 'express' | 'moderate' | 'batch';
+  mealsToTrack: MealType[];
+  onboardingCompleted: boolean;
+}
+
+// ─── Meal Feedback ────────────────────────────────────
+
+export interface MealFeedback {
+  id?: string;
+  assemblyId: string;
+  date: string;
+  pleasure: 1 | 2 | 3 | 4 | 5;
+  quantity: 'not_enough' | 'just_right' | 'too_much' | null;
+  note: string | null;
+}
+
+// ─── Monthly Summary ────────────────────────────────────
+
+export interface MonthlySummary {
+  month: string;
+  avgNutriScore: number;
+  totalMeals: number;
+  topAssemblies: {
+    id: string;
+    name: string;
+    count: number;
+    avgPleasure: number;
+  }[];
+  dominantEmoji: string;
+}
+
+// ─── Shared Link ────────────────────────────────────
+
+export interface SharedLink {
+  id: string;
+  token: string;
+  hasPassword: boolean;
+  createdAt: string;
+  expiresAt: string | null;
+}
+
+// ─── Practitioner ────────────────────────────────────
+
+export interface PractitionerComment {
+  id: string;
+  weekKey: string;
+  assemblyId: string;
+  reaction: 'approved' | 'warning' | 'suggestion';
+  comment: string | null;
+  authorName: string;
+  createdAt: string;
+}
+
+export interface PractitionerGoal {
+  id: string;
+  weekKey: string;
+  goalText: string;
+  targetCount: number | null;
+  achievedCount: number;
 }
