@@ -3,31 +3,36 @@
 import { useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 
-const MATOMO_URL = process.env.NEXT_PUBLIC_MATOMO_URL ?? 'https://analytics.gerersci.fr';
-const MATOMO_SITE_ID = process.env.NEXT_PUBLIC_MATOMO_SITE_ID ?? '2'; // Site ID for AssemblEat in Matomo
-
 export function MatomoTracker() {
   const pathname = usePathname();
 
   useEffect(() => {
-    // Load Matomo script once
-    if (typeof window !== 'undefined' && !(window as any)._paq) {
-      const _paq = (window as any)._paq = (window as any)._paq || [];
-      _paq.push(['setTrackerUrl', `${MATOMO_URL}/matomo.php`]);
-      _paq.push(['setSiteId', MATOMO_SITE_ID]);
-      _paq.push(['enableLinkTracking']);
+    if (typeof window === 'undefined') return;
+    // Initialize Matomo exactly as provided by the Matomo dashboard
+    const _paq = (window as unknown as { _paq: unknown[][] })._paq =
+      (window as unknown as { _paq: unknown[][] })._paq || [];
+    _paq.push(['trackPageView']);
+    _paq.push(['enableLinkTracking']);
 
-      const script = document.createElement('script');
-      script.async = true;
-      script.src = `${MATOMO_URL}/matomo.js`;
-      document.head.appendChild(script);
+    const u = '//analytics.gerersci.fr/';
+    _paq.push(['setTrackerUrl', u + 'matomo.php']);
+    _paq.push(['setSiteId', '2']);
+
+    if (!document.getElementById('matomo-script')) {
+      const g = document.createElement('script');
+      g.id = 'matomo-script';
+      g.async = true;
+      g.src = u + 'matomo.js';
+      const s = document.getElementsByTagName('script')[0];
+      s.parentNode?.insertBefore(g, s);
     }
   }, []);
 
-  // Track page views on route change
+  // Track SPA page views on route change
   useEffect(() => {
-    if (typeof window !== 'undefined' && (window as any)._paq) {
-      const _paq = (window as any)._paq;
+    if (typeof window === 'undefined') return;
+    const _paq = (window as unknown as { _paq: unknown[][] })._paq;
+    if (_paq) {
       _paq.push(['setCustomUrl', pathname]);
       _paq.push(['setDocumentTitle', document.title]);
       _paq.push(['trackPageView']);
