@@ -307,6 +307,36 @@ export default function Dashboard() {
       {/* Feature tour overlay */}
       {showTour && <AppTour onComplete={completeTour} />}
 
+      {/* Trial prompt banner after 3rd feedback */}
+      {showTrialPrompt && (
+        <div className="fixed bottom-20 left-4 right-4 z-40 bg-white rounded-xl shadow-lg border p-4 max-w-md mx-auto">
+          <div className="flex items-start gap-3">
+            <span className="text-2xl">✨</span>
+            <div className="flex-1">
+              <p className="text-sm font-semibold">Vous aimez AssemblEat ?</p>
+              <p className="text-xs text-gray-500 mt-0.5">Essayez Pro 7 jours gratuitement — partage praticien, suggestions, historique.</p>
+            </div>
+            <button onClick={() => setShowTrialPrompt(false)} className="text-gray-400 hover:text-gray-600 text-lg">×</button>
+          </div>
+          <div className="flex gap-2 mt-3">
+            <button
+              onClick={() => { setShowTrialPrompt(false); setProDialogOpen(true); }}
+              className="flex-1 py-2 rounded-lg bg-[var(--color-cta)] text-white text-sm font-semibold"
+            >
+              Essayer Pro gratuit
+            </button>
+            <button
+              onClick={() => setShowTrialPrompt(false)}
+              className="px-4 py-2 rounded-lg border text-sm text-gray-500"
+            >
+              Plus tard
+            </button>
+          </div>
+        </div>
+      )}
+
+      <ProUpsellDialog open={proDialogOpen} onOpenChange={setProDialogOpen} />
+
       {/* Pro upgrade welcome modal */}
       {showUpgradeWelcome && (
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">

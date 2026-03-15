@@ -1,20 +1,24 @@
 'use client';
 
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useWeekNavigation } from '@/lib/hooks/useWeekNavigation';
 import { useMealStore } from '@/lib/store/useMealStore';
+import { useSubscriptionStore } from '@/lib/store/useSubscriptionStore';
 import { generateRandomAssembly } from '@/lib/engine/assemblyEngine';
 import { DayColumn } from '@/components/DayColumn';
 import { ShareWeekButton } from '@/components/share/ShareWeekButton';
+import { ProUpsellDialog } from '@/components/ProUpsellDialog';
 import { useTranslations } from 'next-intl';
 
 export default function SemainierPage() {
   const t = useTranslations('weekPlanner');
   const { weekKey, weekDates, dayNames, goToPreviousWeek, goToNextWeek, goToCurrentWeek, isCurrentWeek } = useWeekNavigation();
   const { getWeekPlan, setDayPlan, recentProteins, settings, streakCount } = useMealStore();
+  const { plan } = useSubscriptionStore();
+  const [proOpen, setProOpen] = useState(false);
 
   const weekPlan = getWeekPlan(weekKey);
 
@@ -81,11 +85,25 @@ export default function SemainierPage() {
               date={date}
               dayPlan={weekPlan.days[i]}
               onGenerate={() => handleGenerateDay(i)}
-              onUpdatePlan={(plan) => setDayPlan(weekKey, i, plan)}
+              onUpdatePlan={(p) => setDayPlan(weekKey, i, p)}
             />
           ))}
         </div>
       </div>
+
+      {/* Pro teaser */}
+      {plan === 'free' && (
+        <div className="mt-4 p-4 rounded-xl border border-dashed border-gray-300 text-center">
+          <p className="text-sm text-gray-500">
+            🔒 Partagez votre semainier avec votre diététicien
+          </p>
+          <button onClick={() => setProOpen(true)} className="mt-2 text-sm font-semibold text-[var(--color-cta)] hover:underline">
+            Essayer Pro gratuitement →
+          </button>
+        </div>
+      )}
+
+      <ProUpsellDialog open={proOpen} onOpenChange={setProOpen} feature="SHARE_WITH_DIETITIAN" />
     </div>
   );
 }

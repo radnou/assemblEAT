@@ -1,11 +1,12 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import { FileDown, Copy, Check, WifiOff } from 'lucide-react';
+import { FileDown, Copy, Check, WifiOff, Lock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useWeekNavigation } from '@/lib/hooks/useWeekNavigation';
 import { useMealStore } from '@/lib/store/useMealStore';
+import { useSubscriptionStore } from '@/lib/store/useSubscriptionStore';
 import { WeekExportPreview } from '@/components/WeekExportPreview';
 import { ProBadge, ProUpsellDialog } from '@/components/ProUpsellDialog';
 import { generateTextSummary } from '@/lib/utils/pdfExport';
@@ -15,6 +16,7 @@ export default function ExportPage() {
   const t = useTranslations('export');
   const { weekKey } = useWeekNavigation();
   const { getWeekPlan, settings } = useMealStore();
+  const { plan } = useSubscriptionStore();
   const [copied, setCopied] = useState(false);
   const [isOffline] = useState(typeof navigator !== 'undefined' && !navigator.onLine);
   const [proOpen, setProOpen] = useState(false);
@@ -113,9 +115,22 @@ export default function ExportPage() {
 
       {/* Actions */}
       <div className="flex gap-3">
-        <Button onClick={handleGeneratePdf} className="flex-1 bg-[var(--color-cta)] text-white hover:bg-[var(--color-cta)]/90">
-          <FileDown size={16} className="mr-2" />
-          {t('generatePdf')}
+        <Button
+          onClick={plan === 'free' ? () => setProOpen(true) : handleGeneratePdf}
+          className="flex-1 bg-[var(--color-cta)] text-white hover:bg-[var(--color-cta)]/90"
+        >
+          {plan === 'free' ? (
+            <>
+              <Lock size={16} className="mr-2" />
+              {t('generatePdf')}
+              <Badge className="ml-2 bg-white/20 text-white border-0 text-[10px] font-semibold">Pro</Badge>
+            </>
+          ) : (
+            <>
+              <FileDown size={16} className="mr-2" />
+              {t('generatePdf')}
+            </>
+          )}
         </Button>
         <Button variant="outline" onClick={handleCopy} className="flex-1">
           {copied ? <Check size={16} className="mr-2 text-green-600" /> : <Copy size={16} className="mr-2" />}

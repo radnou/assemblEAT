@@ -7,7 +7,9 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { useMealStore } from '@/lib/store/useMealStore';
+import { useSubscriptionStore } from '@/lib/store/useSubscriptionStore';
 import { BatchChecklistItem } from '@/components/BatchChecklistItem';
+import { ProUpsellDialog } from '@/components/ProUpsellDialog';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
@@ -56,7 +58,9 @@ function fireConfetti(canvas: HTMLCanvasElement) {
 export default function BatchCookPage() {
   const t = useTranslations('batchCook');
   const { batchItems, toggleBatchItem, resetBatch } = useMealStore();
+  const { plan } = useSubscriptionStore();
   const [showResetDialog, setShowResetDialog] = useState(false);
+  const [proOpen, setProOpen] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const categoryLabels: Record<string, string> = {
@@ -154,6 +158,23 @@ export default function BatchCookPage() {
           </div>
         </div>
       ))}
+
+      {/* Pro teaser */}
+      {plan === 'free' && (
+        <div className="mt-6 p-4 rounded-xl border border-dashed border-gray-300 text-center">
+          <p className="text-sm text-gray-500">
+            🔒 Envie d&apos;une liste de courses automatique ?
+          </p>
+          <button
+            onClick={() => setProOpen(true)}
+            className="mt-2 text-sm font-semibold text-[var(--color-cta)] hover:underline"
+          >
+            Découvrir AssemblEat Pro →
+          </button>
+        </div>
+      )}
+
+      <ProUpsellDialog open={proOpen} onOpenChange={setProOpen} feature="GROCERY_LIST" />
 
       {/* Reset dialog */}
       <Dialog open={showResetDialog} onOpenChange={setShowResetDialog}>
