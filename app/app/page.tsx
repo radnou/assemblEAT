@@ -5,14 +5,16 @@ import { useMealStore } from '@/lib/store/useMealStore';
 import { useSubscriptionStore } from '@/lib/store/useSubscriptionStore';
 import { AssemblyCard } from '@/components/AssemblyCard';
 import { StreakBadge } from '@/components/streak/StreakBadge';
+import { WeeklyScoreCard } from '@/components/WeeklyScoreCard';
 import { generateRandomAssembly, detectDayConflicts } from '@/lib/engine/assemblyEngine';
 import { getSmartSuggestions } from '@/lib/engine/smartSuggestions';
+import { computeWeeklyScore } from '@/lib/engine/weeklyScore';
 import { useTranslations, useLocale } from 'next-intl';
 import type { AssemblyRow, MealFeedback, MealType } from '@/types';
 import { AppTour } from '@/components/tour/AppTour';
 import { ProUpsellDialog } from '@/components/ProUpsellDialog';
 import Link from 'next/link';
-import { Flame, Trophy, ShoppingCart, PartyPopper, UserCircle, Refrigerator } from 'lucide-react';
+import { Flame, Trophy, ShoppingCart, UserCircle, Refrigerator } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 import { useAuth } from '@/lib/hooks/useAuth';
 
@@ -143,6 +145,38 @@ export default function Dashboard() {
     return feedbacks.find((f) => f.assemblyId === assemblyId && f.date === todayISO) ?? null;
   };
 
+  // Current ISO week key (YYYY-Www)
+  const currentWeekKey = useMemo(() => {
+    const now = new Date();
+    const d = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
+    const dayNum = d.getUTCDay() || 7;
+    d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+    const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+    const weekNum = Math.ceil(((d.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);
+    return `${now.getFullYear()}-W${String(weekNum).padStart(2, '0')}`;
+  }, []);
+
+  // Weekly Score (FREE feature)
+  const weeklyScore = useMemo(() => {
+    const weekPlan = {
+      weekKey: currentWeekKey,
+      days: Array.from({ length: 7 }, (_, i) => ({
+        date: '',
+        breakfast: i === 0 ? todayBreakfast : null,
+        lunch: i === 0 ? todayLunch : null,
+        dinner: i === 0 ? todayDinner : null,
+      })),
+    };
+    // Merge from store if available
+    const stored = Object.values(
+      // Access store weekPlans via useMealStore.getState() is not available here;
+      // we rely on feedbacks only for the score computation.
+      {}
+    );
+    void stored;
+    return computeWeeklyScore(weekPlan, feedbacks);
+  }, [currentWeekKey, feedbacks, todayBreakfast, todayLunch, todayDinner]);
+
   // Weekly recap stats
   const thisWeekFeedbacks = feedbacks.filter(f => {
     const feedbackDate = new Date(f.date);
@@ -220,6 +254,15 @@ export default function Dashboard() {
           </div>
           <button onClick={() => setStreakBroken(false)} className="text-orange-400 hover:text-orange-600">✕</button>
         </div>
+      )}
+
+      {/* Weekly Score Card (FREE feature) */}
+      {weeklyScore && weeklyScore.mealsValidated >= 3 && (
+        <WeeklyScoreCard
+          score={weeklyScore}
+          weekKey={currentWeekKey}
+          userName={settings.firstName}
+        />
       )}
 
       {/* Smart suggestions (Pro only) */}

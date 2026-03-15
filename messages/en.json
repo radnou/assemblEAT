@@ -295,6 +295,19 @@
     "title": "Suggestions for you",
     "basedOn": "Based on your preferences"
   },
+  "weeklyScore": {
+    "title": "Weekly Score",
+    "meals": "meals validated",
+    "pleasure": "average pleasure",
+    "share": "Share my score",
+    "insights": {
+      "excellent": "Excellent week! Your meals are well balanced.",
+      "good": "Good score! Keep it up.",
+      "average": "Decent score. More vegetables would improve your balance.",
+      "belowAverage": "A mixed week. A little effort tomorrow?",
+      "poor": "Tough week. Start gently — every meal counts!"
+    }
+  },
   "history": {
     "title": "My nutritional history",
     "subtitle": "Evolution over the last 12 weeks",

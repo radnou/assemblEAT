@@ -295,6 +295,19 @@
     "title": "Suggestions pour toi",
     "basedOn": "Basé sur vos préférences"
   },
+  "weeklyScore": {
+    "title": "Score de la semaine",
+    "meals": "repas validés",
+    "pleasure": "plaisir moyen",
+    "share": "Partager mon score",
+    "insights": {
+      "excellent": "Excellente semaine\u00a0! Vos repas sont bien équilibrés.",
+      "good": "Bon score\u00a0! Continuez comme ça.",
+      "average": "Score correct. Plus de légumes amélioreraient votre équilibre.",
+      "belowAverage": "Semaine en demi-teinte. Un petit effort demain\u00a0?",
+      "poor": "Semaine difficile. Recommencez doucement — chaque repas compte\u00a0!"
+    }
+  },
   "history": {
     "title": "Mon historique nutritionnel",
     "subtitle": "Évolution sur les 12 dernières semaines",
