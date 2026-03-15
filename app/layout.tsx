@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getLocale } from 'next-intl/server';
+import { MatomoTracker } from '@/components/MatomoTracker';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
@@ -37,6 +38,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <NextIntlClientProvider messages={messages}>
           {children}
         </NextIntlClientProvider>
+        <MatomoTracker />
       </body>
     </html>
   );
