@@ -134,6 +134,21 @@
       "description": "Ton praticien peut commenter tes repas en temps réel. Essai gratuit 7 jours."
     }
   },
+  "auth": {
+    "title": "Connexion",
+    "signupTitle": "Créer un compte",
+    "email": "Email",
+    "password": "Mot de passe",
+    "login": "Se connecter",
+    "signup": "Créer un compte",
+    "switchToSignup": "Pas encore de compte ?",
+    "switchToLogin": "Déjà un compte ?",
+    "googleSoon": "Google — Bientôt disponible",
+    "error": "Erreur de connexion. Vérifiez vos identifiants.",
+    "signupSuccess": "Compte créé ! Vérifiez votre email.",
+    "or": "ou",
+    "forgotPassword": "Mot de passe oublié ?"
+  },
   "onboarding": {
     "back": "Retour",
     "next": "Continuer",

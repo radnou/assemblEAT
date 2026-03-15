@@ -134,6 +134,21 @@
       "description": "Your practitioner can comment on your meals in real time. Free 7-day trial."
     }
   },
+  "auth": {
+    "title": "Login",
+    "signupTitle": "Create an account",
+    "email": "Email",
+    "password": "Password",
+    "login": "Log in",
+    "signup": "Create account",
+    "switchToSignup": "No account yet?",
+    "switchToLogin": "Already have an account?",
+    "googleSoon": "Google — Coming soon",
+    "error": "Login error. Please check your credentials.",
+    "signupSuccess": "Account created! Please check your email.",
+    "or": "or",
+    "forgotPassword": "Forgot password?"
+  },
   "onboarding": {
     "back": "Back",
     "next": "Continue",

@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { Trash2 } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Trash2, LogIn, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -9,16 +9,58 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { useMealStore } from '@/lib/store/useMealStore';
 import { ProBadge, ProUpsellDialog } from '@/components/ProUpsellDialog';
 import { useTranslations } from 'next-intl';
+import Link from 'next/link';
+import { createClient } from '@/lib/supabase/client';
+import type { User } from '@supabase/supabase-js';
 
 export default function SettingsPage() {
   const t = useTranslations('settings');
+  const tAuth = useTranslations('auth');
   const { settings, updateSettings, resetAll } = useMealStore();
   const [showResetDialog, setShowResetDialog] = useState(false);
   const [proOpen, setProOpen] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data }) => {
+      setUser(data.user);
+    });
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const handleSignOut = async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    setUser(null);
+  };
 
   return (
     <div className="py-6 space-y-6 max-w-md mx-auto">
       <h1 className="text-xl font-semibold">{t('title')}</h1>
+
+      {/* Auth */}
+      <Card className="p-4">
+        {user ? (
+          <div className="flex items-center justify-between">
+            <p className="text-sm text-gray-700 truncate">{user.email}</p>
+            <Button variant="outline" size="sm" onClick={handleSignOut} className="ml-2 flex items-center gap-1">
+              <LogOut size={14} />
+              <span className="text-xs">Déconnexion</span>
+            </Button>
+          </div>
+        ) : (
+          <Link href="/login">
+            <Button variant="outline" className="w-full flex items-center gap-2">
+              <LogIn size={16} />
+              {tAuth('login')}
+            </Button>
+          </Link>
+        )}
+      </Card>
 
       {/* Prénom */}
       <Card className="p-4 space-y-2">
