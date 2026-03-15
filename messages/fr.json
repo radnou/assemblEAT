@@ -193,6 +193,22 @@
     "export": "Exporter",
     "meals": "repas"
   },
+  "grocery": {
+    "title": "Liste de courses",
+    "subtitle": "Générée depuis votre semainier",
+    "empty": "Planifiez au moins un jour pour générer la liste",
+    "copy": "Copier la liste",
+    "share": "Partager",
+    "copied": "Liste copiée !",
+    "proteins": "Protéines",
+    "vegetables": "Légumes",
+    "cereals": "Féculents",
+    "sauces": "Sauces & condiments",
+    "dairy": "Produits laitiers",
+    "fruits": "Fruits",
+    "other": "Autres",
+    "times": "fois"
+  },
   "onboarding": {
     "back": "Retour",
     "next": "Continuer",
@@ -260,5 +276,17 @@
       "summaryLabel": "Votre profil",
       "cta": "C'est parti !"
     }
+  },
+  "history": {
+    "title": "Mon historique nutritionnel",
+    "subtitle": "Évolution sur les 12 dernières semaines",
+    "totalFeedbacks": "feedbacks donnés",
+    "avgPleasure": "plaisir moyen",
+    "bestWeek": "meilleure semaine",
+    "currentStreak": "streak actuel",
+    "week": "Semaine",
+    "meals": "repas",
+    "noData": "Pas encore assez de données. Validez vos repas pour voir votre historique !",
+    "expand": "Détails"
   }
 }

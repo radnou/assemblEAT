@@ -12,6 +12,7 @@ import { BatchChecklistItem } from '@/components/BatchChecklistItem';
 import { ProUpsellDialog } from '@/components/ProUpsellDialog';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
+import Link from 'next/link';
 
 const categoryOrder = ['protein', 'cereal', 'vegetable', 'sauce'] as const;
 
@@ -159,8 +160,8 @@ export default function BatchCookPage() {
         </div>
       ))}
 
-      {/* Pro teaser */}
-      {plan === 'free' && (
+      {/* Pro teaser / grocery link */}
+      {plan === 'free' ? (
         <div className="mt-6 p-4 rounded-xl border border-dashed border-gray-300 text-center">
           <p className="text-sm text-gray-500">
             🔒 Envie d&apos;une liste de courses automatique ?
@@ -171,6 +172,18 @@ export default function BatchCookPage() {
           >
             Découvrir AssemblEat Pro →
           </button>
+        </div>
+      ) : (
+        <div className="mt-6 p-4 rounded-xl border border-green-200 bg-green-50 text-center">
+          <p className="text-sm text-gray-600 mb-2">
+            🛒 Générez votre liste de courses depuis votre semainier
+          </p>
+          <Link
+            href="/app/grocery"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-green-700 hover:underline"
+          >
+            Voir ma liste de courses →
+          </Link>
         </div>
       )}
 

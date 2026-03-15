@@ -193,6 +193,22 @@
     "export": "Export",
     "meals": "meals"
   },
+  "grocery": {
+    "title": "Grocery List",
+    "subtitle": "Generated from your week planner",
+    "empty": "Plan at least one day to generate the list",
+    "copy": "Copy list",
+    "share": "Share",
+    "copied": "List copied!",
+    "proteins": "Proteins",
+    "vegetables": "Vegetables",
+    "cereals": "Starches",
+    "sauces": "Sauces & condiments",
+    "dairy": "Dairy",
+    "fruits": "Fruits",
+    "other": "Other",
+    "times": "times"
+  },
   "onboarding": {
     "back": "Back",
     "next": "Continue",
@@ -260,5 +276,17 @@
       "summaryLabel": "Your profile",
       "cta": "Let's go!"
     }
+  },
+  "history": {
+    "title": "My nutritional history",
+    "subtitle": "Evolution over the last 12 weeks",
+    "totalFeedbacks": "feedbacks given",
+    "avgPleasure": "average pleasure",
+    "bestWeek": "best week",
+    "currentStreak": "current streak",
+    "week": "Week",
+    "meals": "meals",
+    "noData": "Not enough data yet. Validate your meals to see your history!",
+    "expand": "Details"
   }
 }

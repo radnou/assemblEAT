@@ -11,7 +11,7 @@ import type { MealFeedback, MealType } from '@/types';
 import { AppTour } from '@/components/tour/AppTour';
 import { ProUpsellDialog } from '@/components/ProUpsellDialog';
 import Link from 'next/link';
-import { Flame, Trophy, PartyPopper, UserCircle } from 'lucide-react';
+import { Flame, Trophy, ShoppingCart, PartyPopper, UserCircle } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 import { useAuth } from '@/lib/hooks/useAuth';
 
@@ -247,7 +247,7 @@ export default function Dashboard() {
         </div>
       )}
 
-      {/* Roast my diet + Tier List CTAs */}
+      {/* Roast my diet + Tier List + Grocery CTAs */}
       <div className="flex gap-3 justify-center pt-2 flex-wrap">
         <Link
           href="/app/roast"
@@ -262,6 +262,19 @@ export default function Dashboard() {
         >
           <Trophy size={18} />
           🏆 Ma Tier List
+        </Link>
+        <Link
+          href="/app/grocery"
+          className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-green-400 to-emerald-500 text-white font-semibold shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95"
+        >
+          <ShoppingCart size={18} />
+          🛒 Liste de courses
+        </Link>
+        <Link
+          href="/app/history"
+          className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-blue-400 to-indigo-500 text-white font-semibold shadow-lg"
+        >
+          📊 Mon historique
         </Link>
       </div>
 
