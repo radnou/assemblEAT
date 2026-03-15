@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useRef, useCallback, useEffect } from 'react';
+import { useMemo, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -8,24 +8,10 @@ import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { useMealStore } from '@/lib/store/useMealStore';
 import { BatchChecklistItem } from '@/components/BatchChecklistItem';
-import { fr } from '@/lib/i18n/fr';
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
-const categoryLabels: Record<string, string> = {
-  protein: fr.batchCook.proteins,
-  cereal: fr.batchCook.cereals,
-  vegetable: fr.batchCook.vegetables,
-  sauce: fr.batchCook.sauces,
-};
-
 const categoryOrder = ['protein', 'cereal', 'vegetable', 'sauce'] as const;
-
-const timelineSteps = [
-  { label: fr.batchCook.timeline.oven, emoji: '🔥', method: 'four' },
-  { label: fr.batchCook.timeline.steam, emoji: '💨', method: 'vapeur' },
-  { label: fr.batchCook.timeline.pan, emoji: '🍳', method: 'poêle' },
-  { label: fr.batchCook.timeline.eggs, emoji: '🥚', method: 'cru' },
-];
 
 function fireConfetti(canvas: HTMLCanvasElement) {
   const ctx = canvas.getContext('2d');
@@ -68,13 +54,27 @@ function fireConfetti(canvas: HTMLCanvasElement) {
 }
 
 export default function BatchCookPage() {
+  const t = useTranslations('batchCook');
   const { batchItems, toggleBatchItem, resetBatch } = useMealStore();
   const [showResetDialog, setShowResetDialog] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
+  const categoryLabels: Record<string, string> = {
+    protein: t('proteins'),
+    cereal: t('cereals'),
+    vegetable: t('vegetables'),
+    sauce: t('sauces'),
+  };
+
+  const timelineSteps = [
+    { label: t('timeline.oven'), emoji: '🔥', method: 'four' },
+    { label: t('timeline.steam'), emoji: '💨', method: 'vapeur' },
+    { label: t('timeline.pan'), emoji: '🍳', method: 'poêle' },
+    { label: t('timeline.eggs'), emoji: '🥚', method: 'cru' },
+  ];
+
   const checkedCount = batchItems.filter((i) => i.checked).length;
   const totalCount = batchItems.length;
-  const totalMinutes = batchItems.reduce((s, i) => s + i.estimatedMinutes, 0);
   const remainingMinutes = batchItems.filter((i) => !i.checked).reduce((s, i) => s + i.estimatedMinutes, 0);
 
   const grouped = useMemo(() => {
@@ -105,14 +105,14 @@ export default function BatchCookPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-semibold">{fr.batchCook.title}</h1>
-          <p className="text-sm text-gray-500">{remainingMinutes} {fr.batchCook.estimated}</p>
+          <h1 className="text-xl font-semibold">{t('title')}</h1>
+          <p className="text-sm text-gray-500">{remainingMinutes} {t('estimated')}</p>
         </div>
         <div className="flex items-center gap-2">
           <Badge variant="secondary" className="text-sm">
-            {checkedCount}/{totalCount} {fr.batchCook.prepared}
+            {checkedCount}/{totalCount} {t('prepared')}
           </Badge>
-          <Button variant="ghost" size="icon" onClick={() => setShowResetDialog(true)} aria-label={fr.batchCook.reset}>
+          <Button variant="ghost" size="icon" onClick={() => setShowResetDialog(true)} aria-label={t('reset')}>
             <RotateCcw size={18} />
           </Button>
         </div>
@@ -159,8 +159,8 @@ export default function BatchCookPage() {
       <Dialog open={showResetDialog} onOpenChange={setShowResetDialog}>
         <DialogContent className="max-w-xs">
           <DialogHeader>
-            <DialogTitle>{fr.batchCook.reset}</DialogTitle>
-            <DialogDescription>{fr.batchCook.resetConfirm}</DialogDescription>
+            <DialogTitle>{t('reset')}</DialogTitle>
+            <DialogDescription>{t('resetConfirm')}</DialogDescription>
           </DialogHeader>
           <div className="flex gap-2 justify-end mt-2">
             <Button variant="outline" onClick={() => setShowResetDialog(false)}>Annuler</Button>

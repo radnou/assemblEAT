@@ -12,7 +12,7 @@ import type { AssemblyRow, MealType, NutriGrade } from '@/types';
 import { calculateSimplicity, isLightDinner } from '@/lib/engine/assemblyEngine';
 import { computeAssemblyScore } from '@/lib/nutriscore/assemblyScore';
 import { cn } from '@/lib/utils';
-import { fr } from '@/lib/i18n/fr';
+import { useTranslations } from 'next-intl';
 
 const mealColors: Record<MealType, string> = {
   breakfast: 'border-l-[var(--color-meal-breakfast)]',
@@ -26,12 +26,6 @@ const mealBgColors: Record<MealType, string> = {
   dinner: 'bg-[var(--color-meal-dinner)]',
 };
 
-const mealLabels: Record<MealType, string> = {
-  breakfast: fr.dashboard.breakfast,
-  lunch: fr.dashboard.lunch,
-  dinner: fr.dashboard.dinner,
-};
-
 interface AssemblyCardProps {
   assembly: AssemblyRow | null;
   mealType: MealType;
@@ -41,8 +35,15 @@ interface AssemblyCardProps {
 }
 
 export function AssemblyCard({ assembly, mealType, onRegenerate, onValidate, warnings }: AssemblyCardProps) {
+  const t = useTranslations('dashboard');
   const [nutriGrade, setNutriGrade] = useState<NutriGrade | null>(null);
   const [isSpinning, setIsSpinning] = useState(false);
+
+  const mealLabels: Record<MealType, string> = {
+    breakfast: t('breakfast'),
+    lunch: t('lunch'),
+    dinner: t('dinner'),
+  };
 
   useEffect(() => {
     if (!assembly) {
@@ -67,11 +68,11 @@ export function AssemblyCard({ assembly, mealType, onRegenerate, onValidate, war
       <Card className="border-l-4 border-l-gray-200 p-4">
         <div className="flex items-center justify-between">
           <span className="text-sm font-semibold text-gray-500">{mealLabels[mealType]}</span>
-          <Button variant="ghost" size="icon" onClick={handleRegenerate} aria-label={fr.dashboard.regenerate}>
+          <Button variant="ghost" size="icon" onClick={handleRegenerate} aria-label={t('regenerate')}>
             <Dice5 size={18} />
           </Button>
         </div>
-        <p className="text-xs text-gray-500 mt-2">{fr.dashboard.noMeal}</p>
+        <p className="text-xs text-gray-500 mt-2">{t('noMeal')}</p>
       </Card>
     );
   }
@@ -114,7 +115,7 @@ export function AssemblyCard({ assembly, mealType, onRegenerate, onValidate, war
       {/* Light dinner badge */}
       {lightDinner && (
         <Badge className="bg-green-100 text-green-700 text-xs mb-2">
-          {fr.dashboard.lightDinner}
+          {t('lightDinner')}
         </Badge>
       )}
 
@@ -132,7 +133,7 @@ export function AssemblyCard({ assembly, mealType, onRegenerate, onValidate, war
       {/* Actions */}
       <div className="flex items-center justify-end gap-2 mt-2">
         <motion.div animate={isSpinning ? { rotateY: 180 } : { rotateY: 0 }} transition={{ duration: 0.5 }}>
-          <Button variant="ghost" size="icon" onClick={handleRegenerate} aria-label={fr.dashboard.regenerate}>
+          <Button variant="ghost" size="icon" onClick={handleRegenerate} aria-label={t('regenerate')}>
             <Dice5 size={18} />
           </Button>
         </motion.div>
@@ -142,7 +143,7 @@ export function AssemblyCard({ assembly, mealType, onRegenerate, onValidate, war
             size="icon"
             onClick={onValidate}
             className="text-green-600 hover:text-green-700 hover:bg-green-50"
-            aria-label={fr.dashboard.validate}
+            aria-label={t('validate')}
           >
             <Check size={18} />
           </Button>

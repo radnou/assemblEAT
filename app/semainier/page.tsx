@@ -1,16 +1,17 @@
 'use client';
 
 import { useCallback } from 'react';
-import { ChevronLeft, ChevronRight, RotateCcw } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useWeekNavigation } from '@/lib/hooks/useWeekNavigation';
 import { useMealStore } from '@/lib/store/useMealStore';
 import { generateRandomAssembly } from '@/lib/engine/assemblyEngine';
 import { DayColumn } from '@/components/DayColumn';
-import { fr } from '@/lib/i18n/fr';
+import { useTranslations } from 'next-intl';
 
 export default function SemainierPage() {
+  const t = useTranslations('weekPlanner');
   const { weekKey, weekDates, dayNames, goToPreviousWeek, goToNextWeek, goToCurrentWeek, isCurrentWeek } = useWeekNavigation();
   const { getWeekPlan, setDayPlan, recentProteins, settings } = useMealStore();
 
@@ -41,9 +42,9 @@ export default function SemainierPage() {
     <div className="py-6 space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h1 className="text-xl font-semibold">{fr.weekPlanner.title}</h1>
+        <h1 className="text-xl font-semibold">{t('title')}</h1>
         <div className="flex items-center gap-1">
-          <Button variant="ghost" size="icon" onClick={goToPreviousWeek} aria-label={fr.weekPlanner.previousWeek}>
+          <Button variant="ghost" size="icon" onClick={goToPreviousWeek} aria-label={t('previousWeek')}>
             <ChevronLeft size={18} />
           </Button>
           <Button
@@ -54,7 +55,7 @@ export default function SemainierPage() {
           >
             {weekKey}
           </Button>
-          <Button variant="ghost" size="icon" onClick={goToNextWeek} aria-label={fr.weekPlanner.nextWeek}>
+          <Button variant="ghost" size="icon" onClick={goToNextWeek} aria-label={t('nextWeek')}>
             <ChevronRight size={18} />
           </Button>
         </div>

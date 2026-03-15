@@ -1,0 +1,86 @@
+{
+  "app": {
+    "name": "AssemblEat",
+    "tagline": "Meals without decisions"
+  },
+  "nav": {
+    "dashboard": "Today",
+    "weekPlanner": "Week Planner",
+    "batchCook": "Batch Cook",
+    "export": "Export",
+    "settings": "Settings"
+  },
+  "dashboard": {
+    "greeting": "Hello",
+    "breakfast": "Breakfast",
+    "lunch": "Lunch",
+    "dinner": "Dinner",
+    "regenerate": "Regenerate",
+    "validate": "Validate",
+    "lightDinner": "Light dinner ✓",
+    "noMeal": "No meal selected"
+  },
+  "weekPlanner": {
+    "title": "Week Planner",
+    "generate": "Generate automatically",
+    "physicalActivity": "Physical activity",
+    "notes": "Notes",
+    "previousWeek": "Previous week",
+    "nextWeek": "Next week",
+    "currentWeek": "This week"
+  },
+  "batchCook": {
+    "title": "Sunday Batch Cook",
+    "estimated": "min estimated",
+    "prepared": "prepared",
+    "reset": "Reset",
+    "resetConfirm": "Reset the entire checklist to zero?",
+    "proteins": "Proteins",
+    "cereals": "Starches",
+    "vegetables": "Vegetables",
+    "sauces": "Sauces",
+    "timeline": {
+      "oven": "Oven",
+      "steam": "Steam",
+      "pan": "Pan",
+      "eggs": "Eggs"
+    }
+  },
+  "export": {
+    "title": "Health Export",
+    "selectWeek": "Select week",
+    "generatePdf": "Generate PDF",
+    "copyText": "Copy summary",
+    "copied": "Copied!",
+    "offlineMessage": "PDF export not available offline",
+    "preview": "Preview"
+  },
+  "settings": {
+    "title": "Settings",
+    "firstName": "First name",
+    "language": "Language",
+    "rules": "Business rules",
+    "antiRedundancy": "Anti-protein redundancy",
+    "starchWarning": "Starch warning",
+    "repertoire": "Edit repertoire",
+    "resetAll": "Reset all data",
+    "resetConfirm": "This action is irreversible. Continue?",
+    "modePro": "Pro Mode",
+    "modeProSoon": "Feature coming soon"
+  },
+  "nutriScore": {
+    "calculated": "Nutritional score calculated",
+    "assembly": "Assembly score"
+  },
+  "pro": {
+    "badge": "Pro 🔒",
+    "unlock": "Unlock for €3.99/month",
+    "title": "Upgrade to AssemblEat Pro",
+    "mainBenefit": "Share your week planner directly with your dietitian — they receive a real-time read link, no need to print or transfer files."
+  },
+  "install": {
+    "android": "Install AssemblEat",
+    "ios": "Tap Share then 'Add to Home Screen'",
+    "dismiss": "Later"
+  }
+}

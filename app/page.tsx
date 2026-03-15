@@ -4,10 +4,12 @@ import { useEffect, useCallback } from 'react';
 import { useMealStore } from '@/lib/store/useMealStore';
 import { AssemblyCard } from '@/components/AssemblyCard';
 import { generateRandomAssembly, detectDayConflicts } from '@/lib/engine/assemblyEngine';
-import { fr } from '@/lib/i18n/fr';
+import { useTranslations, useLocale } from 'next-intl';
 import type { MealType } from '@/types';
 
 export default function Dashboard() {
+  const t = useTranslations('dashboard');
+  const locale = useLocale();
   const {
     todayBreakfast,
     todayLunch,
@@ -66,7 +68,7 @@ export default function Dashboard() {
   const warnings = detectDayConflicts(todayBreakfast, todayLunch, todayDinner);
 
   const today = new Date();
-  const dateStr = today.toLocaleDateString('fr-FR', {
+  const dateStr = today.toLocaleDateString(locale === 'fr' ? 'fr-FR' : 'en-US', {
     weekday: 'long',
     day: 'numeric',
     month: 'long',
@@ -77,7 +79,7 @@ export default function Dashboard() {
       {/* Header */}
       <div>
         <h1 className="text-xl font-semibold">
-          {fr.dashboard.greeting}{settings.firstName ? ` ${settings.firstName}` : ''} !
+          {t('greeting')}{settings.firstName ? ` ${settings.firstName}` : ''} !
         </h1>
         <p className="text-sm text-gray-500 capitalize">{dateStr}</p>
       </div>

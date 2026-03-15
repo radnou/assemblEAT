@@ -4,7 +4,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Lock, Share2, BarChart3, Users, Utensils } from 'lucide-react';
-import { fr } from '@/lib/i18n/fr';
+import { useTranslations } from 'next-intl';
 import { featureDescriptions } from '@/lib/config/features';
 import type { FeatureFlag } from '@/types';
 
@@ -30,16 +30,18 @@ interface ProUpsellDialogProps {
 }
 
 export function ProUpsellDialog({ open, onOpenChange, feature }: ProUpsellDialogProps) {
+  const t = useTranslations('pro');
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-sm">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Lock size={18} className="text-[var(--color-cta)]" />
-            {fr.pro.title}
+            {t('title')}
           </DialogTitle>
           <DialogDescription className="text-sm">
-            {fr.pro.mainBenefit}
+            {t('mainBenefit')}
           </DialogDescription>
         </DialogHeader>
 
@@ -64,7 +66,7 @@ export function ProUpsellDialog({ open, onOpenChange, feature }: ProUpsellDialog
 
         <div className="mt-4 space-y-2">
           <Button className="w-full bg-[var(--color-cta)] hover:bg-[var(--color-cta)]/90 text-white">
-            {fr.pro.unlock}
+            {t('unlock')}
           </Button>
           <p className="text-center text-[10px] text-gray-400">
             Paiement sécurisé par Stripe — annulation à tout moment
@@ -76,13 +78,15 @@ export function ProUpsellDialog({ open, onOpenChange, feature }: ProUpsellDialog
 }
 
 export function ProBadge({ feature, onClick }: { feature: FeatureFlag; onClick?: () => void }) {
+  const t = useTranslations('pro');
+
   return (
     <Badge
       variant="outline"
       className="cursor-pointer text-[var(--color-cta)] border-[var(--color-cta)] hover:bg-orange-50 text-[10px]"
       onClick={onClick}
     >
-      {fr.pro.badge}
+      {t('badge')}
     </Badge>
   );
 }

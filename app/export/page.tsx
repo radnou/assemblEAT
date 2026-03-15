@@ -9,13 +9,14 @@ import { useMealStore } from '@/lib/store/useMealStore';
 import { WeekExportPreview } from '@/components/WeekExportPreview';
 import { ProBadge, ProUpsellDialog } from '@/components/ProUpsellDialog';
 import { generateTextSummary } from '@/lib/utils/pdfExport';
-import { fr } from '@/lib/i18n/fr';
+import { useTranslations } from 'next-intl';
 
 export default function ExportPage() {
+  const t = useTranslations('export');
   const { weekKey } = useWeekNavigation();
   const { getWeekPlan, settings } = useMealStore();
   const [copied, setCopied] = useState(false);
-  const [isOffline, setIsOffline] = useState(typeof navigator !== 'undefined' && !navigator.onLine);
+  const [isOffline] = useState(typeof navigator !== 'undefined' && !navigator.onLine);
   const [proOpen, setProOpen] = useState(false);
 
   const weekPlan = getWeekPlan(weekKey);
@@ -91,7 +92,7 @@ export default function ExportPage() {
     return (
       <div className="py-6 flex flex-col items-center justify-center min-h-[60vh] text-center">
         <WifiOff size={48} className="text-gray-300 mb-4" />
-        <p className="text-gray-500">{fr.export.offlineMessage}</p>
+        <p className="text-gray-500">{t('offlineMessage')}</p>
       </div>
     );
   }
@@ -99,7 +100,7 @@ export default function ExportPage() {
   return (
     <div className="py-6 space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-xl font-semibold">{fr.export.title}</h1>
+        <h1 className="text-xl font-semibold">{t('title')}</h1>
         <div className="flex items-center gap-2">
           <ProBadge feature="SHARE_WITH_DIETITIAN" onClick={() => setProOpen(true)} />
         </div>
@@ -114,11 +115,11 @@ export default function ExportPage() {
       <div className="flex gap-3">
         <Button onClick={handleGeneratePdf} className="flex-1 bg-[var(--color-cta)] text-white hover:bg-[var(--color-cta)]/90">
           <FileDown size={16} className="mr-2" />
-          {fr.export.generatePdf}
+          {t('generatePdf')}
         </Button>
         <Button variant="outline" onClick={handleCopy} className="flex-1">
           {copied ? <Check size={16} className="mr-2 text-green-600" /> : <Copy size={16} className="mr-2" />}
-          {copied ? fr.export.copied : fr.export.copyText}
+          {copied ? t('copied') : t('copyText')}
         </Button>
       </div>
 

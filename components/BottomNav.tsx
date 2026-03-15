@@ -4,17 +4,19 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Home, CalendarDays, ChefHat, FileDown, Settings } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useTranslations } from 'next-intl';
 
-const navItems = [
-  { href: '/', label: "Aujourd'hui", icon: Home },
-  { href: '/semainier', label: 'Semainier', icon: CalendarDays },
-  { href: '/batch-cook', label: 'Batch Cook', icon: ChefHat },
-  { href: '/export', label: 'Export', icon: FileDown },
-  { href: '/settings', label: 'Réglages', icon: Settings },
-];
+const navRoutes = [
+  { href: '/', key: 'dashboard', icon: Home },
+  { href: '/semainier', key: 'weekPlanner', icon: CalendarDays },
+  { href: '/batch-cook', key: 'batchCook', icon: ChefHat },
+  { href: '/export', key: 'export', icon: FileDown },
+  { href: '/settings', key: 'settings', icon: Settings },
+] as const;
 
 export function BottomNav() {
   const pathname = usePathname();
+  const t = useTranslations('nav');
 
   return (
     <nav
@@ -23,7 +25,7 @@ export function BottomNav() {
       aria-label="Navigation principale"
     >
       <div className="max-w-5xl mx-auto flex items-center justify-around h-16">
-        {navItems.map(({ href, label, icon: Icon }) => {
+        {navRoutes.map(({ href, key, icon: Icon }) => {
           const isActive = pathname === href;
           return (
             <Link
@@ -38,7 +40,7 @@ export function BottomNav() {
               aria-current={isActive ? 'page' : undefined}
             >
               <Icon size={20} strokeWidth={isActive ? 2.5 : 1.5} />
-              <span className="text-xs font-medium">{label}</span>
+              <span className="text-xs font-medium">{t(key)}</span>
             </Link>
           );
         })}

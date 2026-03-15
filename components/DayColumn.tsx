@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import type { DayPlan, AssemblyRow, MealType } from '@/types';
 import { NutriGradeBadge } from '@/components/NutriGradeBadge';
-import { fr } from '@/lib/i18n/fr';
+import { useTranslations } from 'next-intl';
 
 const mealColors: Record<MealType, string> = {
   breakfast: 'bg-[var(--color-meal-breakfast)]',
@@ -45,8 +45,16 @@ interface DayColumnProps {
 
 export function DayColumn({ dayName, date, dayPlan, onGenerate, onUpdatePlan }: DayColumnProps) {
   const [editOpen, setEditOpen] = useState(false);
+  const tDashboard = useTranslations('dashboard');
+  const tWeek = useTranslations('weekPlanner');
   const isToday = new Date().toDateString() === date.toDateString();
   const hasMeals = dayPlan.breakfast || dayPlan.lunch || dayPlan.dinner;
+
+  const mealLabels: Record<MealType, string> = {
+    breakfast: tDashboard('breakfast'),
+    lunch: tDashboard('lunch'),
+    dinner: tDashboard('dinner'),
+  };
 
   return (
     <>
@@ -84,10 +92,9 @@ export function DayColumn({ dayName, date, dayPlan, onGenerate, onUpdatePlan }: 
           <div className="mt-4 space-y-4">
             {(['breakfast', 'lunch', 'dinner'] as MealType[]).map((mealType) => {
               const assembly = dayPlan[mealType];
-              const label = mealType === 'breakfast' ? fr.dashboard.breakfast : mealType === 'lunch' ? fr.dashboard.lunch : fr.dashboard.dinner;
               return (
                 <div key={mealType} className="space-y-1">
-                  <h3 className="text-sm font-semibold">{label}</h3>
+                  <h3 className="text-sm font-semibold">{mealLabels[mealType]}</h3>
                   {assembly ? (
                     <div className="flex flex-wrap gap-1">
                       {[assembly.protein, assembly.vegetable, assembly.cereal, assembly.sauce].filter(Boolean).map((c) => (
@@ -101,7 +108,7 @@ export function DayColumn({ dayName, date, dayPlan, onGenerate, onUpdatePlan }: 
               );
             })}
             <div className="space-y-1">
-              <h3 className="text-sm font-semibold">{fr.weekPlanner.physicalActivity}</h3>
+              <h3 className="text-sm font-semibold">{tWeek('physicalActivity')}</h3>
               <input
                 type="text"
                 className="w-full border rounded px-2 py-1 text-sm"
@@ -111,7 +118,7 @@ export function DayColumn({ dayName, date, dayPlan, onGenerate, onUpdatePlan }: 
               />
             </div>
             <div className="space-y-1">
-              <h3 className="text-sm font-semibold">{fr.weekPlanner.notes}</h3>
+              <h3 className="text-sm font-semibold">{tWeek('notes')}</h3>
               <textarea
                 className="w-full border rounded px-2 py-1 text-sm min-h-[60px]"
                 value={dayPlan.notes ?? ''}
@@ -121,7 +128,7 @@ export function DayColumn({ dayName, date, dayPlan, onGenerate, onUpdatePlan }: 
             </div>
             {!hasMeals && (
               <Button onClick={() => { onGenerate(); setEditOpen(false); }} className="w-full bg-[var(--color-cta)] text-white">
-                {fr.weekPlanner.generate}
+                {tWeek('generate')}
               </Button>
             )}
           </div>

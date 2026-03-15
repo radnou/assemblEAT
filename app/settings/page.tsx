@@ -1,28 +1,28 @@
 'use client';
 
 import { useState } from 'react';
-import { Trash2, Lock } from 'lucide-react';
+import { Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { useMealStore } from '@/lib/store/useMealStore';
 import { ProBadge, ProUpsellDialog } from '@/components/ProUpsellDialog';
-import { fr } from '@/lib/i18n/fr';
+import { useTranslations } from 'next-intl';
 
 export default function SettingsPage() {
+  const t = useTranslations('settings');
   const { settings, updateSettings, resetAll } = useMealStore();
   const [showResetDialog, setShowResetDialog] = useState(false);
   const [proOpen, setProOpen] = useState(false);
 
   return (
     <div className="py-6 space-y-6 max-w-md mx-auto">
-      <h1 className="text-xl font-semibold">{fr.settings.title}</h1>
+      <h1 className="text-xl font-semibold">{t('title')}</h1>
 
       {/* Prénom */}
       <Card className="p-4 space-y-2">
-        <label htmlFor="firstName" className="text-sm font-medium">{fr.settings.firstName}</label>
+        <label htmlFor="firstName" className="text-sm font-medium">{t('firstName')}</label>
         <input
           id="firstName"
           type="text"
@@ -35,7 +35,7 @@ export default function SettingsPage() {
 
       {/* Langue */}
       <Card className="p-4 space-y-2">
-        <p className="text-sm font-medium">{fr.settings.language}</p>
+        <p className="text-sm font-medium">{t('language')}</p>
         <div className="flex gap-2">
           <Button
             variant={settings.language === 'fr' ? 'default' : 'outline'}
@@ -56,7 +56,7 @@ export default function SettingsPage() {
 
       {/* Règles métier */}
       <Card className="p-4 space-y-3">
-        <p className="text-sm font-medium">{fr.settings.rules}</p>
+        <p className="text-sm font-medium">{t('rules')}</p>
         <div className="flex items-center gap-3">
           <Checkbox
             id="antiRedundancy"
@@ -66,7 +66,7 @@ export default function SettingsPage() {
             }
           />
           <label htmlFor="antiRedundancy" className="text-sm cursor-pointer">
-            {fr.settings.antiRedundancy}
+            {t('antiRedundancy')}
           </label>
         </div>
         <div className="flex items-center gap-3">
@@ -78,7 +78,7 @@ export default function SettingsPage() {
             }
           />
           <label htmlFor="starchWarning" className="text-sm cursor-pointer">
-            {fr.settings.starchWarning}
+            {t('starchWarning')}
           </label>
         </div>
       </Card>
@@ -86,10 +86,10 @@ export default function SettingsPage() {
       {/* Mode Pro */}
       <Card className="p-4 space-y-2">
         <div className="flex items-center justify-between">
-          <p className="text-sm font-medium">{fr.settings.modePro}</p>
+          <p className="text-sm font-medium">{t('modePro')}</p>
           <ProBadge feature="SHARE_WITH_DIETITIAN" onClick={() => setProOpen(true)} />
         </div>
-        <p className="text-xs text-gray-500">{fr.settings.modeProSoon}</p>
+        <p className="text-xs text-gray-500">{t('modeProSoon')}</p>
       </Card>
 
       {/* Reset */}
@@ -99,15 +99,15 @@ export default function SettingsPage() {
         onClick={() => setShowResetDialog(true)}
       >
         <Trash2 size={16} className="mr-2" />
-        {fr.settings.resetAll}
+        {t('resetAll')}
       </Button>
 
       {/* Dialogs */}
       <Dialog open={showResetDialog} onOpenChange={setShowResetDialog}>
         <DialogContent className="max-w-xs">
           <DialogHeader>
-            <DialogTitle>{fr.settings.resetAll}</DialogTitle>
-            <DialogDescription>{fr.settings.resetConfirm}</DialogDescription>
+            <DialogTitle>{t('resetAll')}</DialogTitle>
+            <DialogDescription>{t('resetConfirm')}</DialogDescription>
           </DialogHeader>
           <div className="flex gap-2 justify-end mt-2">
             <Button variant="outline" onClick={() => setShowResetDialog(false)}>Annuler</Button>

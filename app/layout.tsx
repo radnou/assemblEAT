@@ -5,6 +5,8 @@ import { BottomNav } from '@/components/BottomNav';
 import { InstallBanner } from '@/components/InstallBanner';
 import { Toaster } from '@/components/ui/sonner';
 import { HydrationProvider } from '@/components/HydrationProvider';
+import { NextIntlClientProvider } from 'next-intl';
+import { getMessages, getLocale } from 'next-intl/server';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
@@ -26,21 +28,26 @@ export const viewport: Viewport = {
   maximumScale: 1,
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const locale = await getLocale();
+  const messages = await getMessages();
+
   return (
-    <html lang="fr" className={inter.variable}>
+    <html lang={locale} className={inter.variable}>
       <head>
         <link rel="apple-touch-icon" href="/icons/icon-192.png" />
       </head>
       <body className="bg-[var(--color-surface)] text-[var(--color-text-main)] font-sans antialiased">
-        <HydrationProvider>
-          <main className="pb-20 min-h-screen max-w-5xl mx-auto px-4">
-            {children}
-          </main>
-          <BottomNav />
-          <InstallBanner />
-          <Toaster position="top-center" />
-        </HydrationProvider>
+        <NextIntlClientProvider messages={messages}>
+          <HydrationProvider>
+            <main className="pb-20 min-h-screen max-w-5xl mx-auto px-4">
+              {children}
+            </main>
+            <BottomNav />
+            <InstallBanner />
+            <Toaster position="top-center" />
+          </HydrationProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );
