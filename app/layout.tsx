@@ -1,19 +1,14 @@
 import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
-import { BottomNav } from '@/components/BottomNav';
-import { InstallBanner } from '@/components/InstallBanner';
-import { Toaster } from '@/components/ui/sonner';
-import { HydrationProvider } from '@/components/HydrationProvider';
-import { OnboardingGate } from '@/components/OnboardingGate';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getLocale } from 'next-intl/server';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
 export const metadata: Metadata = {
-  title: 'AssemblEat — Repas sans décision',
-  description: 'Simplifiez votre semaine alimentaire avec la méthode CPB et le suivi Nutri-Score',
+  title: 'AssemblEat — Planifiez vos repas avec le Nutri-Score',
+  description: 'Générez votre planning de repas équilibrés, guidé par le Nutri-Score. Adapté à vos goûts. Gratuit.',
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
@@ -40,16 +35,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       </head>
       <body className="bg-[var(--color-surface)] text-[var(--color-text-main)] font-sans antialiased">
         <NextIntlClientProvider messages={messages}>
-          <HydrationProvider>
-            <OnboardingGate>
-              <main className="pb-20 min-h-screen max-w-5xl mx-auto px-4">
-                {children}
-              </main>
-              <BottomNav />
-              <InstallBanner />
-            </OnboardingGate>
-            <Toaster position="top-center" />
-          </HydrationProvider>
+          {children}
         </NextIntlClientProvider>
       </body>
     </html>

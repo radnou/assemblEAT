@@ -40,7 +40,7 @@ export default function LoginPage() {
         if (signInError) {
           setError(t('error'));
         } else {
-          router.push('/');
+          router.push('/app');
         }
       }
     } catch {

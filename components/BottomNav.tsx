@@ -7,11 +7,11 @@ import { cn } from '@/lib/utils';
 import { useTranslations } from 'next-intl';
 
 const navRoutes = [
-  { href: '/', key: 'dashboard', icon: Home },
-  { href: '/semainier', key: 'weekPlanner', icon: CalendarDays },
-  { href: '/batch-cook', key: 'batchCook', icon: ChefHat },
-  { href: '/export', key: 'export', icon: FileDown },
-  { href: '/settings', key: 'settings', icon: Settings },
+  { href: '/app', key: 'dashboard', icon: Home },
+  { href: '/app/semainier', key: 'weekPlanner', icon: CalendarDays },
+  { href: '/app/batch-cook', key: 'batchCook', icon: ChefHat },
+  { href: '/app/export', key: 'export', icon: FileDown },
+  { href: '/app/settings', key: 'settings', icon: Settings },
 ] as const;
 
 export function BottomNav() {
@@ -26,7 +26,7 @@ export function BottomNav() {
     >
       <div className="max-w-5xl mx-auto flex items-center justify-around h-16">
         {navRoutes.map(({ href, key, icon: Icon }) => {
-          const isActive = pathname === href;
+          const isActive = href === '/app' ? pathname === href : pathname.startsWith(href);
           return (
             <Link
               key={href}
