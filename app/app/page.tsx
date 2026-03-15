@@ -8,6 +8,8 @@ import { generateRandomAssembly, detectDayConflicts } from '@/lib/engine/assembl
 import { useTranslations, useLocale } from 'next-intl';
 import type { MealFeedback, MealType } from '@/types';
 import { AppTour } from '@/components/tour/AppTour';
+import Link from 'next/link';
+import { Flame } from 'lucide-react';
 
 export default function Dashboard() {
   const t = useTranslations('dashboard');
@@ -158,6 +160,17 @@ export default function Dashboard() {
           ))}
         </div>
       )}
+
+      {/* Roast my diet CTA */}
+      <div className="flex justify-center pt-2">
+        <Link
+          href="/app/roast"
+          className="inline-flex items-center gap-2 bg-gray-900 hover:bg-gray-800 text-white text-sm font-semibold px-5 py-3 rounded-2xl shadow-lg transition-all hover:scale-105 active:scale-95"
+        >
+          <Flame size={18} className="text-orange-400" />
+          🔥 Roast my diet
+        </Link>
+      </div>
 
       {/* Feature tour overlay */}
       {showTour && <AppTour onComplete={completeTour} />}

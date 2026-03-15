@@ -155,6 +155,22 @@
     "or": "or",
     "forgotPassword": "Forgot password?"
   },
+  "roast": {
+    "title": "Roast my diet",
+    "subtitle": "The app analyses your week and tells you what it thinks.",
+    "regenerate": "New roast",
+    "share": "Share",
+    "kindMode": "Kind mode",
+    "disclaimer": "If you're struggling with food, talk to a professional.",
+    "helpline": "Helpline: 0 800 00 00 67",
+    "noData": "Validate at least 3 meals this week to unlock your roast!",
+    "stats": {
+      "meals": "meals logged",
+      "avgScore": "avg score",
+      "ingredients": "different ingredients",
+      "lightDinners": "light dinners"
+    }
+  },
   "onboarding": {
     "back": "Back",
     "next": "Continue",
