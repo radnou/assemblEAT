@@ -308,6 +308,19 @@
       "poor": "Tough week. Start gently — every meal counts!"
     }
   },
+  "goals": {
+    "title": "Nutritional Goals",
+    "addGoal": "Add a goal",
+    "goalPlaceholder": "E.g. 3 meals with legumes",
+    "target": "Target",
+    "presets": {
+      "legumes": "3 meals with legumes",
+      "greens": "5 days with green vegetables",
+      "reduceSauce": "Reduce sauces this week"
+    },
+    "progress": "Progress",
+    "completed": "Goal reached!"
+  },
   "history": {
     "title": "My nutritional history",
     "subtitle": "Evolution over the last 12 weeks",

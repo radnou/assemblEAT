@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
-import { Trash2, LogIn, LogOut } from 'lucide-react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
+import { Trash2, LogIn, LogOut, Plus, X, Users, Check } from 'lucide-react';
 import {
   isNotificationSupported,
   getNotificationPermission,
@@ -17,15 +17,54 @@ import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 import type { User } from '@supabase/supabase-js';
+import { useGoalsStore } from '@/lib/store/useGoalsStore';
+import { useSubscriptionStore } from '@/lib/store/useSubscriptionStore';
+import { useProfileStore } from '@/lib/store/useProfileStore';
 
 export default function SettingsPage() {
   const t = useTranslations('settings');
   const tAuth = useTranslations('auth');
+  const tGoals = useTranslations('goals');
   const { settings, updateSettings, resetAll } = useMealStore();
+  const { plan } = useSubscriptionStore();
+  const { goals, addGoal, removeGoal } = useGoalsStore();
+  const { profiles, activeProfileId, addProfile, switchProfile, deleteProfile } = useProfileStore();
   const [showResetDialog, setShowResetDialog] = useState(false);
   const [proOpen, setProOpen] = useState(false);
+  const [profilesProOpen, setProfilesProOpen] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [notifPermission, setNotifPermission] = useState<string>('unsupported');
+  const [goalText, setGoalText] = useState('');
+  const [goalTarget, setGoalTarget] = useState(3);
+  const [newProfileName, setNewProfileName] = useState('');
+  const [showAddProfile, setShowAddProfile] = useState(false);
+
+  // Current ISO week key (YYYY-Www)
+  const currentWeekKey = useMemo(() => {
+    const now = new Date();
+    const d = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
+    const dayNum = d.getUTCDay() || 7;
+    d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+    const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+    const weekNum = Math.ceil(((d.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);
+    return `${now.getFullYear()}-W${String(weekNum).padStart(2, '0')}`;
+  }, []);
+
+  const weekGoals = goals.filter((g) => g.weekKey === currentWeekKey);
+
+  const presets = [
+    tGoals('presets.legumes'),
+    tGoals('presets.greens'),
+    tGoals('presets.reduceSauce'),
+  ];
+
+  const handleAddGoal = () => {
+    const text = goalText.trim();
+    if (!text) return;
+    addGoal(text, goalTarget, currentWeekKey);
+    setGoalText('');
+    setGoalTarget(3);
+  };
 
   useEffect(() => {
     setNotifPermission(getNotificationPermission());
@@ -167,6 +206,101 @@ export default function SettingsPage() {
               Notifications bloquées. Activez-les dans les paramètres de votre navigateur.
             </p>
           )}
+        </Card>
+      )}
+
+      {/* Objectifs nutritionnels (Pro only) */}
+      {plan === 'pro' && (
+        <Card className="p-4 space-y-4">
+          <p className="text-sm font-medium">{tGoals('title')}</p>
+
+          {/* Active goals list */}
+          {weekGoals.length > 0 && (
+            <ul className="space-y-2">
+              {weekGoals.map((goal) => (
+                <li
+                  key={goal.id}
+                  className="flex items-center gap-2 p-2 rounded-lg bg-blue-50 border border-blue-100"
+                >
+                  <span className="text-base">🎯</span>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-medium truncate">{goal.text}</p>
+                    <div className="flex items-center gap-2 mt-0.5">
+                      <div className="h-1 flex-1 bg-blue-100 rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-blue-500 rounded-full transition-all"
+                          style={{ width: `${(goal.achievedCount / goal.targetCount) * 100}%` }}
+                        />
+                      </div>
+                      <span className="text-[10px] text-blue-600 font-medium shrink-0">
+                        {goal.achievedCount}/{goal.targetCount}
+                      </span>
+                    </div>
+                    {goal.achievedCount >= goal.targetCount && (
+                      <p className="text-[10px] text-green-600 font-semibold mt-0.5">
+                        {tGoals('completed')}
+                      </p>
+                    )}
+                  </div>
+                  <button
+                    onClick={() => removeGoal(goal.id)}
+                    className="text-gray-300 hover:text-red-400 shrink-0"
+                    aria-label="Supprimer"
+                  >
+                    <X size={14} />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+
+          {/* Preset suggestions */}
+          <div className="space-y-1">
+            <p className="text-xs text-gray-500">Suggestions rapides :</p>
+            <div className="flex flex-wrap gap-2">
+              {presets.map((preset) => (
+                <button
+                  key={preset}
+                  onClick={() => setGoalText(preset)}
+                  className="text-xs px-2 py-1 rounded-full bg-gray-100 hover:bg-blue-100 hover:text-blue-700 transition-colors"
+                >
+                  {preset}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Add goal form */}
+          <div className="space-y-2">
+            <input
+              type="text"
+              className="w-full border rounded-lg px-3 py-2 text-sm"
+              placeholder={tGoals('goalPlaceholder')}
+              value={goalText}
+              onChange={(e) => setGoalText(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleAddGoal()}
+            />
+            <div className="flex items-center gap-2">
+              <label className="text-xs text-gray-500 shrink-0">{tGoals('target')} :</label>
+              <input
+                type="number"
+                min={1}
+                max={30}
+                className="w-16 border rounded-lg px-2 py-1.5 text-sm"
+                value={goalTarget}
+                onChange={(e) => setGoalTarget(Math.max(1, parseInt(e.target.value) || 1))}
+              />
+              <Button
+                size="sm"
+                className="flex-1 flex items-center gap-1"
+                onClick={handleAddGoal}
+                disabled={!goalText.trim()}
+              >
+                <Plus size={14} />
+                {tGoals('addGoal')}
+              </Button>
+            </div>
+          </div>
         </Card>
       )}
 

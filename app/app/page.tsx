@@ -17,9 +17,11 @@ import Link from 'next/link';
 import { Flame, Trophy, ShoppingCart, UserCircle, Refrigerator } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 import { useAuth } from '@/lib/hooks/useAuth';
+import { useGoalsStore } from '@/lib/store/useGoalsStore';
 
 export default function Dashboard() {
   const t = useTranslations('dashboard');
+  const tGoals = useTranslations('goals');
   const locale = useLocale();
   const searchParams = useSearchParams();
   const { user, isAuthenticated } = useAuth();
@@ -211,6 +213,9 @@ export default function Dashboard() {
     }
   }, [todayBreakfast, todayLunch, todayDinner, setTodayMeal]);
 
+  const { goals, incrementGoal } = useGoalsStore();
+  const activeGoals = goals.filter((g) => g.weekKey === currentWeekKey && g.achievedCount < g.targetCount);
+
   const showTour = onboardingCompleted && !tourCompleted;
 
   return (
@@ -282,6 +287,41 @@ export default function Dashboard() {
               </button>
             ))}
           </div>
+        </div>
+      )}
+
+      {/* Goals banner (Pro only) */}
+      {plan === 'pro' && activeGoals.length > 0 && (
+        <div className="space-y-2">
+          {activeGoals.map((goal) => (
+            <div
+              key={goal.id}
+              className="flex items-center gap-3 p-3 rounded-xl bg-blue-50 border border-blue-100"
+            >
+              <span className="text-lg">🎯</span>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium truncate">{goal.text}</p>
+                <div className="flex items-center gap-2 mt-1">
+                  <div className="h-1.5 flex-1 bg-blue-100 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-blue-500 rounded-full transition-all"
+                      style={{ width: `${(goal.achievedCount / goal.targetCount) * 100}%` }}
+                    />
+                  </div>
+                  <span className="text-xs text-blue-600 font-medium shrink-0">
+                    {goal.achievedCount}/{goal.targetCount}
+                  </span>
+                </div>
+              </div>
+              <button
+                onClick={() => incrementGoal(goal.id)}
+                className="text-blue-500 hover:text-blue-700 font-semibold text-sm px-1"
+                aria-label={tGoals('progress')}
+              >
+                +1
+              </button>
+            </div>
+          ))}
         </div>
       )}
 

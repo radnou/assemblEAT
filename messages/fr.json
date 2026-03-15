@@ -308,6 +308,19 @@
       "poor": "Semaine difficile. Recommencez doucement — chaque repas compte\u00a0!"
     }
   },
+  "goals": {
+    "title": "Objectifs nutritionnels",
+    "addGoal": "Ajouter un objectif",
+    "goalPlaceholder": "Ex: 3 repas avec légumineuses",
+    "target": "Objectif",
+    "presets": {
+      "legumes": "3 repas avec légumineuses",
+      "greens": "5 jours avec légumes verts",
+      "reduceSauce": "Réduire les sauces cette semaine"
+    },
+    "progress": "Progression",
+    "completed": "Objectif atteint !"
+  },
   "history": {
     "title": "Mon historique nutritionnel",
     "subtitle": "Évolution sur les 12 dernières semaines",
