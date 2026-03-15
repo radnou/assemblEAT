@@ -155,6 +155,18 @@
     "downloaded": "Image downloaded!",
     "error": "Generation error"
   },
+  "shareLink": {
+    "title": "Shared week plan",
+    "subtitle": "Week",
+    "poweredBy": "Created with AssemblEat",
+    "tryFree": "Try for free",
+    "copied": "Practitioner link copied!",
+    "generate": "Practitioner link",
+    "breakfast": "Breakfast",
+    "lunch": "Lunch",
+    "dinner": "Dinner",
+    "noMeal": "Not planned"
+  },
   "auth": {
     "title": "Login",
     "signupTitle": "Create an account",

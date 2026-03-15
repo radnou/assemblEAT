@@ -9,6 +9,7 @@ import { useMealStore } from '@/lib/store/useMealStore';
 import { useSubscriptionStore } from '@/lib/store/useSubscriptionStore';
 import { WeekExportPreview } from '@/components/WeekExportPreview';
 import { ProBadge, ProUpsellDialog } from '@/components/ProUpsellDialog';
+import { ShareLinkButton } from '@/components/share/ShareLinkButton';
 import { generateTextSummary } from '@/lib/utils/pdfExport';
 import { useTranslations } from 'next-intl';
 
@@ -137,6 +138,13 @@ export default function ExportPage() {
           {copied ? t('copied') : t('copyText')}
         </Button>
       </div>
+
+      {/* Practitioner share link — Pro only */}
+      {plan === 'pro' && (
+        <div className="pt-1">
+          <ShareLinkButton className="w-full justify-center" size="default" />
+        </div>
+      )}
 
       <ProUpsellDialog open={proOpen} onOpenChange={setProOpen} feature="SHARE_WITH_DIETITIAN" />
     </div>

@@ -10,6 +10,7 @@ import { useSubscriptionStore } from '@/lib/store/useSubscriptionStore';
 import { generateRandomAssembly } from '@/lib/engine/assemblyEngine';
 import { DayColumn } from '@/components/DayColumn';
 import { ShareWeekButton } from '@/components/share/ShareWeekButton';
+import { ShareLinkButton } from '@/components/share/ShareLinkButton';
 import { ProUpsellDialog } from '@/components/ProUpsellDialog';
 import { useTranslations } from 'next-intl';
 
@@ -66,13 +67,16 @@ export default function SemainierPage() {
         </div>
       </div>
 
-      {/* Share button */}
-      <div className="flex justify-end">
+      {/* Share buttons */}
+      <div className="flex justify-end gap-2">
         <ShareWeekButton
           weekPlan={weekPlan}
           streak={streakCount}
           userName={settings.firstName}
         />
+        {plan === 'pro' && (
+          <ShareLinkButton size="sm" />
+        )}
       </div>
 
       {/* Week grid */}

@@ -155,6 +155,18 @@
     "downloaded": "Image téléchargée !",
     "error": "Erreur lors de la génération"
   },
+  "shareLink": {
+    "title": "Semainier partagé",
+    "subtitle": "Semaine",
+    "poweredBy": "Créé avec AssemblEat",
+    "tryFree": "Essayer gratuitement",
+    "copied": "Lien praticien copié !",
+    "generate": "Lien praticien",
+    "breakfast": "Petit-déjeuner",
+    "lunch": "Déjeuner",
+    "dinner": "Dîner",
+    "noMeal": "Non planifié"
+  },
   "auth": {
     "title": "Connexion",
     "signupTitle": "Créer un compte",
