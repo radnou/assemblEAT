@@ -66,12 +66,12 @@ export function AssemblyCard({ assembly, mealType, onRegenerate, onValidate, war
     return (
       <Card className="border-l-4 border-l-gray-200 p-4">
         <div className="flex items-center justify-between">
-          <span className="text-sm font-semibold text-gray-400">{mealLabels[mealType]}</span>
+          <span className="text-sm font-semibold text-gray-500">{mealLabels[mealType]}</span>
           <Button variant="ghost" size="icon" onClick={handleRegenerate} aria-label={fr.dashboard.regenerate}>
             <Dice5 size={18} />
           </Button>
         </div>
-        <p className="text-xs text-gray-400 mt-2">{fr.dashboard.noMeal}</p>
+        <p className="text-xs text-gray-500 mt-2">{fr.dashboard.noMeal}</p>
       </Card>
     );
   }
@@ -97,7 +97,7 @@ export function AssemblyCard({ assembly, mealType, onRegenerate, onValidate, war
           <Badge
             key={comp!.id}
             variant="secondary"
-            className={cn('text-[11px] text-white', mealBgColors[mealType])}
+            className={cn('text-xs text-white', mealBgColors[mealType])}
           >
             {comp!.name}
           </Badge>
@@ -113,7 +113,7 @@ export function AssemblyCard({ assembly, mealType, onRegenerate, onValidate, war
 
       {/* Light dinner badge */}
       {lightDinner && (
-        <Badge className="bg-green-100 text-green-700 text-[10px] mb-2">
+        <Badge className="bg-green-100 text-green-700 text-xs mb-2">
           {fr.dashboard.lightDinner}
         </Badge>
       )}
@@ -122,7 +122,7 @@ export function AssemblyCard({ assembly, mealType, onRegenerate, onValidate, war
       {warnings && warnings.length > 0 && (
         <div className="mb-2 space-y-1">
           {warnings.map((w, i) => (
-            <p key={i} className="text-[11px] text-orange-600 bg-orange-50 rounded px-2 py-1">
+            <p key={i} className="text-xs text-orange-600 bg-orange-50 rounded px-2 py-1">
               {w}
             </p>
           ))}
@@ -148,7 +148,7 @@ export function AssemblyCard({ assembly, mealType, onRegenerate, onValidate, war
           </Button>
         )}
         {assembly.validated && (
-          <Badge className="bg-green-100 text-green-700 text-[10px]">Validé</Badge>
+          <Badge className="bg-green-100 text-green-700 text-xs">Validé</Badge>
         )}
       </div>
     </Card>

@@ -127,7 +127,7 @@ export const dinnerAssemblies: AssemblyRow[] = [
   {
     id: 'din-2', mealType: 'dinner',
     protein: lunchProteins[4], vegetable: lunchVegetables[0],
-    cereal: lunchCereals[0], sauce: sauces[1],
+    cereal: { ...lunchCereals[0], weightG: 100 }, sauce: sauces[1],
     flavorProfile: 'asiatique',
   },
   {
@@ -145,7 +145,7 @@ export const dinnerAssemblies: AssemblyRow[] = [
   {
     id: 'din-5', mealType: 'dinner',
     protein: lunchProteins[5], vegetable: lunchVegetables[2],
-    cereal: lunchCereals[2], sauce: sauces[1],
+    cereal: { ...lunchCereals[2], weightG: 100 }, sauce: sauces[1],
     flavorProfile: 'asiatique',
   },
   {

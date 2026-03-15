@@ -33,12 +33,12 @@ export function BottomNav() {
                 'flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-lg transition-colors',
                 isActive
                   ? 'text-[var(--color-cta)]'
-                  : 'text-gray-400 hover:text-gray-600'
+                  : 'text-gray-500 hover:text-gray-600'
               )}
               aria-current={isActive ? 'page' : undefined}
             >
               <Icon size={20} strokeWidth={isActive ? 2.5 : 1.5} />
-              <span className="text-[10px] font-medium">{label}</span>
+              <span className="text-xs font-medium">{label}</span>
             </Link>
           );
         })}
