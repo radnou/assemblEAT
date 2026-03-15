@@ -5,6 +5,15 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
+import { createClient } from '@supabase/supabase-js';
+
+function getServiceSupabase() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    { db: { schema: 'assembleat' } }
+  );
+}
 
 /**
  * Verify the Lemon Squeezy webhook signature using HMAC-SHA256.
@@ -57,12 +66,21 @@ export async function POST(request: NextRequest) {
       const isActive = status != null && ['active', 'on_trial'].includes(status);
 
       if (userId && isActive) {
-        // TODO: update Supabase user plan to 'pro' using service role key
-        // Example (requires SUPABASE_SERVICE_ROLE_KEY):
-        //   const { createClient } = await import('@supabase/supabase-js');
-        //   const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
-        //   await supabase.from('user_subscriptions').upsert({ user_id: userId, plan: 'pro', status });
-        console.log(`[LemonSqueezy] User ${userId} subscription active: ${status}`);
+        const supabase = getServiceSupabase();
+        const lsSubscriptionId = String(data?.id ?? '');
+
+        // Update profile plan to 'pro'
+        await supabase.from('profiles').update({ plan: 'pro' }).eq('id', userId);
+
+        // Upsert subscription record
+        await supabase.from('subscriptions').upsert({
+          user_id: userId,
+          stripe_subscription_id: lsSubscriptionId, // reusing column for LS subscription ID
+          status: status ?? 'active',
+          current_period_end: subscriptionData?.renews_at as string ?? null,
+        }, { onConflict: 'user_id' });
+
+        console.log(`[LemonSqueezy] User ${userId} upgraded to Pro (${status})`);
       }
       break;
     }
@@ -70,8 +88,13 @@ export async function POST(request: NextRequest) {
     case 'subscription_cancelled':
     case 'subscription_expired': {
       if (userId) {
-        // TODO: downgrade user to 'free' in Supabase
-        console.log(`[LemonSqueezy] User ${userId} subscription cancelled/expired`);
+        const supabase = getServiceSupabase();
+
+        // Downgrade to free
+        await supabase.from('profiles').update({ plan: 'free' }).eq('id', userId);
+        await supabase.from('subscriptions').update({ status: 'cancelled' }).eq('user_id', userId);
+
+        console.log(`[LemonSqueezy] User ${userId} downgraded to Free`);
       }
       break;
     }

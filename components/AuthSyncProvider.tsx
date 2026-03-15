@@ -15,6 +15,7 @@ import { useEffect, useRef } from 'react';
 import { useAuth } from '@/lib/hooks/useAuth';
 import { useMigration } from '@/lib/hooks/useMigration';
 import { useMealStore } from '@/lib/store/useMealStore';
+import { useSubscriptionStore } from '@/lib/store/useSubscriptionStore';
 import { createAssembleatClient } from '@/lib/supabase/client';
 import { createSupabasePersistence } from '@/lib/store/persistence';
 
@@ -23,6 +24,7 @@ export function AuthSyncProvider({ children }: { children: React.ReactNode }) {
   const { migrate, migrated } = useMigration();
   const setPersistence = useMealStore((s) => s.setPersistence);
   const syncFromPersistence = useMealStore((s) => s.syncFromPersistence);
+  const setPlan = useSubscriptionStore((s) => s.setPlan);
 
   // Track whether we have already switched to the Supabase layer for this user
   const supabaseLayerActiveRef = useRef(false);
@@ -48,6 +50,20 @@ export function AuthSyncProvider({ children }: { children: React.ReactNode }) {
 
         // Step 3: load authoritative Supabase data into the store
         await syncFromPersistence();
+
+        // Step 4: sync subscription plan from Supabase profiles
+        try {
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('plan')
+            .eq('id', user!.id)
+            .single();
+          if (profile?.plan) {
+            setPlan(profile.plan as 'free' | 'pro');
+          }
+        } catch {
+          // Profile may not exist yet — stay on free
+        }
       }
     }
 
