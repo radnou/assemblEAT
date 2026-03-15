@@ -134,6 +134,12 @@
       "description": "Your practitioner can comment on your meals in real time. Free 7-day trial."
     }
   },
+  "share": {
+    "weekButton": "Share my week",
+    "generating": "Generating...",
+    "downloaded": "Image downloaded!",
+    "error": "Generation error"
+  },
   "auth": {
     "title": "Login",
     "signupTitle": "Create an account",

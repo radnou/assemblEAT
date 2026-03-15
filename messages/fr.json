@@ -134,6 +134,12 @@
       "description": "Ton praticien peut commenter tes repas en temps réel. Essai gratuit 7 jours."
     }
   },
+  "share": {
+    "weekButton": "Partager ma semaine",
+    "generating": "Génération en cours...",
+    "downloaded": "Image téléchargée !",
+    "error": "Erreur lors de la génération"
+  },
   "auth": {
     "title": "Connexion",
     "signupTitle": "Créer un compte",

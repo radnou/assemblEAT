@@ -8,12 +8,13 @@ import { useWeekNavigation } from '@/lib/hooks/useWeekNavigation';
 import { useMealStore } from '@/lib/store/useMealStore';
 import { generateRandomAssembly } from '@/lib/engine/assemblyEngine';
 import { DayColumn } from '@/components/DayColumn';
+import { ShareWeekButton } from '@/components/share/ShareWeekButton';
 import { useTranslations } from 'next-intl';
 
 export default function SemainierPage() {
   const t = useTranslations('weekPlanner');
   const { weekKey, weekDates, dayNames, goToPreviousWeek, goToNextWeek, goToCurrentWeek, isCurrentWeek } = useWeekNavigation();
-  const { getWeekPlan, setDayPlan, recentProteins, settings } = useMealStore();
+  const { getWeekPlan, setDayPlan, recentProteins, settings, streakCount } = useMealStore();
 
   const weekPlan = getWeekPlan(weekKey);
 
@@ -59,6 +60,15 @@ export default function SemainierPage() {
             <ChevronRight size={18} />
           </Button>
         </div>
+      </div>
+
+      {/* Share button */}
+      <div className="flex justify-end">
+        <ShareWeekButton
+          weekPlan={weekPlan}
+          streak={streakCount}
+          userName={settings.firstName}
+        />
       </div>
 
       {/* Week grid */}
