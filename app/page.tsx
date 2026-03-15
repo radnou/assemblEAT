@@ -21,21 +21,24 @@ export default function Dashboard() {
   // Générer les repas au premier chargement si vides
   useEffect(() => {
     if (!todayBreakfast) {
-      setTodayMeal('breakfast', generateRandomAssembly('breakfast'));
+      const breakfast = generateRandomAssembly('breakfast');
+      if (breakfast) setTodayMeal('breakfast', breakfast);
     }
     if (!todayLunch) {
-      setTodayMeal('lunch', generateRandomAssembly('lunch', {
+      const lunch = generateRandomAssembly('lunch', {
         breakfastAssembly: todayBreakfast,
         recentProteins,
         enableAntiRedundancy: settings.rules.antiRedundancy,
-      }));
+      });
+      if (lunch) setTodayMeal('lunch', lunch);
     }
     if (!todayDinner) {
-      setTodayMeal('dinner', generateRandomAssembly('dinner', {
+      const dinner = generateRandomAssembly('dinner', {
         breakfastAssembly: todayBreakfast,
         recentProteins,
         enableAntiRedundancy: settings.rules.antiRedundancy,
-      }));
+      });
+      if (dinner) setTodayMeal('dinner', dinner);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -46,7 +49,7 @@ export default function Dashboard() {
       recentProteins,
       enableAntiRedundancy: settings.rules.antiRedundancy,
     });
-    setTodayMeal(mealType, assembly);
+    if (assembly) setTodayMeal(mealType, assembly);
   }, [todayBreakfast, recentProteins, settings.rules.antiRedundancy, setTodayMeal]);
 
   const handleValidate = useCallback((mealType: MealType) => {

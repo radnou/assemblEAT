@@ -17,17 +17,17 @@ export default function SemainierPage() {
   const weekPlan = getWeekPlan(weekKey);
 
   const handleGenerateDay = useCallback((dayIndex: number) => {
-    const breakfast = generateRandomAssembly('breakfast');
+    const breakfast = generateRandomAssembly('breakfast') ?? null;
     const lunch = generateRandomAssembly('lunch', {
       breakfastAssembly: breakfast,
       recentProteins,
       enableAntiRedundancy: settings.rules.antiRedundancy,
-    });
+    }) ?? null;
     const dinner = generateRandomAssembly('dinner', {
       breakfastAssembly: breakfast,
       recentProteins,
       enableAntiRedundancy: settings.rules.antiRedundancy,
-    });
+    }) ?? null;
 
     setDayPlan(weekKey, dayIndex, {
       date: weekDates[dayIndex].toISOString().split('T')[0],

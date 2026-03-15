@@ -3,8 +3,8 @@ import type { AssemblyRow, MealComponent, BatchItem, FlavorProfile } from '@/typ
 // ─── Composants petit-déjeuner ──────────────────────
 
 const breakfastComponents: Record<string, MealComponent> = {
-  flocons: { id: 'flocons', name: "Flocons d'avoine", category: 'cereal', prepTime: 3, tags: ['cereales', 'chaud'], ciqualRefId: 'flocons-avoine' },
-  painComplet: { id: 'painComplet', name: 'Pain complet', category: 'cereal', prepTime: 1, tags: ['cereales', 'tartine'], ciqualRefId: 'pain-complet' },
+  flocons: { id: 'flocons', name: "Flocons d'avoine", category: 'cereal', prepTime: 3, tags: ['cereales', 'chaud', 'gluten'], ciqualRefId: 'flocons-avoine' },
+  painComplet: { id: 'painComplet', name: 'Pain complet', category: 'cereal', prepTime: 1, tags: ['cereales', 'tartine', 'gluten'], ciqualRefId: 'pain-complet' },
   yaourt: { id: 'yaourt', name: 'Yaourt nature', category: 'dairy', prepTime: 0, tags: ['laitage'], ciqualRefId: 'yaourt-nature' },
   fromBlanc: { id: 'fromBlanc', name: 'Fromage blanc', category: 'dairy', prepTime: 0, tags: ['laitage'], ciqualRefId: 'fromage-blanc' },
   oeufsBreak: { id: 'oeufsBreak', name: 'Œufs brouillés', category: 'protein', prepTime: 5, tags: ['oeufs', 'chaud'], ciqualRefId: 'oeufs-durs', conflictsWith: ['oeufs-plat', 'oeufs-dur-dej'] },
@@ -36,8 +36,8 @@ const lunchCereals: MealComponent[] = [
   { id: 'riz-dej', name: 'Riz complet', category: 'cereal', prepTime: 2, tags: ['feculent'], ciqualRefId: 'riz-complet', weightG: 150 },
   { id: 'quinoa-dej', name: 'Quinoa', category: 'cereal', prepTime: 2, tags: ['feculent', 'complet'], ciqualRefId: 'quinoa-cuit', weightG: 150 },
   { id: 'patate-dej', name: 'Patate douce', category: 'cereal', prepTime: 2, tags: ['feculent', 'tubercule'], ciqualRefId: 'patate-douce', weightG: 150 },
-  { id: 'semoule-dej', name: 'Semoule complète', category: 'cereal', prepTime: 2, tags: ['feculent'], ciqualRefId: 'semoule-complete', weightG: 150 },
-  { id: 'pates-dej', name: 'Pâtes complètes', category: 'cereal', prepTime: 2, tags: ['feculent'], ciqualRefId: 'pates-completes', weightG: 150 },
+  { id: 'semoule-dej', name: 'Semoule complète', category: 'cereal', prepTime: 2, tags: ['feculent', 'gluten'], ciqualRefId: 'semoule-complete', weightG: 150 },
+  { id: 'pates-dej', name: 'Pâtes complètes', category: 'cereal', prepTime: 2, tags: ['feculent', 'gluten'], ciqualRefId: 'pates-completes', weightG: 150 },
 ];
 
 const sauces: MealComponent[] = [

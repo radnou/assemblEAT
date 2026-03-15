@@ -1,6 +1,54 @@
 import type { AssemblyRow, MealType, SimplicityScore } from '@/types';
 import { getAssembliesByMealType } from '@/lib/data/repertoire';
 
+// ─── Diet / Allergy / Objective Filtering ───────────────
+
+const DIET_EXCLUDED_TAGS: Record<string, string[]> = {
+  vegetarien: ['viande', 'volaille', 'poisson'],
+  vegetalien: ['viande', 'volaille', 'poisson', 'laitage', 'oeufs'],
+  pescetarien: ['viande', 'volaille'],
+  sans_gluten: ['gluten'],
+  sans_lactose: ['laitage'],
+  halal: ['porc'],
+  casher: ['porc', 'fruits_de_mer'],
+};
+
+/**
+ * Filtre les assemblages selon les régimes alimentaires.
+ */
+export function filterByDiets(assemblies: AssemblyRow[], diets: string[]): AssemblyRow[] {
+  if (diets.length === 0) return assemblies;
+  const excludedTags = new Set(diets.flatMap((d) => DIET_EXCLUDED_TAGS[d] ?? []));
+  return assemblies.filter((a) => {
+    const allTags = [
+      ...(a.protein?.tags ?? []),
+      ...(a.vegetable?.tags ?? []),
+      ...(a.cereal?.tags ?? []),
+      ...(a.sauce?.tags ?? []),
+      ...(a.extras?.flatMap((e) => e.tags) ?? []),
+    ];
+    return !allTags.some((tag) => excludedTags.has(tag));
+  });
+}
+
+/**
+ * Filtre les assemblages selon les allergies (les noms d'allergènes mappent directement aux tags).
+ */
+export function filterByAllergies(assemblies: AssemblyRow[], allergies: string[]): AssemblyRow[] {
+  if (allergies.length === 0) return assemblies;
+  const allergenSet = new Set(allergies);
+  return assemblies.filter((a) => {
+    const allTags = [
+      ...(a.protein?.tags ?? []),
+      ...(a.vegetable?.tags ?? []),
+      ...(a.cereal?.tags ?? []),
+      ...(a.sauce?.tags ?? []),
+      ...(a.extras?.flatMap((e) => e.tags) ?? []),
+    ];
+    return !allTags.some((tag) => allergenSet.has(tag));
+  });
+}
+
 /**
  * Règle 1 — Anti-redondance protéique
  *
@@ -101,6 +149,7 @@ export function calculateSimplicity(assembly: AssemblyRow): SimplicityScore {
 /**
  * Génère un assemblage aléatoire pour un type de repas donné,
  * en appliquant toutes les règles métier.
+ * Retourne null si aucun candidat n'est disponible après filtrage.
  */
 export function generateRandomAssembly(
   mealType: MealType,
@@ -108,9 +157,44 @@ export function generateRandomAssembly(
     breakfastAssembly?: AssemblyRow | null;
     recentProteins?: string[];
     enableAntiRedundancy?: boolean;
+    diets?: string[];
+    allergies?: string[];
+    objective?: string;
   } = {}
-): AssemblyRow {
+): AssemblyRow | null {
   let candidates = getAssembliesByMealType(mealType);
+
+  // Appliquer filtres régimes alimentaires
+  if (options.diets && options.diets.length > 0) {
+    candidates = filterByDiets(candidates, options.diets);
+  }
+
+  // Appliquer filtres allergies
+  if (options.allergies && options.allergies.length > 0) {
+    candidates = filterByAllergies(candidates, options.allergies);
+  }
+
+  // Appliquer filtres objectif
+  if (options.objective) {
+    let objectiveFiltered = candidates;
+
+    if (options.objective === 'weight_loss' && mealType === 'dinner') {
+      // Pas de féculent au dîner pour perte de poids
+      objectiveFiltered = candidates.filter((a) => a.cereal === null);
+    } else if (options.objective === 'less_meat') {
+      // Préférer les protéines sans viande ni volaille
+      const meatlessCandidates = candidates.filter((a) => {
+        const proteinTags = a.protein?.tags ?? [];
+        return !proteinTags.some((t) => ['viande', 'volaille'].includes(t));
+      });
+      objectiveFiltered = meatlessCandidates;
+    }
+
+    // Utiliser le résultat filtré seulement s'il reste des candidats (sinon fallback)
+    if (objectiveFiltered.length > 0) {
+      candidates = objectiveFiltered;
+    }
+  }
 
   // Appliquer règle 1 (anti-redondance)
   if (options.enableAntiRedundancy !== false && options.breakfastAssembly) {
@@ -123,6 +207,11 @@ export function generateRandomAssembly(
     if (filtered.length > 0) {
       candidates = filtered;
     }
+  }
+
+  // Zéro candidat — retourner null plutôt que crasher
+  if (candidates.length === 0) {
+    return null;
   }
 
   // Sélection aléatoire
