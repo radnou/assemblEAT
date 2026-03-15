@@ -7,6 +7,7 @@ import { StreakBadge } from '@/components/streak/StreakBadge';
 import { generateRandomAssembly, detectDayConflicts } from '@/lib/engine/assemblyEngine';
 import { useTranslations, useLocale } from 'next-intl';
 import type { MealFeedback, MealType } from '@/types';
+import { AppTour } from '@/components/tour/AppTour';
 
 export default function Dashboard() {
   const t = useTranslations('dashboard');
@@ -23,6 +24,9 @@ export default function Dashboard() {
     addFeedback,
     streakCount,
     checkAndUpdateStreak,
+    onboardingCompleted,
+    tourCompleted,
+    completeTour,
   } = useMealStore();
 
   // Générer les repas au premier chargement si vides
@@ -90,6 +94,8 @@ export default function Dashboard() {
     return feedbacks.find((f) => f.assemblyId === assemblyId && f.date === todayISO) ?? null;
   };
 
+  const showTour = onboardingCompleted && !tourCompleted;
+
   return (
     <div className="py-6 space-y-6">
       {/* Header */}
@@ -152,6 +158,9 @@ export default function Dashboard() {
           ))}
         </div>
       )}
+
+      {/* Feature tour overlay */}
+      {showTour && <AppTour onComplete={completeTour} />}
     </div>
   );
 }

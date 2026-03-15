@@ -108,6 +108,32 @@
     "milestone90": "3 months!",
     "milestone365": "1 year!"
   },
+  "tour": {
+    "next": "Next",
+    "skip": "Skip tour",
+    "finish": "Finish",
+    "discoverPro": "Discover Pro",
+    "step1": {
+      "title": "Your meals today",
+      "description": "Every day, 3 balanced assemblies generated for you. Regenerate 🎲 or validate ✓."
+    },
+    "step2": {
+      "title": "Plan your week",
+      "description": "Visualise and organise all 7 days of meals at once."
+    },
+    "step3": {
+      "title": "Prepare on Sunday",
+      "description": "A checklist to prepare everything in 45 min. Tick as you go."
+    },
+    "step4": {
+      "title": "Tell us what you think",
+      "description": "After each meal, rate your enjoyment. The app learns your tastes."
+    },
+    "step5": {
+      "title": "Share with your dietitian",
+      "description": "Your practitioner can comment on your meals in real time. Free 7-day trial."
+    }
+  },
   "onboarding": {
     "back": "Back",
     "next": "Continue",

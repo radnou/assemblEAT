@@ -108,6 +108,32 @@
     "milestone90": "3 mois !",
     "milestone365": "1 an !"
   },
+  "tour": {
+    "next": "Suivant",
+    "skip": "Passer le tour",
+    "finish": "Terminer",
+    "discoverPro": "Découvrir Pro",
+    "step1": {
+      "title": "Tes repas du jour",
+      "description": "Chaque jour, 3 assemblages équilibrés générés pour toi. Régénère 🎲 ou valide ✓."
+    },
+    "step2": {
+      "title": "Planifie ta semaine",
+      "description": "Visualise et organise tes 7 jours de repas d'un coup."
+    },
+    "step3": {
+      "title": "Prépare le dimanche",
+      "description": "Une checklist pour tout préparer en 45 min. Coche au fur et à mesure."
+    },
+    "step4": {
+      "title": "Dis-nous ce que t'en penses",
+      "description": "Après chaque repas, note ton plaisir. L'app apprend tes goûts."
+    },
+    "step5": {
+      "title": "Partage avec ton diététicien",
+      "description": "Ton praticien peut commenter tes repas en temps réel. Essai gratuit 7 jours."
+    }
+  },
   "onboarding": {
     "back": "Retour",
     "next": "Continuer",

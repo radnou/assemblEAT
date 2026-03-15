@@ -56,6 +56,10 @@ interface MealStore {
   onboardingCompleted: boolean;
   completeOnboarding: (profile: UserProfile) => void;
 
+  // ─── Tour ─────────────────────────────────
+  tourCompleted: boolean;
+  completeTour: () => void;
+
   // ─── Streak ──────────────────────────────
   streakCount: number;
   streakLastDate: string | null; // YYYY-MM-DD in local time
@@ -195,6 +199,12 @@ export const useMealStore = create<MealStore>((set, get) => ({
     set({ streakCount: newCount, streakLastDate: today });
   },
 
+  tourCompleted: false,
+  completeTour: () => {
+    setLocalStorage('tourCompleted', true);
+    set({ tourCompleted: true });
+  },
+
   onboardingCompleted: false,
   completeOnboarding: (profile) => {
     const settingsToSave: UserSettings = {
@@ -221,6 +231,7 @@ export const useMealStore = create<MealStore>((set, get) => ({
     const storedBatch = getLocalStorage<BatchItem[] | null>('batch-items', null);
     const feedbacks = getLocalStorage<MealFeedback[]>('meal-feedbacks', []);
     const onboardingCompleted = getLocalStorage<boolean>('onboardingCompleted', false);
+    const tourCompleted = getLocalStorage<boolean>('tourCompleted', false);
     const streakCount = getLocalStorage<number>('streak-count', 0);
     const streakLastDate = getLocalStorage<string | null>('streak-last-date', null);
 
@@ -231,6 +242,7 @@ export const useMealStore = create<MealStore>((set, get) => ({
       batchItems: storedBatch ?? batchCookItems,
       feedbacks,
       onboardingCompleted,
+      tourCompleted,
       streakCount,
       streakLastDate,
       hydrated: true,
