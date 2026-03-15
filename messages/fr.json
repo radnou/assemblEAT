@@ -173,18 +173,16 @@
   },
   "auth": {
     "title": "Connexion",
-    "signupTitle": "Créer un compte",
-    "email": "Email",
-    "password": "Mot de passe",
-    "login": "Se connecter",
-    "signup": "Créer un compte",
-    "switchToSignup": "Pas encore de compte ?",
-    "switchToLogin": "Déjà un compte ?",
-    "googleSoon": "Google — Bientôt disponible",
-    "error": "Erreur de connexion. Vérifiez vos identifiants.",
-    "signupSuccess": "Compte créé ! Vérifiez votre email.",
+    "googleButton": "Continuer avec Google",
     "or": "ou",
-    "forgotPassword": "Mot de passe oublié ?"
+    "emailLabel": "Votre email",
+    "emailPlaceholder": "marie@exemple.com",
+    "magicLinkButton": "Recevoir un lien de connexion",
+    "magicLinkSent": "Lien envoyé ! Vérifiez votre boîte mail.",
+    "magicLinkDesc": "Pas besoin de mot de passe — un lien sécurisé vous sera envoyé.",
+    "error": "Erreur. Vérifiez votre email et réessayez.",
+    "back": "Retour",
+    "login": "Se connecter"
   },
   "roast": {
     "title": "Roast my diet",

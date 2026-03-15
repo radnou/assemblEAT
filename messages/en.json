@@ -172,19 +172,17 @@
     "noMeal": "Not planned"
   },
   "auth": {
-    "title": "Login",
-    "signupTitle": "Create an account",
-    "email": "Email",
-    "password": "Password",
-    "login": "Log in",
-    "signup": "Create account",
-    "switchToSignup": "No account yet?",
-    "switchToLogin": "Already have an account?",
-    "googleSoon": "Google — Coming soon",
-    "error": "Login error. Please check your credentials.",
-    "signupSuccess": "Account created! Please check your email.",
+    "title": "Sign in",
+    "googleButton": "Continue with Google",
     "or": "or",
-    "forgotPassword": "Forgot password?"
+    "emailLabel": "Your email",
+    "emailPlaceholder": "marie@example.com",
+    "magicLinkButton": "Send me a sign-in link",
+    "magicLinkSent": "Link sent! Check your inbox.",
+    "magicLinkDesc": "No password needed — a secure link will be sent to you.",
+    "error": "Error. Please check your email and try again.",
+    "back": "Back",
+    "login": "Sign in"
   },
   "roast": {
     "title": "Roast my diet",
