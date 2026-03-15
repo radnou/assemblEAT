@@ -260,4 +260,46 @@ describe('buildShareUrl', () => {
     const url = buildShareUrl('token');
     expect(url).toMatch(/\/share\/token$/);
   });
+
+  it('returns correct URL format: protocol + host + /share/ + encoded', () => {
+    const token = 'myToken42';
+    const url = buildShareUrl(token);
+    expect(url).toMatch(/^https?:\/\/.+\/share\/myToken42$/);
+  });
+
+  it('very long week plan still encodes without crashing', () => {
+    // Build a week plan with many days and long names to stress the encoder
+    const protein = makeComponent('p1', 'A'.repeat(100));
+    const vegetable = { ...makeComponent('v1', 'B'.repeat(100)), category: 'vegetable' as const };
+    const cereal = { ...makeComponent('c1', 'C'.repeat(100)), category: 'cereal' as const };
+
+    const days = Array.from({ length: 30 }, (_, i) => ({
+      date: `2024-0${(i % 9) + 1}-01`,
+      breakfast: makeAssembly(`b-${i}`, { protein }),
+      lunch: makeAssembly(`l-${i}`, { vegetable }),
+      dinner: makeAssembly(`d-${i}`, { cereal }),
+    }));
+
+    const weekPlan = makeWeekPlan(days, '2024-W50');
+    const feedbacks = Array.from({ length: 50 }, (_, i) =>
+      makeFeedback(`assembly-${i}`, '2024-03-01', 3)
+    );
+
+    const payload = {
+      weekPlan,
+      feedbacks,
+      userName: 'LongNameUser'.repeat(5),
+      weekKey: '2024-W50',
+    };
+
+    expect(() => {
+      const encoded = encodeShareData(payload);
+      const url = buildShareUrl(encoded);
+      expect(typeof url).toBe('string');
+      expect(url).toContain('/share/');
+      // Should decode back without error (may have truncated feedbacks)
+      const decoded = decodeShareData(encoded);
+      expect(decoded).not.toBeNull();
+    }).not.toThrow();
+  });
 });
