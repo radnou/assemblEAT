@@ -215,6 +215,9 @@ export const useMealStore = create<MealStore>((set, get) => ({
     setLocalStorage('settings', settingsToSave);
     setLocalStorage('onboardingCompleted', true);
     setLocalStorage('userProfile', profile);
+    if (profile.foodPreferences) {
+      setLocalStorage('food-preferences', profile.foodPreferences);
+    }
     set({ settings: settingsToSave, onboardingCompleted: true });
   },
 
@@ -234,6 +237,8 @@ export const useMealStore = create<MealStore>((set, get) => ({
     const tourCompleted = getLocalStorage<boolean>('tourCompleted', false);
     const streakCount = getLocalStorage<number>('streak-count', 0);
     const streakLastDate = getLocalStorage<string | null>('streak-last-date', null);
+    // food preferences are stored inside userProfile; also kept separately for convenience
+    getLocalStorage<{ id: string; rating: 'like' | 'neutral' | 'dislike' }[]>('food-preferences', []);
 
     set({
       ...todayMeals,

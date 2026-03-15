@@ -157,6 +157,7 @@ export interface UserProfile extends UserSettings {
   cookingTime: 'express' | 'moderate' | 'batch';
   mealsToTrack: MealType[];
   onboardingCompleted: boolean;
+  foodPreferences?: { id: string; rating: 'like' | 'neutral' | 'dislike' }[];
 }
 
 // ─── Meal Feedback ────────────────────────────────────

@@ -10,9 +10,11 @@ import { OnboardingStep2 } from './OnboardingStep2';
 import { OnboardingStep3 } from './OnboardingStep3';
 import { OnboardingStep4 } from './OnboardingStep4';
 import { OnboardingStep5 } from './OnboardingStep5';
+import { OnboardingStepFoodPrefs } from './OnboardingStepFoodPrefs';
+import type { FoodPreference } from './OnboardingStepFoodPrefs';
 import type { UserProfile, MealType } from '@/types';
 
-const TOTAL_STEPS = 5;
+const TOTAL_STEPS = 6;
 
 const DEFAULT_PROFILE: UserProfile = {
   firstName: '',
@@ -26,6 +28,7 @@ const DEFAULT_PROFILE: UserProfile = {
   cookingTime: 'moderate',
   mealsToTrack: ['lunch', 'dinner'] as MealType[],
   onboardingCompleted: false,
+  foodPreferences: [],
 };
 
 interface OnboardingFlowProps {
@@ -135,6 +138,17 @@ export function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
               />
             )}
             {step === 4 && (
+              <OnboardingStepFoodPrefs
+                preferences={(profile.foodPreferences ?? []) as FoodPreference[]}
+                onChange={(prefs) =>
+                  setProfile((p) => ({
+                    ...p,
+                    foodPreferences: prefs.map((fp) => ({ id: fp.id, rating: fp.rating })),
+                  }))
+                }
+              />
+            )}
+            {step === 5 && (
               <OnboardingStep4
                 householdSize={profile.householdSize}
                 cookingTime={profile.cookingTime}
@@ -149,7 +163,7 @@ export function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
                 }
               />
             )}
-            {step === 5 && (
+            {step === 6 && (
               <OnboardingStep5 profile={profile} onComplete={handleComplete} />
             )}
           </motion.div>

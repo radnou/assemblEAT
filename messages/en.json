@@ -185,6 +185,16 @@
       "lunch": "Lunch",
       "dinner": "Dinner"
     },
+    "foodPrefs": {
+      "title": "Your tastes",
+      "subtitle": "Tell us what you like to personalise your meals",
+      "proteins": "Proteins",
+      "vegetables": "Vegetables",
+      "starches": "Starches",
+      "like": "I like it",
+      "neutral": "Neutral",
+      "dislike": "Not for me"
+    },
     "step5": {
       "title": "Let's go, {name}!",
       "subtitle": "Here is your profile and a first suggested assembly.",

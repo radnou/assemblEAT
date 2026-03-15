@@ -185,6 +185,16 @@
       "lunch": "Déjeuner",
       "dinner": "Dîner"
     },
+    "foodPrefs": {
+      "title": "Tes goûts",
+      "subtitle": "Dis-nous ce que tu aimes pour personnaliser tes repas",
+      "proteins": "Protéines",
+      "vegetables": "Légumes",
+      "starches": "Féculents",
+      "like": "J'aime",
+      "neutral": "Neutre",
+      "dislike": "Bof"
+    },
     "step5": {
       "title": "C'est parti, {name} !",
       "subtitle": "Voici votre profil et un premier assemblage suggéré.",
