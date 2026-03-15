@@ -94,5 +94,63 @@
     "notePlaceholder": "Ex: sauce trop salée, brocolis parfaits...",
     "submit": "Envoyer",
     "skip": "Passer"
+  },
+  "onboarding": {
+    "back": "Retour",
+    "next": "Continuer",
+    "skip": "Passer",
+    "step1": {
+      "title": "Bienvenue !",
+      "subtitle": "Commençons par faire connaissance.",
+      "firstNameLabel": "Votre prénom",
+      "firstNamePlaceholder": "Ex : Marie",
+      "avatarLabel": "Choisissez votre emoji"
+    },
+    "step2": {
+      "title": "Votre objectif",
+      "subtitle": "Qu'est-ce qui vous motive à mieux manger ?",
+      "balanced": "Manger plus équilibré",
+      "timeSaving": "Gagner du temps",
+      "weightLoss": "Perdre du poids",
+      "moreProtein": "Plus de protéines",
+      "lessMeat": "Réduire la viande"
+    },
+    "step3": {
+      "title": "Restrictions alimentaires",
+      "subtitle": "On adapte vos assemblages à vos besoins.",
+      "dietsLabel": "Régimes",
+      "allergiesLabel": "Allergies / intolérances",
+      "allergiesPlaceholder": "Tapez et appuyez sur Entrée…",
+      "noRestrictions": "Pas de restriction",
+      "diets": {
+        "none": "Aucun",
+        "vegetarian": "Végétarien",
+        "vegan": "Végétalien",
+        "pescatarian": "Pescetarien",
+        "glutenFree": "Sans gluten",
+        "lactoseFree": "Sans lactose",
+        "halal": "Halal",
+        "kosher": "Casher"
+      }
+    },
+    "step4": {
+      "title": "Vos habitudes",
+      "subtitle": "Pour des assemblages vraiment adaptés à votre quotidien.",
+      "householdLabel": "Nombre de personnes",
+      "cookingTimeLabel": "Temps de cuisine",
+      "mealsLabel": "Repas à planifier",
+      "express": "Express — moins de 5 min",
+      "moderate": "Rapide — 10-15 min",
+      "batch": "Batch cook — je prépare à l'avance",
+      "breakfast": "Petit-déjeuner",
+      "lunch": "Déjeuner",
+      "dinner": "Dîner"
+    },
+    "step5": {
+      "title": "C'est parti, {name} !",
+      "subtitle": "Voici votre profil et un premier assemblage suggéré.",
+      "summaryLabel": "Votre profil",
+      "cta": "C'est parti !"
+    }
   }
 }

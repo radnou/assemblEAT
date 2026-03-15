@@ -94,5 +94,63 @@
     "notePlaceholder": "E.g. sauce too salty, perfect broccoli...",
     "submit": "Submit",
     "skip": "Skip"
+  },
+  "onboarding": {
+    "back": "Back",
+    "next": "Continue",
+    "skip": "Skip",
+    "step1": {
+      "title": "Welcome!",
+      "subtitle": "Let's get to know each other.",
+      "firstNameLabel": "Your first name",
+      "firstNamePlaceholder": "E.g. Marie",
+      "avatarLabel": "Choose your emoji"
+    },
+    "step2": {
+      "title": "Your goal",
+      "subtitle": "What motivates you to eat better?",
+      "balanced": "Eat more balanced",
+      "timeSaving": "Save time",
+      "weightLoss": "Lose weight",
+      "moreProtein": "More protein",
+      "lessMeat": "Reduce meat"
+    },
+    "step3": {
+      "title": "Dietary restrictions",
+      "subtitle": "We adapt your assemblies to your needs.",
+      "dietsLabel": "Diets",
+      "allergiesLabel": "Allergies / intolerances",
+      "allergiesPlaceholder": "Type and press Enter…",
+      "noRestrictions": "No restrictions",
+      "diets": {
+        "none": "None",
+        "vegetarian": "Vegetarian",
+        "vegan": "Vegan",
+        "pescatarian": "Pescatarian",
+        "glutenFree": "Gluten-free",
+        "lactoseFree": "Lactose-free",
+        "halal": "Halal",
+        "kosher": "Kosher"
+      }
+    },
+    "step4": {
+      "title": "Your habits",
+      "subtitle": "For assemblies truly adapted to your daily life.",
+      "householdLabel": "Number of people",
+      "cookingTimeLabel": "Cooking time",
+      "mealsLabel": "Meals to plan",
+      "express": "Express — under 5 min",
+      "moderate": "Quick — 10-15 min",
+      "batch": "Batch cook — I prepare in advance",
+      "breakfast": "Breakfast",
+      "lunch": "Lunch",
+      "dinner": "Dinner"
+    },
+    "step5": {
+      "title": "Let's go, {name}!",
+      "subtitle": "Here is your profile and a first suggested assembly.",
+      "summaryLabel": "Your profile",
+      "cta": "Let's go!"
+    }
   }
 }

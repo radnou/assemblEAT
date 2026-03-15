@@ -5,6 +5,7 @@ import { BottomNav } from '@/components/BottomNav';
 import { InstallBanner } from '@/components/InstallBanner';
 import { Toaster } from '@/components/ui/sonner';
 import { HydrationProvider } from '@/components/HydrationProvider';
+import { OnboardingGate } from '@/components/OnboardingGate';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getLocale } from 'next-intl/server';
 
@@ -40,11 +41,13 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body className="bg-[var(--color-surface)] text-[var(--color-text-main)] font-sans antialiased">
         <NextIntlClientProvider messages={messages}>
           <HydrationProvider>
-            <main className="pb-20 min-h-screen max-w-5xl mx-auto px-4">
-              {children}
-            </main>
-            <BottomNav />
-            <InstallBanner />
+            <OnboardingGate>
+              <main className="pb-20 min-h-screen max-w-5xl mx-auto px-4">
+                {children}
+              </main>
+              <BottomNav />
+              <InstallBanner />
+            </OnboardingGate>
             <Toaster position="top-center" />
           </HydrationProvider>
         </NextIntlClientProvider>
