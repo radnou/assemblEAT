@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 
 export interface FoodPreference {
@@ -72,6 +73,9 @@ const RATING_STYLES: Record<Rating, string> = {
 };
 
 export function OnboardingStepFoodPrefs({ preferences, onChange }: OnboardingStepFoodPrefsProps) {
+  const [customInputs, setCustomInputs] = useState<Record<string, string>>({});
+  const [showInputs, setShowInputs] = useState<Record<string, boolean>>({});
+
   const effectivePrefs: FoodPreference[] =
     preferences.length > 0 ? preferences : DEFAULT_PREFERENCES;
 
@@ -80,16 +84,41 @@ export function OnboardingStepFoodPrefs({ preferences, onChange }: OnboardingSte
   };
 
   const handleRate = (id: string, rating: Rating) => {
-    const ingredient = INGREDIENTS.find((i) => i.id === id);
-    if (!ingredient) return;
-
     const base = effectivePrefs.length > 0 ? effectivePrefs : DEFAULT_PREFERENCES;
     const updated = base.map((p) => (p.id === id ? { ...p, rating } : p));
-    // If the ingredient wasn't in the list yet, add it
+    // If the item wasn't in the list yet, find and add it
     if (!updated.find((p) => p.id === id)) {
-      updated.push({ ...ingredient, rating });
+      const ingredient = INGREDIENTS.find((i) => i.id === id);
+      if (ingredient) {
+        updated.push({ ...ingredient, rating });
+      }
     }
     onChange(updated);
+  };
+
+  const addCustomFood = (sectionLabel: string, name: string) => {
+    const trimmed = name.trim();
+    if (!trimmed) return;
+    const sectionTag = sectionLabel.toLowerCase();
+    const id = `custom-${sectionTag}-${trimmed.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}`;
+    const newItem: FoodPreference = { id, name: trimmed, emoji: '🍽️', rating: 'neutral' };
+    const base = effectivePrefs.length > 0 ? effectivePrefs : DEFAULT_PREFERENCES;
+    onChange([...base, newItem]);
+    setCustomInputs((prev) => ({ ...prev, [sectionLabel]: '' }));
+  };
+
+  const handleCustomKeyDown = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    sectionLabel: string
+  ) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      addCustomFood(sectionLabel, customInputs[sectionLabel] ?? '');
+    }
+    if (e.key === 'Escape') {
+      setShowInputs((prev) => ({ ...prev, [sectionLabel]: false }));
+      setCustomInputs((prev) => ({ ...prev, [sectionLabel]: '' }));
+    }
   };
 
   return (
@@ -103,14 +132,22 @@ export function OnboardingStepFoodPrefs({ preferences, onChange }: OnboardingSte
 
       <div className="flex flex-col gap-5">
         {SECTIONS.map((section) => {
-          const items = INGREDIENTS.filter((i) => section.ids.includes(i.id));
+          const baseItems = INGREDIENTS.filter((i) => section.ids.includes(i.id));
+          const sectionTag = section.label.toLowerCase();
+          const customItems = effectivePrefs.filter((p) =>
+            p.id.startsWith(`custom-${sectionTag}-`)
+          );
+          const allItems = [...baseItems.map((i) => ({ ...i, rating: getRating(i.id) })), ...customItems];
+          const isShowingInput = showInputs[section.label] ?? false;
+          const inputValue = customInputs[section.label] ?? '';
+
           return (
             <div key={section.label}>
               <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">
                 {section.label}
               </div>
               <div className="flex flex-col gap-2">
-                {items.map((ingredient) => {
+                {allItems.map((ingredient) => {
                   const currentRating = getRating(ingredient.id);
                   return (
                     <div
@@ -146,6 +183,52 @@ export function OnboardingStepFoodPrefs({ preferences, onChange }: OnboardingSte
                     </div>
                   );
                 })}
+
+                {/* Add custom food */}
+                <div className="mt-1">
+                  {isShowingInput ? (
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="text"
+                        value={inputValue}
+                        onChange={(e) =>
+                          setCustomInputs((prev) => ({ ...prev, [section.label]: e.target.value }))
+                        }
+                        onKeyDown={(e) => handleCustomKeyDown(e, section.label)}
+                        placeholder={`Ajouter un aliment…`}
+                        autoFocus
+                        className="flex-1 border rounded-lg px-3 py-1.5 text-sm outline-none focus:border-ring focus:ring-2 focus:ring-ring/30"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => addCustomFood(section.label, inputValue)}
+                        className="text-xs px-3 py-1.5 rounded-lg bg-[var(--color-cta)] text-white hover:opacity-90 transition"
+                      >
+                        Ajouter
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setShowInputs((prev) => ({ ...prev, [section.label]: false }));
+                          setCustomInputs((prev) => ({ ...prev, [section.label]: '' }));
+                        }}
+                        className="text-xs text-muted-foreground hover:text-foreground transition"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setShowInputs((prev) => ({ ...prev, [section.label]: true }))
+                      }
+                      className="text-xs text-[var(--color-cta)] hover:underline"
+                    >
+                      + Ajouter un aliment
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           );

@@ -139,18 +139,19 @@ export function OnboardingStep3({ diets, allergies, onChange }: OnboardingStep3P
           />
         </div>
 
-        {allergyInput.length > 0 && (
+        {ALLERGY_SUGGESTIONS.filter((s) => !allergies.includes(s)).length > 0 && (
           <div className="flex flex-wrap gap-1.5">
             {ALLERGY_SUGGESTIONS.filter((s) =>
-              s.includes(allergyInput.toLowerCase()) && !allergies.includes(s)
-            ).slice(0, 5).map((suggestion) => (
+              !allergies.includes(s) &&
+              (allergyInput.length === 0 || s.includes(allergyInput.toLowerCase()))
+            ).map((suggestion) => (
               <button
                 key={suggestion}
                 type="button"
                 onClick={() => addAllergy(suggestion)}
-                className="px-2 py-0.5 rounded-full text-xs border border-border bg-muted hover:bg-muted/80 transition-colors"
+                className="px-2.5 py-1 rounded-full border border-gray-200 text-xs text-gray-600 hover:bg-gray-50 transition-colors"
               >
-                {suggestion}
+                + {suggestion}
               </button>
             ))}
           </div>
