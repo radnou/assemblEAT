@@ -13,6 +13,7 @@ import { OnboardingStep5 } from './OnboardingStep5';
 import { OnboardingStepFoodPrefs } from './OnboardingStepFoodPrefs';
 import type { FoodPreference } from './OnboardingStepFoodPrefs';
 import type { UserProfile, MealType } from '@/types';
+import Link from 'next/link';
 
 const TOTAL_STEPS = 6;
 
@@ -40,6 +41,7 @@ export function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
   const [step, setStep] = useState(1);
   const [direction, setDirection] = useState(1);
   const [profile, setProfile] = useState<UserProfile>(DEFAULT_PROFILE);
+  const [showSavePrompt, setShowSavePrompt] = useState(false);
 
   const goNext = () => {
     if (step < TOTAL_STEPS) {
@@ -60,7 +62,7 @@ export function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
   };
 
   const handleComplete = () => {
-    onComplete({ ...profile, onboardingCompleted: true });
+    setShowSavePrompt(true);
   };
 
   const canProceed = (): boolean => {
@@ -182,6 +184,50 @@ export function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
           </Button>
         </div>
       )}
+
+      {/* Save prompt overlay — shown after the last step, before calling onComplete */}
+      <AnimatePresence>
+        {showSavePrompt && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            className="fixed inset-0 z-50 bg-black/50 flex items-end sm:items-center justify-center p-4"
+          >
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 40 }}
+              transition={{ duration: 0.3, ease: 'easeOut' }}
+              className="bg-white rounded-2xl p-8 max-w-sm w-full text-center shadow-2xl"
+            >
+              <div className="text-4xl mb-4">🎉</div>
+              <h2 className="text-xl font-bold mb-2">Votre profil est prêt !</h2>
+              <p className="text-gray-500 text-sm leading-relaxed mb-6">
+                Créez un compte gratuit pour sauvegarder vos préférences — sinon elles seront
+                perdues si vous fermez l&apos;onglet.
+              </p>
+              <Link
+                href="/app/login"
+                className="block w-full py-3 rounded-xl font-semibold text-white mb-3 transition hover:opacity-90"
+                style={{ background: 'var(--color-cta)' }}
+              >
+                Créer un compte →
+              </Link>
+              <button
+                onClick={() => {
+                  setShowSavePrompt(false);
+                  onComplete({ ...profile, onboardingCompleted: true });
+                }}
+                className="text-sm text-gray-500 hover:text-gray-700 transition underline-offset-2 hover:underline"
+              >
+                Continuer sans compte
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

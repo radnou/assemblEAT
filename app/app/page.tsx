@@ -12,7 +12,6 @@ import Link from 'next/link';
 import { Flame, Trophy, PartyPopper, UserCircle } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
-import { toast } from 'sonner';
 import { useAuth } from '@/lib/hooks/useAuth';
 
 export default function Dashboard() {
@@ -20,15 +19,13 @@ export default function Dashboard() {
   const locale = useLocale();
   const searchParams = useSearchParams();
   const { user, isAuthenticated } = useAuth();
+  const [showUpgradeWelcome, setShowUpgradeWelcome] = useState(
+    () => searchParams.get('upgraded') === 'true'
+  );
 
-  // Show success toast after Pro upgrade
+  // Clean URL when the upgrade welcome modal is first shown
   useEffect(() => {
     if (searchParams.get('upgraded') === 'true') {
-      toast.success('Bienvenue dans AssemblEat Pro ! 🎉', {
-        description: 'Votre essai gratuit de 7 jours a commencé.',
-        duration: 8000,
-      });
-      // Clean URL
       window.history.replaceState({}, '', '/app');
     }
   }, [searchParams]);
@@ -233,6 +230,27 @@ export default function Dashboard() {
 
       {/* Feature tour overlay */}
       {showTour && <AppTour onComplete={completeTour} />}
+
+      {/* Pro upgrade welcome modal */}
+      {showUpgradeWelcome && (
+        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl p-8 max-w-sm w-full text-center shadow-2xl">
+            <div className="text-5xl mb-4">🎉</div>
+            <h2 className="text-2xl font-bold mb-2">Bienvenue dans Pro !</h2>
+            <p className="text-gray-500 mb-6">
+              Votre essai gratuit de 7 jours a commencé. Profitez du partage praticien, des
+              suggestions intelligentes, et bien plus.
+            </p>
+            <button
+              onClick={() => setShowUpgradeWelcome(false)}
+              className="w-full py-3 rounded-xl font-semibold text-white transition hover:opacity-90"
+              style={{ background: 'var(--color-cta)' }}
+            >
+              Découvrir mes avantages Pro
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

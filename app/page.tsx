@@ -195,6 +195,13 @@ export default function LandingPage() {
             Gratuit · Aucune carte requise · Installable sur mobile
           </p>
 
+          <p className="mt-3 text-sm text-gray-400">
+            Déjà un compte ?{' '}
+            <a href="/app/login" className="text-[var(--color-cta)] hover:underline">
+              Se connecter
+            </a>
+          </p>
+
           {/* App Preview */}
           <div className="mt-12 max-w-4xl mx-auto rounded-2xl shadow-2xl border border-gray-200 overflow-hidden bg-white">
             <div className="bg-gray-100 px-4 py-2 flex items-center gap-2 border-b">
