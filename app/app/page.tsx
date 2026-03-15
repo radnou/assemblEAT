@@ -1,17 +1,18 @@
 'use client';
 
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useState } from 'react';
 import { useMealStore } from '@/lib/store/useMealStore';
+import { useSubscriptionStore } from '@/lib/store/useSubscriptionStore';
 import { AssemblyCard } from '@/components/AssemblyCard';
 import { StreakBadge } from '@/components/streak/StreakBadge';
 import { generateRandomAssembly, detectDayConflicts } from '@/lib/engine/assemblyEngine';
 import { useTranslations, useLocale } from 'next-intl';
 import type { MealFeedback, MealType } from '@/types';
 import { AppTour } from '@/components/tour/AppTour';
+import { ProUpsellDialog } from '@/components/ProUpsellDialog';
 import Link from 'next/link';
 import { Flame, Trophy, PartyPopper, UserCircle } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
-import { useState } from 'react';
 import { useAuth } from '@/lib/hooks/useAuth';
 
 export default function Dashboard() {
@@ -19,9 +20,16 @@ export default function Dashboard() {
   const locale = useLocale();
   const searchParams = useSearchParams();
   const { user, isAuthenticated } = useAuth();
+  const { plan } = useSubscriptionStore();
   const [showUpgradeWelcome, setShowUpgradeWelcome] = useState(
     () => searchParams.get('upgraded') === 'true'
   );
+  const [proDialogOpen, setProDialogOpen] = useState(false);
+  const [showTrialPrompt, setShowTrialPrompt] = useState(false);
+
+  // Streak recovery state
+  const [streakBroken, setStreakBroken] = useState(false);
+  const [previousStreak, setPreviousStreak] = useState(0);
 
   // Clean URL when the upgrade welcome modal is first shown
   useEffect(() => {
@@ -29,6 +37,21 @@ export default function Dashboard() {
       window.history.replaceState({}, '', '/app');
     }
   }, [searchParams]);
+
+  // Detect broken streak on mount
+  useEffect(() => {
+    const lastDate = localStorage.getItem('streak-last-date');
+    const lastCount = parseInt(localStorage.getItem('streak-count') ?? '0', 10);
+    if (lastDate && lastCount > 0) {
+      const last = new Date(lastDate);
+      const today = new Date();
+      const diffDays = Math.floor((today.getTime() - last.getTime()) / (1000 * 60 * 60 * 24));
+      if (diffDays >= 2) {
+        setStreakBroken(true);
+        setPreviousStreak(lastCount);
+      }
+    }
+  }, []);
   const {
     todayBreakfast,
     todayLunch,
@@ -45,6 +68,14 @@ export default function Dashboard() {
     tourCompleted,
     completeTour,
   } = useMealStore();
+
+  // Show trial prompt once after 3rd feedback
+  useEffect(() => {
+    if (feedbacks.length === 3 && plan === 'free' && !localStorage.getItem('trial-prompt-shown')) {
+      setShowTrialPrompt(true);
+      localStorage.setItem('trial-prompt-shown', 'true');
+    }
+  }, [feedbacks.length, plan]);
 
   // Générer les repas au premier chargement si vides
   useEffect(() => {
@@ -111,6 +142,18 @@ export default function Dashboard() {
     return feedbacks.find((f) => f.assemblyId === assemblyId && f.date === todayISO) ?? null;
   };
 
+  // Weekly recap stats
+  const thisWeekFeedbacks = feedbacks.filter(f => {
+    const feedbackDate = new Date(f.date);
+    const weekAgo = new Date();
+    weekAgo.setDate(weekAgo.getDate() - 7);
+    return feedbackDate >= weekAgo;
+  });
+
+  const avgPleasure = thisWeekFeedbacks.length > 0
+    ? (thisWeekFeedbacks.reduce((sum, f) => sum + f.pleasure, 0) / thisWeekFeedbacks.length).toFixed(1)
+    : null;
+
   const showTour = onboardingCompleted && !tourCompleted;
 
   return (
@@ -139,6 +182,22 @@ export default function Dashboard() {
           {streakCount > 0 && <StreakBadge count={streakCount} size="md" />}
         </div>
       </div>
+
+      {/* Streak recovery banner */}
+      {streakBroken && (
+        <div className="bg-orange-50 border border-orange-200 rounded-xl p-4 flex items-center gap-3">
+          <span className="text-2xl">😢</span>
+          <div className="flex-1">
+            <p className="text-sm font-semibold text-orange-800">
+              Votre série de {previousStreak} jours est interrompue
+            </p>
+            <p className="text-xs text-orange-600">
+              Validez un repas aujourd&apos;hui pour repartir de zéro !
+            </p>
+          </div>
+          <button onClick={() => setStreakBroken(false)} className="text-orange-400 hover:text-orange-600">✕</button>
+        </div>
+      )}
 
       {/* Meal cards */}
       <div className="space-y-4 lg:flex lg:gap-4 lg:space-y-0">
@@ -227,6 +286,23 @@ export default function Dashboard() {
           <p className="text-xs text-gray-500 mt-1">{t('totalFeedbacks')}</p>
         </div>
       </div>
+
+      {/* Weekly recap card */}
+      {thisWeekFeedbacks.length >= 3 && (
+        <div className="bg-gradient-to-r from-[var(--color-meal-breakfast)]/10 to-[var(--color-meal-lunch)]/10 rounded-xl p-4">
+          <h3 className="text-sm font-semibold mb-2">📊 Résumé de la semaine</h3>
+          <div className="flex gap-4 text-sm">
+            <div>
+              <span className="font-bold text-[var(--color-meal-breakfast)]">{thisWeekFeedbacks.length}</span>
+              <span className="text-gray-500"> repas notés</span>
+            </div>
+            <div>
+              <span className="font-bold text-[var(--color-cta)]">{avgPleasure}</span>
+              <span className="text-gray-500">/5 plaisir moyen</span>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Feature tour overlay */}
       {showTour && <AppTour onComplete={completeTour} />}
