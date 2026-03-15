@@ -36,6 +36,14 @@ yarn-error.log*
 # vercel
 .vercel
 
+# PWA generated
+/public/sw.js
+/public/workbox-*.js
+/public/sw.js.map
+
+# firebase
+firebase-debug.log
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

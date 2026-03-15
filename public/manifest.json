@@ -1,0 +1,25 @@
+{
+  "name": "AssemblEat — Repas sans décision",
+  "short_name": "AssemblEat",
+  "description": "Simplifiez votre semaine alimentaire avec la méthode CPB et le suivi Nutri-Score",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F8F9FA",
+  "theme_color": "#2E4057",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["food", "health", "lifestyle"]
+}

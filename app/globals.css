@@ -45,6 +45,19 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+
+  /* AssemblEat — palette sémantique */
+  --color-meal-breakfast: #048A81;
+  --color-meal-lunch: #E07A5F;
+  --color-meal-dinner: #3D405B;
+  --color-cta: #F4A261;
+  --color-surface: #F8F9FA;
+  --color-text-main: #1A1A2E;
+  --color-nutri-a: #037F2D;
+  --color-nutri-b: #7DC243;
+  --color-nutri-c: #FFCC01;
+  --color-nutri-d: #F5860F;
+  --color-nutri-e: #E63312;
 }
 
 :root {
