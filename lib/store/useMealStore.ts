@@ -303,7 +303,14 @@ export const useMealStore = create<MealStore>((set, get) => ({
       const patch: Partial<MealStore> = {};
 
       if (settingsResult) {
-        patch.settings = { ...defaultSettings, ...settingsResult };
+        // Preserve the locally-hydrated firstName if the remote value is empty,
+        // so a new or not-yet-migrated Supabase profile does not wipe the name.
+        const currentFirstName = get().settings.firstName;
+        const mergedSettings = { ...defaultSettings, ...settingsResult };
+        if (!mergedSettings.firstName && currentFirstName) {
+          mergedSettings.firstName = currentFirstName;
+        }
+        patch.settings = mergedSettings;
       }
       if (feedbacksResult.length > 0) {
         patch.feedbacks = feedbacksResult;
