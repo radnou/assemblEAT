@@ -100,8 +100,8 @@ export function AssemblyCard({
       <Card className="border-l-4 border-l-gray-200 p-4">
         <div className="flex items-center justify-between">
           <span className="text-sm font-semibold text-gray-500">{mealLabels[mealType]}</span>
-          <Button variant="ghost" size="icon" onClick={handleRegenerate} aria-label={t('regenerate')}>
-            <Dice5 size={18} />
+          <Button variant="ghost" size="icon" onClick={handleRegenerate} aria-label={t('regenerate')} title={t('regenerate')}>
+            <Dice5 size={22} />
           </Button>
         </div>
         <p className="text-xs text-gray-500 mt-2">{t('noMeal')}</p>
@@ -166,8 +166,8 @@ export function AssemblyCard({
         {/* Actions */}
         <div className="flex items-center justify-end gap-2 mt-2">
           <motion.div animate={isSpinning ? { rotateY: 180 } : { rotateY: 0 }} transition={{ duration: 0.5 }}>
-            <Button variant="ghost" size="icon" onClick={handleRegenerate} aria-label={t('regenerate')}>
-              <Dice5 size={18} />
+            <Button variant="ghost" size="icon" onClick={handleRegenerate} aria-label={t('regenerate')} title={t('regenerate')}>
+              <Dice5 size={22} />
             </Button>
           </motion.div>
           {!assembly.validated && (
@@ -177,8 +177,9 @@ export function AssemblyCard({
               onClick={handleValidate}
               className="text-green-600 hover:text-green-700 hover:bg-green-50"
               aria-label={t('validate')}
+              title={t('validate')}
             >
-              <Check size={18} />
+              <Check size={22} />
             </Button>
           )}
           {assembly.validated && (

@@ -38,8 +38,9 @@ export function BottomNav() {
                   : 'text-gray-500 hover:text-gray-600'
               )}
               aria-current={isActive ? 'page' : undefined}
+              title={t(key)}
             >
-              <Icon size={20} strokeWidth={isActive ? 2.5 : 1.5} />
+              <Icon size={24} strokeWidth={isActive ? 2.5 : 1.5} />
               <span className="text-xs font-medium">{t(key)}</span>
             </Link>
           );
