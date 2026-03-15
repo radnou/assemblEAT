@@ -511,7 +511,7 @@ export default function LandingPage() {
                   ))}
                 </ul>
                 <a
-                  href={process.env.NEXT_PUBLIC_LEMONSQUEEZY_CHECKOUT_URL ?? '/app'}
+                  href={`${process.env.NEXT_PUBLIC_LEMONSQUEEZY_CHECKOUT_URL ?? '/app'}?checkout[success_url]=${encodeURIComponent('https://assembleat.app/app?upgraded=true')}`}
                   className="block w-full text-center py-3 rounded-xl font-semibold text-white transition hover:opacity-90"
                   style={{ background: 'var(--color-cta)' }}
                   target="_blank"

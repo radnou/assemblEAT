@@ -9,11 +9,27 @@ import { useTranslations, useLocale } from 'next-intl';
 import type { MealFeedback, MealType } from '@/types';
 import { AppTour } from '@/components/tour/AppTour';
 import Link from 'next/link';
-import { Flame, Trophy } from 'lucide-react';
+import { Flame, Trophy, PartyPopper } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
+import { useState } from 'react';
+import { toast } from 'sonner';
 
 export default function Dashboard() {
   const t = useTranslations('dashboard');
   const locale = useLocale();
+  const searchParams = useSearchParams();
+
+  // Show success toast after Pro upgrade
+  useEffect(() => {
+    if (searchParams.get('upgraded') === 'true') {
+      toast.success('Bienvenue dans AssemblEat Pro ! 🎉', {
+        description: 'Votre essai gratuit de 7 jours a commencé.',
+        duration: 8000,
+      });
+      // Clean URL
+      window.history.replaceState({}, '', '/app');
+    }
+  }, [searchParams]);
   const {
     todayBreakfast,
     todayLunch,

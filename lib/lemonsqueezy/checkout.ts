@@ -27,8 +27,8 @@ export function getCheckoutUrl(options?: {
     url.searchParams.set('checkout[name]', options.firstName);
   }
 
-  // Embed mode — opens as an overlay instead of a redirect
-  url.searchParams.set('embed', '1');
+  // Redirect after successful payment
+  url.searchParams.set('checkout[success_url]', 'https://assembleat.app/app?upgraded=true');
 
   return url.toString();
 }
