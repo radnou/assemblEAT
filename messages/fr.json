@@ -289,6 +289,10 @@
       "cta": "C'est parti !"
     }
   },
+  "suggestions": {
+    "title": "Suggestions pour toi",
+    "basedOn": "Basé sur vos préférences"
+  },
   "history": {
     "title": "Mon historique nutritionnel",
     "subtitle": "Évolution sur les 12 dernières semaines",

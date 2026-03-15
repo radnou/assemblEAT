@@ -1,13 +1,14 @@
 'use client';
 
-import { useEffect, useCallback, useState } from 'react';
+import { useEffect, useCallback, useState, useMemo } from 'react';
 import { useMealStore } from '@/lib/store/useMealStore';
 import { useSubscriptionStore } from '@/lib/store/useSubscriptionStore';
 import { AssemblyCard } from '@/components/AssemblyCard';
 import { StreakBadge } from '@/components/streak/StreakBadge';
 import { generateRandomAssembly, detectDayConflicts } from '@/lib/engine/assemblyEngine';
+import { getSmartSuggestions } from '@/lib/engine/smartSuggestions';
 import { useTranslations, useLocale } from 'next-intl';
-import type { MealFeedback, MealType } from '@/types';
+import type { AssemblyRow, MealFeedback, MealType } from '@/types';
 import { AppTour } from '@/components/tour/AppTour';
 import { ProUpsellDialog } from '@/components/ProUpsellDialog';
 import Link from 'next/link';
@@ -154,6 +155,28 @@ export default function Dashboard() {
     ? (thisWeekFeedbacks.reduce((sum, f) => sum + f.pleasure, 0) / thisWeekFeedbacks.length).toFixed(1)
     : null;
 
+  // Smart suggestions for Pro users — mealType defaults to 'lunch' as the primary meal
+  const smartSuggestions = useMemo(() => {
+    if (plan !== 'pro') return [];
+    return getSmartSuggestions('lunch', feedbacks, 3);
+  }, [plan, feedbacks]);
+
+  const applySuggestion = useCallback((assembly: AssemblyRow) => {
+    // Apply to the first unvalidated meal (breakfast → lunch → dinner)
+    const meals: { type: MealType; value: AssemblyRow | null }[] = [
+      { type: 'breakfast', value: todayBreakfast },
+      { type: 'lunch', value: todayLunch },
+      { type: 'dinner', value: todayDinner },
+    ];
+    const target = meals.find((m) => m.value && !m.value.validated);
+    if (target) {
+      setTodayMeal(target.type, { ...assembly, mealType: target.type, validated: false });
+    } else {
+      // Fallback: apply to lunch
+      setTodayMeal('lunch', { ...assembly, mealType: 'lunch', validated: false });
+    }
+  }, [todayBreakfast, todayLunch, todayDinner, setTodayMeal]);
+
   const showTour = onboardingCompleted && !tourCompleted;
 
   return (
@@ -196,6 +219,26 @@ export default function Dashboard() {
             </p>
           </div>
           <button onClick={() => setStreakBroken(false)} className="text-orange-400 hover:text-orange-600">✕</button>
+        </div>
+      )}
+
+      {/* Smart suggestions (Pro only) */}
+      {plan === 'pro' && smartSuggestions.length > 0 && (
+        <div className="space-y-2">
+          <h2 className="text-sm font-semibold text-gray-600">✨ Suggestions pour toi</h2>
+          <div className="flex gap-2 overflow-x-auto pb-2">
+            {smartSuggestions.map(s => (
+              <button
+                key={s.id}
+                onClick={() => applySuggestion(s)}
+                className="shrink-0 px-4 py-2 rounded-xl bg-gradient-to-r from-orange-50 to-amber-50 border border-orange-100 text-sm"
+              >
+                <span className="font-medium">{s.protein?.name}</span>
+                <span className="text-gray-400"> + </span>
+                <span className="text-gray-600">{s.vegetable?.name}</span>
+              </button>
+            ))}
+          </div>
         </div>
       )}
 
