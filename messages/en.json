@@ -76,7 +76,13 @@
     "badge": "Pro 🔒",
     "unlock": "Unlock for €3.99/month",
     "title": "Upgrade to AssemblEat Pro",
-    "mainBenefit": "Share your week planner directly with your dietitian — they receive a real-time read link, no need to print or transfer files."
+    "mainBenefit": "Share your week planner directly with your dietitian — they receive a real-time read link, no need to print or transfer files.",
+    "trialBadge": "7 days free",
+    "price": "€3.99/month",
+    "priceContext": "Less than a coffee per week",
+    "cta": "Try for free",
+    "cancel": "Cancel anytime in 1 click",
+    "alsoIncluded": "Also included"
   },
   "install": {
     "android": "Install AssemblEat",

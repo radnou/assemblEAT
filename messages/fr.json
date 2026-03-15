@@ -76,7 +76,13 @@
     "badge": "Pro 🔒",
     "unlock": "Débloquer pour 3,99€/mois",
     "title": "Passez à AssemblEat Pro",
-    "mainBenefit": "Partagez votre semainier directement avec votre diététicien(ne) — il reçoit un lien de lecture en temps réel, plus besoin d'imprimer ni de transférer des fichiers."
+    "mainBenefit": "Partagez votre semainier directement avec votre diététicien(ne) — il reçoit un lien de lecture en temps réel, plus besoin d'imprimer ni de transférer des fichiers.",
+    "trialBadge": "7 jours gratuits",
+    "price": "3,99 €/mois",
+    "priceContext": "Moins qu'un café par semaine",
+    "cta": "Essayer gratuitement",
+    "cancel": "Annulation en 1 clic",
+    "alsoIncluded": "Aussi inclus"
   },
   "install": {
     "android": "Installer AssemblEat",
