@@ -3,6 +3,7 @@
 import { create } from 'zustand';
 import type { AssemblyRow, DayPlan, WeekPlan, UserSettings, UserProfile, BatchItem, MealFeedback } from '@/types';
 import { batchCookItems } from '@/lib/data/repertoire';
+import { createLocalPersistence, type PersistenceLayer } from '@/lib/store/persistence';
 
 function getLocalStorage<T>(key: string, fallback: T): T {
   if (typeof window === 'undefined') return fallback;
@@ -71,6 +72,18 @@ interface MealStore {
 
   // ─── Reset ───────────────────────────────
   resetAll: () => void;
+
+  // ─── Persistence layer ────────────────────
+  /** Active persistence layer (localStorage by default, Supabase after login). */
+  persistence: PersistenceLayer;
+  /** Switch the persistence layer at runtime (called after auth). */
+  setPersistence: (layer: PersistenceLayer) => void;
+  /**
+   * Load authoritative data from the current persistence layer into the store.
+   * Safe to call multiple times; each call overwrites the in-memory state with
+   * whatever the persistence layer returns.
+   */
+  syncFromPersistence: () => Promise<void>;
 }
 
 const defaultSettings: UserSettings = {
@@ -269,5 +282,43 @@ export const useMealStore = create<MealStore>((set, get) => ({
       streakCount: 0,
       streakLastDate: null,
     });
+  },
+
+  // ─── Persistence layer ────────────────────
+  persistence: createLocalPersistence(),
+
+  setPersistence: (layer) => {
+    set({ persistence: layer });
+  },
+
+  syncFromPersistence: async () => {
+    const { persistence } = get();
+    try {
+      const [settingsResult, feedbacksResult, streakResult] = await Promise.all([
+        persistence.getSettings(),
+        persistence.getFeedbacks(),
+        persistence.getStreak(),
+      ]);
+
+      const patch: Partial<MealStore> = {};
+
+      if (settingsResult) {
+        patch.settings = { ...defaultSettings, ...settingsResult };
+      }
+      if (feedbacksResult.length > 0) {
+        patch.feedbacks = feedbacksResult;
+      }
+      if (streakResult.count > 0 || streakResult.lastDate !== null) {
+        patch.streakCount = streakResult.count;
+        patch.streakLastDate = streakResult.lastDate;
+      }
+
+      if (Object.keys(patch).length > 0) {
+        set(patch);
+      }
+    } catch (error) {
+      console.error('[useMealStore] syncFromPersistence failed:', error);
+      // Store keeps existing in-memory state — no data lost
+    }
   },
 }));
