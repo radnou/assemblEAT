@@ -134,12 +134,20 @@ export default function LandingPage() {
             <span className="text-lg font-bold text-[var(--color-text-main)]">
               🥗 AssemblEat
             </span>
-            <a
-              href="/app"
-              className="px-4 py-1.5 rounded-full bg-[var(--color-cta)] text-white font-semibold text-sm hover:opacity-90 transition"
-            >
-              Commencer
-            </a>
+            <div className="flex items-center gap-3">
+              <a
+                href="/app/login"
+                className="text-sm text-gray-600 hover:text-gray-900 transition"
+              >
+                Se connecter
+              </a>
+              <a
+                href="/app"
+                className="px-4 py-1.5 rounded-full bg-[var(--color-cta)] text-white font-semibold text-sm hover:opacity-90 transition"
+              >
+                Commencer
+              </a>
+            </div>
           </div>
         </header>
 

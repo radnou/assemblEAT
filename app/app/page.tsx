@@ -9,15 +9,17 @@ import { useTranslations, useLocale } from 'next-intl';
 import type { MealFeedback, MealType } from '@/types';
 import { AppTour } from '@/components/tour/AppTour';
 import Link from 'next/link';
-import { Flame, Trophy, PartyPopper } from 'lucide-react';
+import { Flame, Trophy, PartyPopper, UserCircle } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
+import { useAuth } from '@/lib/hooks/useAuth';
 
 export default function Dashboard() {
   const t = useTranslations('dashboard');
   const locale = useLocale();
   const searchParams = useSearchParams();
+  const { user, isAuthenticated } = useAuth();
 
   // Show success toast after Pro upgrade
   useEffect(() => {
@@ -124,7 +126,21 @@ export default function Dashboard() {
           </h1>
           <p className="text-sm text-gray-500 capitalize">{dateStr}</p>
         </div>
-        {streakCount > 0 && <StreakBadge count={streakCount} size="md" />}
+        <div className="flex items-center gap-2">
+          {!isAuthenticated ? (
+            <Link href="/app/login" className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700">
+              <UserCircle size={20} />
+              <span className="hidden sm:inline">Connexion</span>
+            </Link>
+          ) : (
+            <div className="flex items-center gap-1 text-sm text-gray-500" title={user?.email ?? ''}>
+              <div className="w-7 h-7 rounded-full bg-[var(--color-cta)] text-white flex items-center justify-center text-xs font-bold">
+                {settings.firstName?.charAt(0)?.toUpperCase() || user?.email?.charAt(0)?.toUpperCase() || '?'}
+              </div>
+            </div>
+          )}
+          {streakCount > 0 && <StreakBadge count={streakCount} size="md" />}
+        </div>
       </div>
 
       {/* Meal cards */}

@@ -72,7 +72,7 @@ export default function SettingsPage() {
             </Button>
           </div>
         ) : (
-          <Link href="/login">
+          <Link href="/app/login">
             <Button variant="outline" className="w-full flex items-center gap-2">
               <LogIn size={16} />
               {tAuth('login')}
