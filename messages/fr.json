@@ -82,5 +82,17 @@
     "android": "Installer AssemblEat",
     "ios": "Appuyer sur Partager puis 'Sur l'écran d'accueil'",
     "dismiss": "Plus tard"
+  },
+  "feedback": {
+    "title": "Comment c'était ?",
+    "pleasureLabel": "T'as kiffé ?",
+    "quantityLabel": "C'était suffisant ?",
+    "notEnough": "Pas assez",
+    "justRight": "Pile bien",
+    "tooMuch": "Trop",
+    "noteLabel": "Un truc à dire ?",
+    "notePlaceholder": "Ex: sauce trop salée, brocolis parfaits...",
+    "submit": "Envoyer",
+    "skip": "Passer"
   }
 }

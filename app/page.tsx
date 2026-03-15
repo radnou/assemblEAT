@@ -5,7 +5,7 @@ import { useMealStore } from '@/lib/store/useMealStore';
 import { AssemblyCard } from '@/components/AssemblyCard';
 import { generateRandomAssembly, detectDayConflicts } from '@/lib/engine/assemblyEngine';
 import { useTranslations, useLocale } from 'next-intl';
-import type { MealType } from '@/types';
+import type { MealFeedback, MealType } from '@/types';
 
 export default function Dashboard() {
   const t = useTranslations('dashboard');
@@ -18,6 +18,8 @@ export default function Dashboard() {
     recentProteins,
     addRecentProtein,
     settings,
+    feedbacks,
+    addFeedback,
   } = useMealStore();
 
   // Générer les repas au premier chargement si vides
@@ -65,14 +67,24 @@ export default function Dashboard() {
     }
   }, [todayBreakfast, todayLunch, todayDinner, setTodayMeal, addRecentProtein]);
 
+  const handleFeedbackSubmit = useCallback((feedback: MealFeedback) => {
+    addFeedback(feedback);
+  }, [addFeedback]);
+
   const warnings = detectDayConflicts(todayBreakfast, todayLunch, todayDinner);
 
   const today = new Date();
+  const todayISO = today.toISOString().split('T')[0];
   const dateStr = today.toLocaleDateString(locale === 'fr' ? 'fr-FR' : 'en-US', {
     weekday: 'long',
     day: 'numeric',
     month: 'long',
   });
+
+  const getFeedbackForAssembly = (assemblyId: string | undefined) => {
+    if (!assemblyId) return null;
+    return feedbacks.find((f) => f.assemblyId === assemblyId && f.date === todayISO) ?? null;
+  };
 
   return (
     <div className="py-6 space-y-6">
@@ -92,6 +104,9 @@ export default function Dashboard() {
             mealType="breakfast"
             onRegenerate={() => handleRegenerate('breakfast')}
             onValidate={() => handleValidate('breakfast')}
+            existingFeedback={getFeedbackForAssembly(todayBreakfast?.id)}
+            onFeedbackSubmit={handleFeedbackSubmit}
+            today={todayISO}
           />
         </div>
         <div className="flex-1">
@@ -101,6 +116,9 @@ export default function Dashboard() {
             onRegenerate={() => handleRegenerate('lunch')}
             onValidate={() => handleValidate('lunch')}
             warnings={warnings.filter((w) => w.includes('déjeuner') || w.includes('midi'))}
+            existingFeedback={getFeedbackForAssembly(todayLunch?.id)}
+            onFeedbackSubmit={handleFeedbackSubmit}
+            today={todayISO}
           />
         </div>
         <div className="flex-1">
@@ -110,6 +128,9 @@ export default function Dashboard() {
             onRegenerate={() => handleRegenerate('dinner')}
             onValidate={() => handleValidate('dinner')}
             warnings={warnings.filter((w) => w.includes('soir') || w.includes('dîner'))}
+            existingFeedback={getFeedbackForAssembly(todayDinner?.id)}
+            onFeedbackSubmit={handleFeedbackSubmit}
+            today={todayISO}
           />
         </div>
       </div>

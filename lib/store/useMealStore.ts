@@ -1,7 +1,7 @@
 'use client';
 
 import { create } from 'zustand';
-import type { AssemblyRow, DayPlan, WeekPlan, UserSettings, BatchItem } from '@/types';
+import type { AssemblyRow, DayPlan, WeekPlan, UserSettings, UserProfile, BatchItem, MealFeedback } from '@/types';
 import { batchCookItems } from '@/lib/data/repertoire';
 
 function getLocalStorage<T>(key: string, fallback: T): T {
@@ -47,6 +47,14 @@ interface MealStore {
   // ─── Settings ────────────────────────────
   settings: UserSettings;
   updateSettings: (partial: Partial<UserSettings>) => void;
+
+  // ─── Feedbacks ───────────────────────────
+  feedbacks: MealFeedback[];
+  addFeedback: (feedback: MealFeedback) => void;
+
+  // ─── Onboarding ──────────────────────────
+  onboardingCompleted: boolean;
+  completeOnboarding: (profile: UserProfile) => void;
 
   // ─── Hydration ───────────────────────────
   hydrated: boolean;
@@ -139,6 +147,16 @@ export const useMealStore = create<MealStore>((set, get) => ({
     setLocalStorage('batch-items', reset);
   },
 
+  feedbacks: [],
+  addFeedback: (feedback) => {
+    set((s) => {
+      const existing = s.feedbacks.filter((f) => f.assemblyId !== feedback.assemblyId || f.date !== feedback.date);
+      const updated = [...existing, feedback];
+      setLocalStorage('meal-feedbacks', updated);
+      return { feedbacks: updated };
+    });
+  },
+
   settings: defaultSettings,
   updateSettings: (partial) => {
     set((s) => {
@@ -146,6 +164,19 @@ export const useMealStore = create<MealStore>((set, get) => ({
       setLocalStorage('settings', updated);
       return { settings: updated };
     });
+  },
+
+  onboardingCompleted: false,
+  completeOnboarding: (profile) => {
+    const settingsToSave: UserSettings = {
+      firstName: profile.firstName,
+      language: profile.language,
+      rules: profile.rules,
+    };
+    setLocalStorage('settings', settingsToSave);
+    setLocalStorage('onboardingCompleted', true);
+    setLocalStorage('userProfile', profile);
+    set({ settings: settingsToSave, onboardingCompleted: true });
   },
 
   hydrated: false,
@@ -159,12 +190,16 @@ export const useMealStore = create<MealStore>((set, get) => ({
     const settings = getLocalStorage<UserSettings>('settings', defaultSettings);
     const recentProteins = getLocalStorage<string[]>('recent-proteins', []);
     const storedBatch = getLocalStorage<BatchItem[] | null>('batch-items', null);
+    const feedbacks = getLocalStorage<MealFeedback[]>('meal-feedbacks', []);
+    const onboardingCompleted = getLocalStorage<boolean>('onboardingCompleted', false);
 
     set({
       ...todayMeals,
       settings,
       recentProteins,
       batchItems: storedBatch ?? batchCookItems,
+      feedbacks,
+      onboardingCompleted,
       hydrated: true,
     });
   },

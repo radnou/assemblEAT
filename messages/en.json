@@ -82,5 +82,17 @@
     "android": "Install AssemblEat",
     "ios": "Tap Share then 'Add to Home Screen'",
     "dismiss": "Later"
+  },
+  "feedback": {
+    "title": "How was it?",
+    "pleasureLabel": "Did you enjoy it?",
+    "quantityLabel": "Was it enough?",
+    "notEnough": "Not enough",
+    "justRight": "Just right",
+    "tooMuch": "Too much",
+    "noteLabel": "Anything to add?",
+    "notePlaceholder": "E.g. sauce too salty, perfect broccoli...",
+    "submit": "Submit",
+    "skip": "Skip"
   }
 }
