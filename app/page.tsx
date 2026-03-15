@@ -3,6 +3,7 @@
 import { useEffect, useCallback } from 'react';
 import { useMealStore } from '@/lib/store/useMealStore';
 import { AssemblyCard } from '@/components/AssemblyCard';
+import { StreakBadge } from '@/components/streak/StreakBadge';
 import { generateRandomAssembly, detectDayConflicts } from '@/lib/engine/assemblyEngine';
 import { useTranslations, useLocale } from 'next-intl';
 import type { MealFeedback, MealType } from '@/types';
@@ -20,6 +21,8 @@ export default function Dashboard() {
     settings,
     feedbacks,
     addFeedback,
+    streakCount,
+    checkAndUpdateStreak,
   } = useMealStore();
 
   // Générer les repas au premier chargement si vides
@@ -65,7 +68,8 @@ export default function Dashboard() {
     if (current.protein) {
       addRecentProtein(current.protein.id);
     }
-  }, [todayBreakfast, todayLunch, todayDinner, setTodayMeal, addRecentProtein]);
+    checkAndUpdateStreak();
+  }, [todayBreakfast, todayLunch, todayDinner, setTodayMeal, addRecentProtein, checkAndUpdateStreak]);
 
   const handleFeedbackSubmit = useCallback((feedback: MealFeedback) => {
     addFeedback(feedback);
@@ -89,11 +93,14 @@ export default function Dashboard() {
   return (
     <div className="py-6 space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="text-xl font-semibold">
-          {t('greeting')}{settings.firstName ? ` ${settings.firstName}` : ''} !
-        </h1>
-        <p className="text-sm text-gray-500 capitalize">{dateStr}</p>
+      <div className="flex items-start justify-between">
+        <div>
+          <h1 className="text-xl font-semibold">
+            {t('greeting')}{settings.firstName ? ` ${settings.firstName}` : ''} !
+          </h1>
+          <p className="text-sm text-gray-500 capitalize">{dateStr}</p>
+        </div>
+        {streakCount > 0 && <StreakBadge count={streakCount} size="md" />}
       </div>
 
       {/* Meal cards */}

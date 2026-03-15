@@ -56,6 +56,11 @@ interface MealStore {
   onboardingCompleted: boolean;
   completeOnboarding: (profile: UserProfile) => void;
 
+  // ─── Streak ──────────────────────────────
+  streakCount: number;
+  streakLastDate: string | null; // YYYY-MM-DD in local time
+  checkAndUpdateStreak: () => void;
+
   // ─── Hydration ───────────────────────────
   hydrated: boolean;
   hydrate: () => void;
@@ -166,6 +171,30 @@ export const useMealStore = create<MealStore>((set, get) => ({
     });
   },
 
+  streakCount: 0,
+  streakLastDate: null,
+  checkAndUpdateStreak: () => {
+    const today = new Date().toLocaleDateString('en-CA'); // YYYY-MM-DD
+    const { streakLastDate, streakCount } = get();
+
+    if (streakLastDate === today) return; // already validated today
+
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    const yesterdayStr = yesterday.toLocaleDateString('en-CA');
+
+    let newCount: number;
+    if (streakLastDate === yesterdayStr) {
+      newCount = streakCount + 1;
+    } else {
+      newCount = 1;
+    }
+
+    setLocalStorage('streak-count', newCount);
+    setLocalStorage('streak-last-date', today);
+    set({ streakCount: newCount, streakLastDate: today });
+  },
+
   onboardingCompleted: false,
   completeOnboarding: (profile) => {
     const settingsToSave: UserSettings = {
@@ -192,6 +221,8 @@ export const useMealStore = create<MealStore>((set, get) => ({
     const storedBatch = getLocalStorage<BatchItem[] | null>('batch-items', null);
     const feedbacks = getLocalStorage<MealFeedback[]>('meal-feedbacks', []);
     const onboardingCompleted = getLocalStorage<boolean>('onboardingCompleted', false);
+    const streakCount = getLocalStorage<number>('streak-count', 0);
+    const streakLastDate = getLocalStorage<string | null>('streak-last-date', null);
 
     set({
       ...todayMeals,
@@ -200,6 +231,8 @@ export const useMealStore = create<MealStore>((set, get) => ({
       batchItems: storedBatch ?? batchCookItems,
       feedbacks,
       onboardingCompleted,
+      streakCount,
+      streakLastDate,
       hydrated: true,
     });
   },
@@ -216,6 +249,8 @@ export const useMealStore = create<MealStore>((set, get) => ({
       recentProteins: [],
       batchItems: batchCookItems.map((i) => ({ ...i, checked: false })),
       settings: defaultSettings,
+      streakCount: 0,
+      streakLastDate: null,
     });
   },
 }));

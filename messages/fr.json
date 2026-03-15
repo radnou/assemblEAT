@@ -95,6 +95,13 @@
     "submit": "Envoyer",
     "skip": "Passer"
   },
+  "streak": {
+    "days": "jours",
+    "milestone7": "1 semaine !",
+    "milestone30": "1 mois !",
+    "milestone90": "3 mois !",
+    "milestone365": "1 an !"
+  },
   "onboarding": {
     "back": "Retour",
     "next": "Continuer",
