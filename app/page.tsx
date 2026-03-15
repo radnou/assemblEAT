@@ -186,6 +186,65 @@ export default function LandingPage() {
           <p className="mt-4 text-sm text-gray-400">
             Gratuit · Aucune carte requise · Installable sur mobile
           </p>
+
+          {/* App Preview */}
+          <div className="mt-12 max-w-4xl mx-auto rounded-2xl shadow-2xl border border-gray-200 overflow-hidden bg-white">
+            <div className="bg-gray-100 px-4 py-2 flex items-center gap-2 border-b">
+              <div className="flex gap-1.5">
+                <div className="w-3 h-3 rounded-full bg-red-400" />
+                <div className="w-3 h-3 rounded-full bg-yellow-400" />
+                <div className="w-3 h-3 rounded-full bg-green-400" />
+              </div>
+              <span className="text-xs text-gray-400 ml-2">assembleat.app</span>
+            </div>
+            <div className="p-6 bg-[var(--color-surface)]">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <p className="text-lg font-semibold">Bonjour Marie !</p>
+                  <p className="text-sm text-gray-400">Dimanche 15 Mars</p>
+                </div>
+                <span className="text-sm bg-orange-100 text-orange-600 px-2 py-1 rounded-full font-medium">🔥 12 jours</span>
+              </div>
+              <div className="grid grid-cols-3 gap-3">
+                {/* Breakfast card */}
+                <div className="rounded-lg border-l-4 border-l-[#048A81] bg-white p-3 shadow-sm">
+                  <div className="flex items-center gap-1.5 mb-2">
+                    <span className="w-5 h-5 rounded bg-[#7DC243] text-white text-xs flex items-center justify-center font-bold">B</span>
+                    <span className="text-sm font-semibold">Petit-déjeuner</span>
+                  </div>
+                  <div className="flex flex-wrap gap-1">
+                    <span className="text-[10px] bg-[#048A81] text-white px-1.5 py-0.5 rounded">Flocons</span>
+                    <span className="text-[10px] bg-[#048A81] text-white px-1.5 py-0.5 rounded">Yaourt</span>
+                    <span className="text-[10px] bg-[#048A81] text-white px-1.5 py-0.5 rounded">Banane</span>
+                  </div>
+                </div>
+                {/* Lunch card */}
+                <div className="rounded-lg border-l-4 border-l-[#E07A5F] bg-white p-3 shadow-sm">
+                  <div className="flex items-center gap-1.5 mb-2">
+                    <span className="w-5 h-5 rounded bg-[#037F2D] text-white text-xs flex items-center justify-center font-bold">A</span>
+                    <span className="text-sm font-semibold">Déjeuner</span>
+                  </div>
+                  <div className="flex flex-wrap gap-1">
+                    <span className="text-[10px] bg-[#E07A5F] text-white px-1.5 py-0.5 rounded">Poulet</span>
+                    <span className="text-[10px] bg-[#E07A5F] text-white px-1.5 py-0.5 rounded">Quinoa</span>
+                    <span className="text-[10px] bg-[#E07A5F] text-white px-1.5 py-0.5 rounded">Brocolis</span>
+                  </div>
+                </div>
+                {/* Dinner card */}
+                <div className="rounded-lg border-l-4 border-l-[#3D405B] bg-white p-3 shadow-sm">
+                  <div className="flex items-center gap-1.5 mb-2">
+                    <span className="w-5 h-5 rounded bg-[#037F2D] text-white text-xs flex items-center justify-center font-bold">A</span>
+                    <span className="text-sm font-semibold">Dîner</span>
+                  </div>
+                  <div className="flex flex-wrap gap-1">
+                    <span className="text-[10px] bg-[#3D405B] text-white px-1.5 py-0.5 rounded">Saumon</span>
+                    <span className="text-[10px] bg-[#3D405B] text-white px-1.5 py-0.5 rounded">Épinards</span>
+                  </div>
+                  <span className="text-[9px] text-green-600 mt-1 block">Dîner léger ✓</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </section>
 
         {/* Problem / Solution */}
@@ -278,6 +337,43 @@ export default function LandingPage() {
               >
                 Essayer maintenant →
               </a>
+            </div>
+          </div>
+        </section>
+
+        {/* Social Proof */}
+        <section className="py-16 px-4">
+          <div className="max-w-4xl mx-auto text-center">
+            <div className="flex justify-center gap-8 md:gap-16 mb-12">
+              <div>
+                <p className="text-3xl font-bold text-[var(--color-cta)]">500+</p>
+                <p className="text-sm text-gray-500">repas générés</p>
+              </div>
+              <div>
+                <p className="text-3xl font-bold text-[var(--color-meal-breakfast)]">4.8/5</p>
+                <p className="text-sm text-gray-500">satisfaction</p>
+              </div>
+              <div>
+                <p className="text-3xl font-bold text-[var(--color-meal-lunch)]">30s</p>
+                <p className="text-sm text-gray-500">pour planifier</p>
+              </div>
+            </div>
+            <div className="grid md:grid-cols-3 gap-6">
+              <div className="bg-white rounded-xl p-6 shadow-sm border text-left">
+                <div className="flex gap-1 mb-3 text-yellow-400">★★★★★</div>
+                <p className="text-gray-600 text-sm italic">&quot;Je ne me pose plus la question de quoi manger. L&apos;app décide pour moi et c&apos;est toujours équilibré.&quot;</p>
+                <p className="mt-3 text-sm font-semibold">Marie, 28 ans</p>
+              </div>
+              <div className="bg-white rounded-xl p-6 shadow-sm border text-left">
+                <div className="flex gap-1 mb-3 text-yellow-400">★★★★★</div>
+                <p className="text-gray-600 text-sm italic">&quot;Le batch cook du dimanche m&apos;a fait gagner 2h par semaine. Et le Nutri-Score me rassure.&quot;</p>
+                <p className="mt-3 text-sm font-semibold">Thomas, 34 ans</p>
+              </div>
+              <div className="bg-white rounded-xl p-6 shadow-sm border text-left">
+                <div className="flex gap-1 mb-3 text-yellow-400">★★★★★</div>
+                <p className="text-gray-600 text-sm italic">&quot;Mon diététicien est impressionné par mon suivi. Et c&apos;est juste une app gratuite !&quot;</p>
+                <p className="mt-3 text-sm font-semibold">Sarah, 31 ans</p>
+              </div>
             </div>
           </div>
         </section>
