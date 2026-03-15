@@ -18,7 +18,10 @@
     "regenerate": "Regenerate",
     "validate": "Validate",
     "lightDinner": "Light dinner ✓",
-    "noMeal": "No meal selected"
+    "noMeal": "No meal selected",
+    "goodMeals": "enjoyed meals",
+    "streakDays": "streak days",
+    "totalFeedbacks": "feedbacks given"
   },
   "weekPlanner": {
     "title": "Week Planner",

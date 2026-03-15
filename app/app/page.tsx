@@ -130,7 +130,6 @@ export default function Dashboard() {
             mealType="lunch"
             onRegenerate={() => handleRegenerate('lunch')}
             onValidate={() => handleValidate('lunch')}
-            warnings={warnings.filter((w) => w.includes('déjeuner') || w.includes('midi'))}
             existingFeedback={getFeedbackForAssembly(todayLunch?.id)}
             onFeedbackSubmit={handleFeedbackSubmit}
             today={todayISO}
@@ -142,7 +141,6 @@ export default function Dashboard() {
             mealType="dinner"
             onRegenerate={() => handleRegenerate('dinner')}
             onValidate={() => handleValidate('dinner')}
-            warnings={warnings.filter((w) => w.includes('soir') || w.includes('dîner'))}
             existingFeedback={getFeedbackForAssembly(todayDinner?.id)}
             onFeedbackSubmit={handleFeedbackSubmit}
             today={todayISO}
@@ -170,6 +168,28 @@ export default function Dashboard() {
           <Flame size={18} className="text-orange-400" />
           🔥 Roast my diet
         </Link>
+      </div>
+
+      {/* Quick stats */}
+      <div className="grid grid-cols-3 gap-3">
+        <div className="bg-white rounded-xl border p-4 text-center">
+          <p className="text-2xl font-bold text-[var(--color-meal-breakfast)]">
+            {feedbacks.filter(f => f.pleasure >= 4).length}
+          </p>
+          <p className="text-xs text-gray-500 mt-1">{t('goodMeals')}</p>
+        </div>
+        <div className="bg-white rounded-xl border p-4 text-center">
+          <p className="text-2xl font-bold text-[var(--color-cta)]">
+            {streakCount}
+          </p>
+          <p className="text-xs text-gray-500 mt-1">{t('streakDays')}</p>
+        </div>
+        <div className="bg-white rounded-xl border p-4 text-center">
+          <p className="text-2xl font-bold text-[var(--color-meal-dinner)]">
+            {feedbacks.length}
+          </p>
+          <p className="text-xs text-gray-500 mt-1">{t('totalFeedbacks')}</p>
+        </div>
       </div>
 
       {/* Feature tour overlay */}

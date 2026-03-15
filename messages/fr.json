@@ -18,7 +18,10 @@
     "regenerate": "Régénérer",
     "validate": "Valider",
     "lightDinner": "Dîner léger ✓",
-    "noMeal": "Aucun repas sélectionné"
+    "noMeal": "Aucun repas sélectionné",
+    "goodMeals": "repas appréciés",
+    "streakDays": "jours de streak",
+    "totalFeedbacks": "feedbacks donnés"
   },
   "weekPlanner": {
     "title": "Semainier",
