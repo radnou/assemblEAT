@@ -94,7 +94,10 @@
     "priceContext": "Moins qu'un café par semaine",
     "cta": "Essayer gratuitement",
     "cancel": "Annulation en 1 clic",
-    "alsoIncluded": "Aussi inclus"
+    "alsoIncluded": "Aussi inclus",
+    "processing": "Traitement en cours...",
+    "subscribed": "Vous êtes Pro !",
+    "manageSubscription": "Gérer mon abonnement"
   },
   "install": {
     "android": "Installer AssemblEat",

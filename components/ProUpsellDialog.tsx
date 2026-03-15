@@ -16,6 +16,8 @@ import {
 import { useTranslations } from 'next-intl';
 import { motion } from 'framer-motion';
 import type { FeatureFlag } from '@/types';
+import { useLemonSqueezy, openCheckout } from '@/components/LemonSqueezyCheckout';
+import { useAuth } from '@/lib/hooks/useAuth';
 
 type LucideIcon = typeof Share2;
 
@@ -103,11 +105,20 @@ interface ProUpsellDialogProps {
 
 export function ProUpsellDialog({ open, onOpenChange, feature }: ProUpsellDialogProps) {
   const t = useTranslations('pro');
+  const { user } = useAuth();
+  useLemonSqueezy();
 
   const hero = (feature && heroContent[feature]) ?? DEFAULT_HERO;
   const HeroIcon = hero.icon;
 
   const alsoIncluded = ALSO_INCLUDED.filter((item) => item.key !== feature);
+
+  function handleCtaClick() {
+    openCheckout({
+      userId: user?.id,
+      email: user?.email,
+    });
+  }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -172,7 +183,7 @@ export function ProUpsellDialog({ open, onOpenChange, feature }: ProUpsellDialog
           <div className="space-y-2">
             <Button
               className={`w-full bg-gradient-to-r ${hero.gradient} text-white border-0 font-semibold shadow-sm hover:opacity-90 transition-opacity`}
-              onClick={() => onOpenChange(false)}
+              onClick={handleCtaClick}
             >
               {t('cta')}
             </Button>
