@@ -56,7 +56,9 @@
     "copyText": "Copy summary",
     "copied": "Copied!",
     "offlineMessage": "PDF export not available offline",
-    "preview": "Preview"
+    "preview": "Preview",
+    "fullExport": "Full export",
+    "detailedSummary": "Detailed summary"
   },
   "settings": {
     "title": "Settings",
@@ -114,7 +116,9 @@
     "noteLabel": "Anything to add?",
     "notePlaceholder": "E.g. sauce too salty, perfect broccoli...",
     "submit": "Submit",
-    "skip": "Skip"
+    "skip": "Skip",
+    "photoLabel": "Photo of the dish (optional)",
+    "addPhoto": "Add a photo"
   },
   "streak": {
     "days": "days",

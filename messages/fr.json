@@ -56,7 +56,9 @@
     "copyText": "Copier le résumé",
     "copied": "Copié !",
     "offlineMessage": "Export PDF non disponible hors ligne",
-    "preview": "Aperçu"
+    "preview": "Aperçu",
+    "fullExport": "Export complet",
+    "detailedSummary": "Résumé détaillé"
   },
   "settings": {
     "title": "Réglages",
@@ -114,7 +116,9 @@
     "noteLabel": "Un truc à dire ?",
     "notePlaceholder": "Ex: sauce trop salée, brocolis parfaits...",
     "submit": "Envoyer",
-    "skip": "Passer"
+    "skip": "Passer",
+    "photoLabel": "Photo du plat (optionnel)",
+    "addPhoto": "Ajouter une photo"
   },
   "streak": {
     "days": "jours",

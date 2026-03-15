@@ -10,7 +10,7 @@ import { useSubscriptionStore } from '@/lib/store/useSubscriptionStore';
 import { WeekExportPreview } from '@/components/WeekExportPreview';
 import { ProBadge, ProUpsellDialog } from '@/components/ProUpsellDialog';
 import { ShareLinkButton } from '@/components/share/ShareLinkButton';
-import { generateTextSummary } from '@/lib/utils/pdfExport';
+import { generateTextSummary, generateProTextSummary } from '@/lib/utils/pdfExport';
 import { useTranslations } from 'next-intl';
 
 export default function ExportPage() {
@@ -25,7 +25,9 @@ export default function ExportPage() {
   const weekPlan = getWeekPlan(weekKey);
 
   const handleCopy = useCallback(async () => {
-    const text = generateTextSummary(weekPlan, settings.firstName);
+    const text = plan === 'pro'
+      ? generateProTextSummary(weekPlan, settings.firstName)
+      : generateTextSummary(weekPlan, settings.firstName);
     try {
       await navigator.clipboard.writeText(text);
       setCopied(true);
@@ -41,7 +43,7 @@ export default function ExportPage() {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     }
-  }, [weekPlan, settings.firstName]);
+  }, [weekPlan, settings.firstName, plan]);
 
   const handleGeneratePdf = useCallback(async () => {
     // Lazy-load @react-pdf/renderer pour réduire le bundle initial
@@ -63,12 +65,15 @@ export default function ExportPage() {
       return [a.protein, a.vegetable, a.cereal, a.sauce].filter(Boolean).map((c) => c!.name).join(' + ');
     };
 
+    // Pro gets all 7 days; free gets first 5 days
+    const daysToExport = plan === 'pro' ? weekPlan.days : weekPlan.days.slice(0, 5);
+
     const doc = (
       <Document>
         <Page size="A4" style={styles.page}>
           <Text style={styles.header}>Semainier AssemblEat — {settings.firstName || 'Utilisateur'}</Text>
-          <Text style={styles.subheader}>Semaine {weekKey}</Text>
-          {weekPlan.days.map((day, i) => (
+          <Text style={styles.subheader}>Semaine {weekKey}{plan === 'pro' ? ' · Export complet' : ' · Export limité (5 jours)'}</Text>
+          {daysToExport.map((day, i) => (
             <View key={i}>
               <Text style={styles.dayTitle}>{dayNames[i]}</Text>
               <Text style={styles.meal}><Text style={styles.mealLabel}>Petit-déj: </Text>{assemblyText(day.breakfast)}</Text>
@@ -89,7 +94,7 @@ export default function ExportPage() {
     a.download = `assembleat-${weekKey}.pdf`;
     a.click();
     URL.revokeObjectURL(url);
-  }, [weekPlan, weekKey, settings.firstName]);
+  }, [weekPlan, weekKey, settings.firstName, plan]);
 
   if (isOffline) {
     return (
@@ -130,6 +135,7 @@ export default function ExportPage() {
             <>
               <FileDown size={16} className="mr-2" />
               {t('generatePdf')}
+              <Badge className="ml-2 bg-white/20 text-white border-0 text-[10px] font-semibold">{t('fullExport')}</Badge>
             </>
           )}
         </Button>
@@ -143,6 +149,16 @@ export default function ExportPage() {
       {plan === 'pro' && (
         <div className="pt-1">
           <ShareLinkButton className="w-full justify-center" size="default" />
+        </div>
+      )}
+
+      {/* Pro text summary with feedback emojis — Pro only */}
+      {plan === 'pro' && (
+        <div className="rounded-xl border border-gray-100 bg-gray-50 p-4 space-y-1">
+          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">{t('detailedSummary')}</p>
+          <pre className="text-xs text-gray-700 whitespace-pre-wrap font-mono leading-relaxed">
+            {generateProTextSummary(weekPlan, settings.firstName)}
+          </pre>
         </div>
       )}
 
