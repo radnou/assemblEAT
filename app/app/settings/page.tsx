@@ -1,7 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Trash2, LogIn, LogOut } from 'lucide-react';
+import {
+  isNotificationSupported,
+  getNotificationPermission,
+  requestNotificationPermission,
+} from '@/lib/notifications/notificationManager';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -20,6 +25,20 @@ export default function SettingsPage() {
   const [showResetDialog, setShowResetDialog] = useState(false);
   const [proOpen, setProOpen] = useState(false);
   const [user, setUser] = useState<User | null>(null);
+  const [notifPermission, setNotifPermission] = useState<string>('unsupported');
+
+  useEffect(() => {
+    setNotifPermission(getNotificationPermission());
+  }, []);
+
+  const notifEnabled = notifPermission === 'granted';
+
+  const handleNotificationToggle = useCallback(async () => {
+    if (!isNotificationSupported()) return;
+    if (notifPermission === 'denied') return; // can't re-request once denied
+    const granted = await requestNotificationPermission();
+    setNotifPermission(granted ? 'granted' : 'denied');
+  }, [notifPermission]);
 
   useEffect(() => {
     const supabase = createClient();
@@ -124,6 +143,32 @@ export default function SettingsPage() {
           </label>
         </div>
       </Card>
+
+      {/* Notifications */}
+      {isNotificationSupported() && (
+        <Card className="p-4 space-y-3">
+          <p className="text-sm font-medium">{t('notifications')}</p>
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm">Rappels de repas</p>
+              <p className="text-xs text-gray-500">Midi, soir, et streak en danger</p>
+            </div>
+            <Button
+              variant={notifEnabled ? 'default' : 'outline'}
+              size="sm"
+              onClick={handleNotificationToggle}
+              disabled={notifPermission === 'denied'}
+            >
+              {notifEnabled ? 'Activé ✓' : 'Activer'}
+            </Button>
+          </div>
+          {notifPermission === 'denied' && (
+            <p className="text-xs text-red-500">
+              Notifications bloquées. Activez-les dans les paramètres de votre navigateur.
+            </p>
+          )}
+        </Card>
+      )}
 
       {/* Mode Pro */}
       <Card className="p-4 space-y-2">
