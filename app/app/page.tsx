@@ -14,7 +14,7 @@ import type { AssemblyRow, MealFeedback, MealType } from '@/types';
 import { AppTour } from '@/components/tour/AppTour';
 import { ProUpsellDialog } from '@/components/ProUpsellDialog';
 import Link from 'next/link';
-import { Flame, Trophy, ShoppingCart, UserCircle, Refrigerator } from 'lucide-react';
+import { Flame, Trophy, ShoppingCart, UserCircle, Refrigerator, BookOpen } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 import { useAuth } from '@/lib/hooks/useAuth';
 import { useGoalsStore } from '@/lib/store/useGoalsStore';
@@ -408,6 +408,13 @@ export default function Dashboard() {
         >
           <Refrigerator size={18} />
           🧊 Mode Frigo
+        </Link>
+        <Link
+          href="/app/repertoire"
+          className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-gradient-to-r from-purple-400 to-violet-500 text-white text-sm font-semibold shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95"
+        >
+          <BookOpen size={18} />
+          📚 Mon répertoire
         </Link>
       </div>
 

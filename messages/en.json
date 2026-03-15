@@ -80,7 +80,11 @@
     "notifDenied": "Notifications blocked. Enable them in your browser settings.",
     "notifPromptTitle": "Enable meal reminders?",
     "notifPromptEnable": "Enable",
-    "notifPromptLater": "Later"
+    "notifPromptLater": "Later",
+    "profiles": "Profiles",
+    "addProfile": "Add a profile",
+    "profileNamePlaceholder": "E.g. Family",
+    "profilesProHint": "Manage multiple profiles with a Pro subscription"
   },
   "nutriScore": {
     "calculated": "Nutritional score calculated",
@@ -332,5 +336,12 @@
     "meals": "meals",
     "noData": "Not enough data yet. Validate your meals to see your history!",
     "expand": "Details"
+  },
+  "repertoire": {
+    "title": "My repertoire",
+    "addCustom": "Add",
+    "newCustomAssembly": "New custom assembly",
+    "deleteConfirm": "Delete this assembly?",
+    "proHint": "Pro feature — add your own assemblies"
   }
 }

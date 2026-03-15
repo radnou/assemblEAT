@@ -80,7 +80,11 @@
     "notifDenied": "Notifications bloquées. Activez-les dans les paramètres de votre navigateur.",
     "notifPromptTitle": "Activer les rappels de repas ?",
     "notifPromptEnable": "Activer",
-    "notifPromptLater": "Plus tard"
+    "notifPromptLater": "Plus tard",
+    "profiles": "Profils",
+    "addProfile": "Ajouter un profil",
+    "profileNamePlaceholder": "Ex : Famille",
+    "profilesProHint": "Gérez plusieurs profils avec un abonnement Pro"
   },
   "nutriScore": {
     "calculated": "Score nutritionnel calculé",
@@ -332,5 +336,12 @@
     "meals": "repas",
     "noData": "Pas encore assez de données. Validez vos repas pour voir votre historique !",
     "expand": "Détails"
+  },
+  "repertoire": {
+    "title": "Mon répertoire",
+    "addCustom": "Ajouter",
+    "newCustomAssembly": "Nouvel assemblage personnalisé",
+    "deleteConfirm": "Supprimer cet assemblage ?",
+    "proHint": "Fonctionnalité Pro — ajoutez vos propres assemblages"
   }
 }

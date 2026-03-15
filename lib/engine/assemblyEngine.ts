@@ -1,5 +1,6 @@
 import type { AssemblyRow, MealType, SimplicityScore } from '@/types';
 import { getAssembliesByMealType } from '@/lib/data/repertoire';
+import { getCustomAssemblies } from '@/lib/engine/customRepertoire';
 
 // ─── Diet / Allergy / Objective Filtering ───────────────
 
@@ -160,9 +161,18 @@ export function generateRandomAssembly(
     diets?: string[];
     allergies?: string[];
     objective?: string;
+    isPro?: boolean;
   } = {}
 ): AssemblyRow | null {
   let candidates = getAssembliesByMealType(mealType);
+
+  // Include custom assemblies for Pro users
+  if (options.isPro) {
+    const custom = getCustomAssemblies().filter((a) => a.mealType === mealType);
+    if (custom.length > 0) {
+      candidates = [...candidates, ...custom];
+    }
+  }
 
   // Appliquer filtres régimes alimentaires
   if (options.diets && options.diets.length > 0) {
