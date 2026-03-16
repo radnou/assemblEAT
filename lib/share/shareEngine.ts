@@ -5,6 +5,8 @@ export interface SharePayload {
   feedbacks: MealFeedback[];
   userName: string;
   weekKey: string;
+  /** Optional weekly balance grade (A–E) to display on shared page */
+  grade?: 'A' | 'B' | 'C' | 'D' | 'E';
 }
 
 export interface DecodedShareData {
@@ -12,6 +14,8 @@ export interface DecodedShareData {
   userName: string;
   days: { b: string[] | null; l: string[] | null; d: string[] | null }[];
   feedbacks: { p: number; d: string }[];
+  /** Optional weekly balance grade (A–E) */
+  grade?: 'A' | 'B' | 'C' | 'D' | 'E';
 }
 
 /**
@@ -35,6 +39,8 @@ export function encodeShareData(data: SharePayload): string {
     })),
     // Limit feedbacks to avoid URL bloat
     f: data.feedbacks.slice(0, 14).map(f => ({ p: f.pleasure, d: f.date.slice(5) })), // MM-DD only
+    // Optional grade (single char, negligible size)
+    ...(data.grade ? { s: data.grade } : {}),
   };
 
   const json = JSON.stringify(payload);
@@ -57,11 +63,15 @@ export function decodeShareData(encoded: string): DecodedShareData | null {
 
     if (!data.w || !data.n || !Array.isArray(data.d)) return null;
 
+    const validGrades = ['A', 'B', 'C', 'D', 'E'] as const;
+    const grade = validGrades.includes(data.s) ? data.s as DecodedShareData['grade'] : undefined;
+
     return {
       weekKey: data.w,
       userName: data.n,
       days: data.d,
       feedbacks: Array.isArray(data.f) ? data.f : [],
+      grade,
     };
   } catch {
     return null;

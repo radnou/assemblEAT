@@ -5,6 +5,7 @@ import { Link as LinkIcon, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useMealStore } from '@/lib/store/useMealStore';
 import { encodeShareData, buildShareUrl } from '@/lib/share/shareEngine';
+import { computeWeeklyScore } from '@/lib/engine/weeklyScore';
 import { useWeekNavigation } from '@/lib/hooks/useWeekNavigation';
 import { toast } from 'sonner';
 
@@ -28,11 +29,14 @@ export function ShareLinkButton({ size = 'sm', className }: ShareLinkButtonProps
     );
     const weekFeedbacks = feedbacks.filter(f => weekDates.has(f.date));
 
+    const weeklyScore = computeWeeklyScore(weekPlan, weekFeedbacks);
+
     const encoded = encodeShareData({
       weekPlan,
       feedbacks: weekFeedbacks,
       userName: settings.firstName || 'Utilisateur',
       weekKey,
+      grade: weeklyScore.grade,
     });
 
     const url = buildShareUrl(encoded);

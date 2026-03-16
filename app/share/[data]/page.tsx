@@ -15,6 +15,14 @@ const PLEASURE_EMOJI: Record<number, string> = {
   5: '🤩',
 };
 
+const GRADE_BADGE_STYLES: Record<string, { bg: string; text: string; label: string }> = {
+  A: { bg: 'bg-[#037F2D]', text: 'text-white', label: 'Excellent' },
+  B: { bg: 'bg-[#7DC243]', text: 'text-white', label: 'Bon' },
+  C: { bg: 'bg-[#FFCC01]', text: 'text-gray-900', label: 'Correct' },
+  D: { bg: 'bg-[#F5860F]', text: 'text-white', label: 'Limité' },
+  E: { bg: 'bg-[#E63312]', text: 'text-white', label: 'À améliorer' },
+};
+
 export default async function SharePage({ params }: Props) {
   const { data: encoded } = await params;
   const shareData = decodeShareData(encoded);
@@ -45,6 +53,25 @@ export default async function SharePage({ params }: Props) {
         </h1>
         <p className="text-sm opacity-75 mt-0.5">Semaine {shareData.weekKey}</p>
       </header>
+
+      {/* Weekly balance score badge */}
+      {shareData.grade && GRADE_BADGE_STYLES[shareData.grade] && (
+        <div className="px-4 pt-5 pb-0 max-w-2xl mx-auto w-full">
+          <div className="flex items-center gap-3 bg-white rounded-xl shadow-sm border border-gray-100 px-4 py-3">
+            <span
+              className={`inline-flex items-center justify-center w-10 h-10 rounded-lg font-bold text-lg ${GRADE_BADGE_STYLES[shareData.grade].bg} ${GRADE_BADGE_STYLES[shareData.grade].text}`}
+            >
+              {shareData.grade}
+            </span>
+            <div>
+              <p className="text-sm font-semibold text-gray-800">
+                Indice d&apos;équilibre : {GRADE_BADGE_STYLES[shareData.grade].label}
+              </p>
+              <p className="text-xs text-gray-500">Score nutritionnel moyen de la semaine</p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Week grid */}
       <main className="flex-1 px-4 py-6 max-w-2xl mx-auto w-full space-y-3">
@@ -115,15 +142,30 @@ export default async function SharePage({ params }: Props) {
         )}
       </main>
 
+      {/* Viral CTA section */}
+      <div className="mx-4 mb-6 max-w-2xl lg:mx-auto">
+        <div className="p-6 bg-gradient-to-br from-green-50 to-orange-50 rounded-2xl text-center">
+          <h2 className="text-xl font-bold mb-2">
+            Envie de manger aussi bien ?
+          </h2>
+          <p className="text-sm text-muted-foreground mb-4">
+            Génère ton propre plan repas avec Nutri-Score en 30 secondes — gratuit.
+          </p>
+          <a
+            href="/app"
+            className="inline-block px-6 py-3 bg-[var(--color-cta)] text-white font-semibold rounded-full hover:opacity-90 transition"
+          >
+            🚀 Essayer assemblEAT gratuitement
+          </a>
+          <p className="text-xs text-muted-foreground mt-3">
+            Déjà un compte ? <a href="/sign-in" className="underline">Se connecter</a>
+          </p>
+        </div>
+      </div>
+
       {/* Footer */}
-      <footer className="text-center py-6 px-4 border-t border-gray-200 bg-white">
-        <p className="text-xs text-gray-400 mb-2">Créé avec AssemblEat</p>
-        <Link
-          href="/"
-          className="text-sm font-semibold text-[#2E4057] hover:underline"
-        >
-          Essayer gratuitement →
-        </Link>
+      <footer className="text-center py-4 px-4 border-t border-gray-200 bg-white">
+        <p className="text-xs text-gray-400">Créé avec AssemblEat</p>
       </footer>
     </div>
   );
@@ -137,8 +179,22 @@ export async function generateMetadata({ params }: Props) {
     return { title: 'Lien invalide — AssemblEat' };
   }
 
+  const title = `Plan repas de ${shareData.userName} — assemblEAT`;
+  const description = 'Découvre le plan repas de la semaine avec Nutri-Score. Génère le tien gratuitement.';
+
   return {
-    title: `Semainier de ${shareData.userName} — AssemblEat`,
-    description: `Découvrez le plan repas de ${shareData.userName} pour la semaine ${shareData.weekKey}.`,
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      type: 'website',
+      siteName: 'assemblEAT',
+    },
+    twitter: {
+      card: 'summary',
+      title,
+      description,
+    },
   };
 }
