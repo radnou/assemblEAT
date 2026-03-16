@@ -144,6 +144,17 @@ export function AssemblyCard({
           ))}
         </div>
 
+        {/* Bon gras */}
+        {assembly.bonGras && (
+          <div className="flex items-center gap-1.5 mb-2 text-xs text-gray-600">
+            <span>{assembly.bonGras.emoji}</span>
+            <span>{assembly.bonGras.label}</span>
+            {assembly.bonGras.weightG && (
+              <span className="text-gray-400">({assembly.bonGras.weightG}g)</span>
+            )}
+          </div>
+        )}
+
         {/* Flavor profile */}
         {assembly.flavorProfile && (
           <div className="mb-3">

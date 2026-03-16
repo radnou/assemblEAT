@@ -1,4 +1,4 @@
-import type { AssemblyRow, MealComponent, BatchItem, FlavorProfile } from '@/types';
+import type { AssemblyRow, MealComponent, BatchItem, BonGrasItem, FlavorProfile } from '@/types';
 
 // ─── Composants petit-déjeuner ──────────────────────
 
@@ -154,6 +154,19 @@ export const dinnerAssemblies: AssemblyRow[] = [
     cereal: null, sauce: sauces[2],
     flavorProfile: 'classique',
   },
+];
+
+// ─── Bon gras (bonnes graisses) ─────────────────────
+
+export const bonGras: BonGrasItem[] = [
+  { id: 'huile-olive', label: 'Huile d\'olive', emoji: '🫒', tags: ['omega-9'], weightG: 15 },
+  { id: 'avocat', label: 'Avocat', emoji: '🥑', tags: ['omega-9', 'fibre'], weightG: 80 },
+  { id: 'noix', label: 'Noix', emoji: '🥜', tags: ['omega-3'], weightG: 30 },
+  { id: 'amandes', label: 'Amandes', emoji: '🥜', tags: ['omega-9', 'vitamine-e'], weightG: 30 },
+  { id: 'graines-lin', label: 'Graines de lin', emoji: '🌱', tags: ['omega-3', 'fibre'], weightG: 15 },
+  { id: 'graines-chia', label: 'Graines de chia', emoji: '🌱', tags: ['omega-3', 'fibre'], weightG: 15 },
+  { id: 'beurre-cacahuete', label: 'Beurre de cacahuète', emoji: '🥜', tags: ['proteine'], weightG: 20 },
+  { id: 'huile-colza', label: 'Huile de colza', emoji: '🫒', tags: ['omega-3'], weightG: 15 },
 ];
 
 // ─── Profils saveurs ────────────────────────────────

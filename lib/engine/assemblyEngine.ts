@@ -1,5 +1,5 @@
 import type { AssemblyRow, MealType, SimplicityScore } from '@/types';
-import { getAssembliesByMealType } from '@/lib/data/repertoire';
+import { getAssembliesByMealType, bonGras } from '@/lib/data/repertoire';
 import { getCustomAssemblies } from '@/lib/engine/customRepertoire';
 
 // ─── Diet / Allergy / Objective Filtering ───────────────
@@ -26,6 +26,7 @@ export function filterByDiets(assemblies: AssemblyRow[], diets: string[]): Assem
       ...(a.vegetable?.tags ?? []),
       ...(a.cereal?.tags ?? []),
       ...(a.sauce?.tags ?? []),
+      ...(a.bonGras?.tags ?? []),
       ...(a.extras?.flatMap((e) => e.tags) ?? []),
     ];
     return !allTags.some((tag) => excludedTags.has(tag));
@@ -44,6 +45,7 @@ export function filterByAllergies(assemblies: AssemblyRow[], allergies: string[]
       ...(a.vegetable?.tags ?? []),
       ...(a.cereal?.tags ?? []),
       ...(a.sauce?.tags ?? []),
+      ...(a.bonGras?.tags ?? []),
       ...(a.extras?.flatMap((e) => e.tags) ?? []),
     ];
     return !allTags.some((tag) => allergenSet.has(tag));
@@ -226,7 +228,15 @@ export function generateRandomAssembly(
 
   // Sélection aléatoire
   const index = Math.floor(Math.random() * candidates.length);
-  return { ...candidates[index], validated: false };
+  const selected = { ...candidates[index], validated: false };
+
+  // Optionally attach a "bon gras" item for lunch/dinner (always included)
+  if (mealType !== 'breakfast' && bonGras.length > 0) {
+    const bonGrasIndex = Math.floor(Math.random() * bonGras.length);
+    selected.bonGras = bonGras[bonGrasIndex];
+  }
+
+  return selected;
 }
 
 /**
