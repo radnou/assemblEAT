@@ -18,6 +18,7 @@
 
 **Files:**
 - Modify: `lib/store/useMealStore.ts` (remove streak state + `checkAndUpdateStreak`)
+- Modify: `lib/store/persistence.ts` (remove `getStreak`/`updateStreak` from interface + both implementations)
 - Delete: `components/streak/StreakBadge.tsx`
 - Modify: `app/app/page.tsx` (remove streak imports, local states, logic)
 
@@ -35,6 +36,13 @@ In `lib/store/useMealStore.ts`:
 - Remove the `checkAndUpdateStreak` implementation (lines ~193-213)
 - Remove streak-related reads in `syncFromPersistence()` (lines reading `streak-count`, `streak-last-date`)
 - Remove streak initializers from create() (`streakCount: 0, streakLastDate: null`)
+
+- [ ] **Step 2b: Remove streak from PersistenceLayer**
+
+In `lib/store/persistence.ts`:
+- Remove `getStreak()` and `updateStreak()` from the `PersistenceLayer` interface (lines 31-33)
+- Remove `getStreak` and `updateStreak` implementations from `createLocalPersistence()` (lines 82-91)
+- Remove `getStreak` and `updateStreak` implementations from `createSupabasePersistence()` (lines 214-243)
 
 - [ ] **Step 3: Delete StreakBadge component**
 
@@ -265,7 +273,13 @@ git add package.json package-lock.json .env.local.example && git commit -m "feat
 **Files:**
 - Create: `app/api/webhooks/clerk/route.ts`
 
-- [ ] **Step 1: Create webhook route**
+- [ ] **Step 1: Install svix for webhook verification**
+
+```bash
+npm install svix
+```
+
+- [ ] **Step 2: Create webhook route**
 
 ```typescript
 // app/api/webhooks/clerk/route.ts
@@ -336,12 +350,6 @@ export async function POST(req: Request) {
 
   return new Response('OK', { status: 200 });
 }
-```
-
-- [ ] **Step 2: Install svix for webhook verification**
-
-```bash
-npm install svix
 ```
 
 - [ ] **Step 3: Commit**
@@ -461,7 +469,67 @@ git add app/sign-in/ app/sign-up/ && git commit -m "feat(v2): add Clerk sign-in/
 
 ---
 
-### Task 11: ClerkSyncProvider
+### Task 11: Update persistence layer (MUST come before ClerkSyncProvider)
+
+**Files:**
+- Modify: `lib/store/persistence.ts` (accept userId param, remove auth dependency)
+
+- [ ] **Step 1: Change `createSupabasePersistence` signature**
+
+In `lib/store/persistence.ts`:
+
+1. Change the type alias (line 97):
+```typescript
+// OLD: type SupabaseClient = ReturnType<typeof import('@/lib/supabase/client').createAssembleatClient>;
+// NEW:
+import type { SupabaseClient } from '@supabase/supabase-js';
+```
+
+2. Change function signature (line 99):
+```typescript
+// OLD: export function createSupabasePersistence(supabase: SupabaseClient): PersistenceLayer {
+// NEW:
+export function createSupabasePersistence(supabase: SupabaseClient, userId: string): PersistenceLayer {
+```
+
+3. Remove the `getUserId()` helper function (lines 100-103) entirely.
+
+4. Replace every `const userId = await getUserId(); if (!userId) return ...;` with just using the `userId` parameter directly. There are 7 occurrences across `getWeekPlan`, `saveWeekPlan`, `saveFeedback`, `getFeedbacks`, `getSettings`, `saveSettings`.
+
+5. In `getSettings` (line 185): change `.eq('id', userId)` to `.eq('clerk_user_id', userId)` since we now use Clerk user IDs.
+
+6. In `saveSettings` (line 204): change `const patch: Record<string, unknown> = { id: userId }` to `{ clerk_user_id: userId }` and update the onConflict to `'clerk_user_id'`.
+
+- [ ] **Step 2: Verify build + commit**
+
+```bash
+npm run build && git add lib/store/persistence.ts && git commit -m "feat(v2): persistence layer accepts userId param, no auth dependency"
+```
+
+---
+
+### Task 12: Adapt useMigration to Clerk
+
+**Files:**
+- Modify: `lib/hooks/useMigration.ts`
+
+- [ ] **Step 1: Replace Supabase auth with Clerk userId param**
+
+In `lib/hooks/useMigration.ts`:
+- Remove any import of `useAuth` from `@/lib/hooks/useAuth`
+- Change the hook to accept a `userId: string | null` parameter instead of reading from Supabase auth
+- Replace internal references to `user.id` with the `userId` parameter
+- Ensure the migration is still idempotent (check flag before running)
+
+- [ ] **Step 2: Commit**
+
+```bash
+git add lib/hooks/useMigration.ts && git commit -m "feat(v2): adapt useMigration to accept Clerk userId"
+```
+
+---
+
+### Task 13: ClerkSyncProvider
 
 **Files:**
 - Create: `components/ClerkSyncProvider.tsx`
@@ -478,6 +546,7 @@ import { useEffect, useRef } from 'react';
 import { useMealStore } from '@/lib/store/useMealStore';
 import { useSubscriptionStore } from '@/lib/store/useSubscriptionStore';
 import { createSupabasePersistence } from '@/lib/store/persistence';
+import { useMigration } from '@/lib/hooks/useMigration';
 import { createClient } from '@supabase/supabase-js';
 
 const supabase = createClient(
@@ -491,17 +560,21 @@ export function ClerkSyncProvider({ children }: { children: React.ReactNode }) {
   const supabaseLayerActiveRef = useRef(false);
   const { setPersistence, syncFromPersistence } = useMealStore();
   const setPlan = useSubscriptionStore((s) => s.setPlan);
+  const { migrate, migrated } = useMigration(isSignedIn ? user?.id ?? null : null);
 
   useEffect(() => {
     if (!isSignedIn || !user?.id || supabaseLayerActiveRef.current) return;
 
     const sync = async () => {
-      // Switch persistence to Supabase
+      // Step 1: Migrate localStorage → Supabase (idempotent, one-shot)
+      if (!migrated) await migrate();
+
+      // Step 2: Switch persistence to Supabase
       setPersistence(createSupabasePersistence(supabase, user.id));
       await syncFromPersistence();
       supabaseLayerActiveRef.current = true;
 
-      // Fetch subscription plan
+      // Step 3: Fetch subscription plan
       const { data: profile } = await supabase
         .from('profiles')
         .select('plan')
@@ -514,7 +587,7 @@ export function ClerkSyncProvider({ children }: { children: React.ReactNode }) {
     };
 
     sync();
-  }, [isSignedIn, user?.id, setPersistence, syncFromPersistence, setPlan]);
+  }, [isSignedIn, user?.id, setPersistence, syncFromPersistence, setPlan, migrate, migrated]);
 
   return <>{children}</>;
 }
@@ -561,53 +634,7 @@ git add components/ClerkSyncProvider.tsx app/app/layout.tsx && git commit -m "fe
 
 ---
 
-### Task 12: Update persistence layer
-
-**Files:**
-- Modify: `lib/store/persistence.ts` (accept userId parameter)
-
-- [ ] **Step 1: Update createSupabasePersistence signature**
-
-In `lib/store/persistence.ts`, modify `createSupabasePersistence` to accept a `userId: string` parameter instead of reading from Supabase auth session:
-
-```typescript
-export function createSupabasePersistence(
-  supabase: SupabaseClient,
-  userId: string
-): PersistenceLayer {
-  return {
-    async loadWeekPlan(weekKey: string) {
-      const { data } = await supabase
-        .from('week_plans')
-        .select('data')
-        .eq('user_id', userId)
-        .eq('week_key', weekKey)
-        .single();
-      return data?.data ?? null;
-    },
-    async saveWeekPlan(weekKey: string, plan: unknown) {
-      await supabase.from('week_plans').upsert(
-        { user_id: userId, week_key: weekKey, data: plan },
-        { onConflict: 'user_id,week_key' }
-      );
-    },
-    // ... update all other methods to use userId parameter
-    // instead of reading from supabase.auth.getUser()
-  };
-}
-```
-
-Review every method in the persistence layer and replace any `supabase.auth.getUser()` calls with the `userId` parameter.
-
-- [ ] **Step 2: Verify build + commit**
-
-```bash
-npm run build && git add lib/store/persistence.ts && git commit -m "feat(v2): persistence layer accepts userId param (no auth dependency)"
-```
-
----
-
-### Task 13: Validate + cleanup old auth
+### Task 14: Validate + cleanup old auth
 
 - [ ] **Step 1: Verify full flow**
 
@@ -648,7 +675,7 @@ git tag v2-phase2-complete
 
 ## Chunk 3: Phase 3 — Onboarding Rewrite
 
-### Task 14: Avatar component
+### Task 15: Avatar component
 
 **Files:**
 - Create: `components/onboarding/AvatarGenerator.tsx`
@@ -749,7 +776,7 @@ git add components/onboarding/AvatarGenerator.tsx && git commit -m "feat(v2): ad
 
 ---
 
-### Task 15: Rewrite OnboardingFlow (4 steps)
+### Task 16: Rewrite OnboardingFlow (4 steps)
 
 **Files:**
 - Rewrite: `components/onboarding/OnboardingFlow.tsx`
@@ -804,7 +831,7 @@ git tag v2-phase3-complete
 
 ## Chunk 4: Phase 4 — Contextual Dashboard
 
-### Task 16: Time-based meal focus helper
+### Task 17: Time-based meal focus helper
 
 **Files:**
 - Create: `lib/hooks/useTimeContext.ts`
@@ -882,7 +909,7 @@ git add lib/hooks/useTimeContext.ts && git commit -m "feat(v2): add useTimeConte
 
 ---
 
-### Task 17: Progressive guide hook
+### Task 18: Progressive guide hook
 
 **Files:**
 - Create: `lib/hooks/useProgressiveGuide.ts`
@@ -947,7 +974,7 @@ git add lib/hooks/useProgressiveGuide.ts && git commit -m "feat(v2): add progres
 
 ---
 
-### Task 18: Objective coaching hook
+### Task 19: Objective coaching hook
 
 **Files:**
 - Create: `lib/hooks/useObjectiveCoaching.ts`
@@ -1014,7 +1041,7 @@ git add lib/hooks/useObjectiveCoaching.ts && git commit -m "feat(v2): add object
 
 ---
 
-### Task 19: Rewrite dashboard page
+### Task 20: Rewrite dashboard page
 
 **Files:**
 - Rewrite: `app/app/page.tsx`
@@ -1059,7 +1086,7 @@ git tag v2-phase4-complete
 
 ## Chunk 5: Phase 5 — Polish
 
-### Task 20: Restructure Settings
+### Task 21: Restructure Settings
 
 **Files:**
 - Modify: `app/app/settings/page.tsx`
@@ -1081,7 +1108,7 @@ git add app/app/settings/page.tsx && git commit -m "feat(v2): restructure settin
 
 ---
 
-### Task 21: Update i18n messages
+### Task 22: Update i18n messages
 
 **Files:**
 - Modify: `messages/fr.json`
@@ -1113,7 +1140,7 @@ git add messages/fr.json && git commit -m "feat(v2): update i18n messages for ne
 
 ---
 
-### Task 22: Accessibility pass
+### Task 23: Accessibility pass
 
 - [ ] **Step 1: aria-labels on emoji avatars**
 
@@ -1135,7 +1162,7 @@ git add -A && git commit -m "fix(v2): accessibility improvements (aria-labels, c
 
 ---
 
-### Task 23: End-to-end verification
+### Task 24: End-to-end verification
 
 - [ ] **Step 1: Full build + test suite**
 
