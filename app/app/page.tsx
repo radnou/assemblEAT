@@ -12,6 +12,8 @@ import { useTimeContext } from '@/lib/hooks/useTimeContext';
 import { useProgressiveGuide } from '@/lib/hooks/useProgressiveGuide';
 import { useObjectiveCoaching } from '@/lib/hooks/useObjectiveCoaching';
 import { useWeeklyChallenge } from '@/lib/hooks/useWeeklyChallenge';
+import { useMonthlyStats } from '@/lib/hooks/useMonthlyStats';
+import { MonthlyWrapped } from '@/components/MonthlyWrapped';
 import { useFruitVegCounter } from '@/lib/hooks/useFruitVegCounter';
 import { useFeatureFlag } from '@/lib/hooks/useFeatureFlag';
 import { useLocalStorage } from '@/lib/hooks/useLocalStorage';
@@ -50,6 +52,19 @@ export default function Dashboard() {
 
   // ---- Fruit & vegetable counter -------------------------------------------
   const fruitVeg = useFruitVegCounter();
+
+  // ---- Monthly wrapped -----------------------------------------------------
+  const { stats: monthlyStats, isAvailable: wrappedAvailable } = useMonthlyStats();
+
+  // Show wrapped card on the last 3 days of the month or first 3 days of the next month
+  const showWrapped = useMemo(() => {
+    if (!wrappedAvailable || !monthlyStats) return false;
+    const now = new Date();
+    const day = now.getDate();
+    const lastDayOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+    // Last 3 days of current month or first 3 days of new month
+    return day >= lastDayOfMonth - 2 || day <= 3;
+  }, [wrappedAvailable, monthlyStats]);
 
   // ---- Feature flags ------------------------------------------------------
   const hasGrocery = useFeatureFlag('GROCERY_LIST');
@@ -532,6 +547,13 @@ export default function Dashboard() {
           />
         </div>
       </section>
+
+      {/* ─── Monthly Wrapped Card ────────────────────────────────────────── */}
+      {showWrapped && monthlyStats && (
+        <div className="mx-0">
+          <MonthlyWrapped stats={monthlyStats} />
+        </div>
+      )}
 
       {/* ================================================================ */}
       {/* SECTION 3: 🛠️ MES OUTILS                                       */}
