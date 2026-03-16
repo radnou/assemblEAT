@@ -21,7 +21,7 @@ import { createSupabasePersistence } from '@/lib/store/persistence';
 
 export function AuthSyncProvider({ children }: { children: React.ReactNode }) {
   const { user, isAuthenticated } = useAuth();
-  const { migrate, migrated } = useMigration();
+  const { migrate, migrated } = useMigration(user?.id ?? null);
   const setPersistence = useMealStore((s) => s.setPersistence);
   const syncFromPersistence = useMealStore((s) => s.syncFromPersistence);
   const setPlan = useSubscriptionStore((s) => s.setPlan);
@@ -44,7 +44,7 @@ export function AuthSyncProvider({ children }: { children: React.ReactNode }) {
       // Step 2: switch persistence layer to Supabase (once per session)
       if (!supabaseLayerActiveRef.current) {
         const supabase = createAssembleatClient();
-        const layer = createSupabasePersistence(supabase);
+        const layer = createSupabasePersistence(supabase, user!.id);
         setPersistence(layer);
         supabaseLayerActiveRef.current = true;
 

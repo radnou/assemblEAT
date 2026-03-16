@@ -11,7 +11,8 @@
  * localStorage (non-destructive).
  */
 
-import type { SupabaseClient } from '@supabase/supabase-js';
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnySupabaseClient = import('@supabase/supabase-js').SupabaseClient<any, any, any>;
 import type { WeekPlan, MealFeedback, UserSettings } from '@/types';
 
 // ─── Interface ────────────────────────────────────────────────────────────────
@@ -82,7 +83,7 @@ export function createLocalPersistence(): PersistenceLayer {
 
 // ─── Supabase implementation ──────────────────────────────────────────────────
 
-export function createSupabasePersistence(supabase: SupabaseClient, userId: string): PersistenceLayer {
+export function createSupabasePersistence(supabase: AnySupabaseClient, userId: string): PersistenceLayer {
   return {
     async getWeekPlan(weekKey) {
       try {
