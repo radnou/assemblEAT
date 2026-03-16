@@ -61,7 +61,7 @@ export function WeeklyScoreCard({ score, weekKey, userName }: WeeklyScoreCardPro
         <div className="flex items-center justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-wide text-gray-400">
-              Score de la semaine
+              Indice d&apos;équilibre hebdomadaire
             </p>
             {userName && (
               <p className="text-sm font-medium text-gray-700 mt-0.5">{userName}</p>

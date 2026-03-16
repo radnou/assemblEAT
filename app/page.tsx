@@ -79,7 +79,7 @@ const freeFeatures = [
   'Nutri-Score sur chaque repas',
   'Régénération illimitée',
   'Checklist batch cook',
-  'Score nutritionnel',
+  'Indice d\'équilibre',
 ];
 
 const proFeatures = [

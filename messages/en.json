@@ -87,8 +87,8 @@
     "profilesProHint": "Manage multiple profiles with a Pro subscription"
   },
   "nutriScore": {
-    "calculated": "Nutritional score calculated",
-    "assembly": "Assembly score"
+    "calculated": "Balance index calculated",
+    "assembly": "Assembly balance index"
   },
   "pro": {
     "badge": "Pro 🔒",
@@ -300,7 +300,7 @@
     "basedOn": "Based on your preferences"
   },
   "weeklyScore": {
-    "title": "Weekly Score",
+    "title": "Weekly Balance Index",
     "meals": "meals validated",
     "pleasure": "average pleasure",
     "share": "Share my score",

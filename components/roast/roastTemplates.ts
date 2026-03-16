@@ -334,7 +334,7 @@ export const roastTemplates: RoastTemplate[] = [
   {
     id: 'low_07',
     category: 'score_low',
-    template: '{avgScore} de Nutri-Score moyen. Même les voisins ont faim pour toi.',
+    template: '{avgScore} d\'indice d\'équilibre moyen. Même les voisins ont faim pour toi.',
     tone: 'roast',
   },
   {
@@ -346,7 +346,7 @@ export const roastTemplates: RoastTemplate[] = [
   {
     id: 'low_08',
     category: 'score_low',
-    template: 'Ton Nutri-Score moyen fait honte aux céréales du rayon petit-déjeuner.',
+    template: 'Ton indice d\'équilibre moyen fait honte aux céréales du rayon petit-déjeuner.',
     tone: 'roast',
   },
   {
@@ -394,7 +394,7 @@ export const roastTemplates: RoastTemplate[] = [
   {
     id: 'low_12',
     category: 'score_low',
-    template: 'Nutri-Score moyen {avgScore} — t\'avais sûrement mieux à faire qu\'étudier les étiquettes.',
+    template: 'Indice d\'équilibre moyen {avgScore} — t\'avais sûrement mieux à faire qu\'étudier les étiquettes.',
     tone: 'roast',
   },
   {
@@ -430,7 +430,7 @@ export const roastTemplates: RoastTemplate[] = [
   {
     id: 'low_15',
     category: 'score_low',
-    template: 'Score nutritionnel de la semaine : merci de ne pas partager ta carte d\'identité alimentaire en public.',
+    template: 'Indice d\'équilibre de la semaine : merci de ne pas partager ta carte d\'identité alimentaire en public.',
     tone: 'roast',
   },
   {
@@ -468,7 +468,7 @@ export const roastTemplates: RoastTemplate[] = [
   {
     id: 'high_03',
     category: 'score_high',
-    template: 'T\'as un Nutri-Score moyen de A. T\'es sûr(e) que tu n\'es pas diététicien(ne) ?',
+    template: 'T\'as un indice d\'équilibre moyen de A. T\'es sûr(e) que tu n\'es pas diététicien(ne) ?',
     tone: 'roast',
   },
   {

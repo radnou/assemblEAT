@@ -49,7 +49,7 @@ const heroContent: Partial<Record<FeatureFlag, HeroContent>> = {
     gradient: 'from-blue-500 to-indigo-600',
     icon: BarChart3,
     headline: 'Suivez votre progression',
-    description: 'Évolution du Nutri-Score sur 12 semaines. Voyez vos progrès concrets.',
+    description: 'Évolution de votre indice d\'équilibre sur 12 semaines. Voyez vos progrès concrets.',
     preview: '📊 Semaine 1: C → Semaine 4: B → Semaine 8: A',
   },
   CLOUD_SYNC: {

@@ -108,8 +108,8 @@
     "notifPromptLater": "Plus tard"
   },
   "nutriScore": {
-    "calculated": "Score nutritionnel calculé",
-    "assembly": "Score de l'assemblage"
+    "calculated": "Indice d'équilibre calculé",
+    "assembly": "Indice d'équilibre de l'assemblage"
   },
   "pro": {
     "badge": "Pro 🔒",
@@ -314,7 +314,7 @@
     "basedOn": "Basé sur vos préférences"
   },
   "weeklyScore": {
-    "title": "Score de la semaine",
+    "title": "Indice d'équilibre hebdomadaire",
     "meals": "repas validés",
     "pleasure": "plaisir moyen",
     "share": "Partager mon score",
