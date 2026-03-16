@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { Trash2, LogIn, LogOut, Plus, X, Users, Check } from 'lucide-react';
+import { Trash2, LogIn, LogOut, Plus, X } from 'lucide-react';
 import {
   isNotificationSupported,
   getNotificationPermission,
@@ -19,8 +19,6 @@ import { createClient } from '@/lib/supabase/client';
 import type { User } from '@supabase/supabase-js';
 import { useGoalsStore } from '@/lib/store/useGoalsStore';
 import { useSubscriptionStore } from '@/lib/store/useSubscriptionStore';
-import { useProfileStore } from '@/lib/store/useProfileStore';
-
 export default function SettingsPage() {
   const t = useTranslations('settings');
   const tAuth = useTranslations('auth');
@@ -28,16 +26,12 @@ export default function SettingsPage() {
   const { settings, updateSettings, resetAll } = useMealStore();
   const { plan } = useSubscriptionStore();
   const { goals, addGoal, removeGoal } = useGoalsStore();
-  const { profiles, activeProfileId, addProfile, switchProfile, deleteProfile } = useProfileStore();
   const [showResetDialog, setShowResetDialog] = useState(false);
   const [proOpen, setProOpen] = useState(false);
-  const [profilesProOpen, setProfilesProOpen] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [notifPermission, setNotifPermission] = useState<string>('unsupported');
   const [goalText, setGoalText] = useState('');
   const [goalTarget, setGoalTarget] = useState(3);
-  const [newProfileName, setNewProfileName] = useState('');
-  const [showAddProfile, setShowAddProfile] = useState(false);
 
   // Current ISO week key (YYYY-Www)
   const currentWeekKey = useMemo(() => {
@@ -64,14 +58,6 @@ export default function SettingsPage() {
     addGoal(text, goalTarget, currentWeekKey);
     setGoalText('');
     setGoalTarget(3);
-  };
-
-  const handleAddProfile = () => {
-    const name = newProfileName.trim();
-    if (!name) return;
-    addProfile(name);
-    setNewProfileName('');
-    setShowAddProfile(false);
   };
 
   useEffect(() => {
@@ -312,93 +298,6 @@ export default function SettingsPage() {
         </Card>
       )}
 
-      {/* Profils (Pro only) */}
-      <Card className="p-4 space-y-3">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Users size={16} className="text-gray-500" />
-            <p className="text-sm font-medium">{t('profiles')}</p>
-          </div>
-          {plan !== 'pro' && (
-            <ProBadge feature="MULTI_PROFILE" onClick={() => setProfilesProOpen(true)} />
-          )}
-        </div>
-
-        {plan === 'pro' ? (
-          <div className="space-y-3">
-            {/* Profile list */}
-            <ul className="space-y-2">
-              {profiles.map((profile) => {
-                const isActive = profile.id === activeProfileId;
-                return (
-                  <li
-                    key={profile.id}
-                    className={`flex items-center gap-3 px-3 py-2.5 rounded-xl border transition-colors ${
-                      isActive
-                        ? 'bg-orange-50 border-[var(--color-cta)]'
-                        : 'bg-white border-gray-100 hover:border-gray-200'
-                    }`}
-                  >
-                    <button
-                      className="flex-1 flex items-center gap-2 text-left"
-                      onClick={() => switchProfile(profile.id)}
-                    >
-                      <span className="text-base">👤</span>
-                      <span className={`text-sm font-medium ${isActive ? 'text-[var(--color-cta)]' : 'text-gray-700'}`}>
-                        {profile.name}
-                      </span>
-                      {isActive && <Check size={14} className="text-[var(--color-cta)]" />}
-                    </button>
-                    {profiles.length > 1 && !isActive && (
-                      <button
-                        onClick={() => deleteProfile(profile.id)}
-                        className="text-gray-300 hover:text-red-400 transition-colors"
-                        aria-label="Supprimer ce profil"
-                      >
-                        <Trash2 size={13} />
-                      </button>
-                    )}
-                  </li>
-                );
-              })}
-            </ul>
-
-            {/* Add profile */}
-            {showAddProfile ? (
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  className="flex-1 border rounded-lg px-3 py-2 text-sm"
-                  placeholder={t('profileNamePlaceholder')}
-                  value={newProfileName}
-                  onChange={(e) => setNewProfileName(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleAddProfile()}
-                  autoFocus
-                />
-                <Button size="sm" onClick={handleAddProfile} disabled={!newProfileName.trim()}>
-                  <Check size={14} />
-                </Button>
-                <Button size="sm" variant="outline" onClick={() => { setShowAddProfile(false); setNewProfileName(''); }}>
-                  <X size={14} />
-                </Button>
-              </div>
-            ) : (
-              <Button
-                variant="outline"
-                size="sm"
-                className="w-full flex items-center gap-1.5"
-                onClick={() => setShowAddProfile(true)}
-              >
-                <Plus size={14} />
-                {t('addProfile')}
-              </Button>
-            )}
-          </div>
-        ) : (
-          <p className="text-xs text-gray-500">{t('profilesProHint')}</p>
-        )}
-      </Card>
-
       {/* Mode Pro */}
       <Card className="p-4 space-y-2">
         <div className="flex items-center justify-between">
@@ -435,7 +334,6 @@ export default function SettingsPage() {
       </Dialog>
 
       <ProUpsellDialog open={proOpen} onOpenChange={setProOpen} feature="SHARE_WITH_DIETITIAN" />
-      <ProUpsellDialog open={profilesProOpen} onOpenChange={setProfilesProOpen} feature="MULTI_PROFILE" />
 
       <p className="text-center text-[10px] text-gray-400 pt-4">
         AssemblEat v1.0 — Données stockées localement sur votre appareil
