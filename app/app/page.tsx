@@ -582,6 +582,7 @@ export default function Dashboard() {
             <button
               onClick={() => setShowTrialPrompt(false)}
               className="text-gray-400 hover:text-gray-600 text-lg"
+              aria-label="Fermer"
             >
               ×
             </button>

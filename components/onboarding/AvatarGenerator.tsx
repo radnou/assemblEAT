@@ -41,7 +41,8 @@ export function AvatarGenerator({
       <div className="flex gap-2">
         {COLORS.map((color, i) => (
           <button key={i} onClick={() => onColorChange(i)}
-            className={`w-8 h-8 rounded-full ${color} ${selectedColor === i ? 'ring-2 ring-offset-2 ring-green-500 scale-110' : ''} transition-all`} />
+            className={`w-8 h-8 rounded-full ${color} ${selectedColor === i ? 'ring-2 ring-offset-2 ring-green-500 scale-110' : ''} transition-all`}
+            aria-label={`Couleur ${i + 1}`} />
         ))}
       </div>
       <div className="text-xs text-muted-foreground">Choisis ton compagnon food</div>
