@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { width: 1600px; height: 1200px; font-family: 'Inter', system-ui; background: #111827; display: flex; align-items: center; justify-content: center; }
+
+  .container { text-align: center; width: 1300px; }
+  .badge { display: inline-block; background: rgba(244,162,97,0.2); color: #F4A261; padding: 8px 20px; border-radius: 20px; font-size: 16px; font-weight: 600; margin-bottom: 32px; }
+  h1 { color: white; font-size: 56px; font-weight: 800; margin-bottom: 16px; }
+  h1 em { font-style: normal; color: #F4A261; }
+  .sub { color: rgba(255,255,255,0.5); font-size: 22px; margin-bottom: 56px; }
+
+  .roast-card { background: #1F2937; border-radius: 24px; padding: 56px 64px; text-align: left; position: relative; overflow: hidden; }
+  .roast-card::before { content: ''; position: absolute; top: -60px; right: -60px; width: 200px; height: 200px; background: radial-gradient(circle, rgba(244,162,97,0.1) 0%, transparent 70%); border-radius: 50%; }
+
+  .roast-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
+  .roast-title { color: #F4A261; font-size: 18px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; }
+  .mode-toggle { color: rgba(255,255,255,0.4); font-size: 14px; }
+
+  .punchline { padding: 20px 0; border-left: 3px solid #F4A261; padding-left: 24px; margin-bottom: 24px; }
+  .punchline p { color: rgba(255,255,255,0.9); font-size: 24px; line-height: 1.5; font-weight: 500; }
+
+  .stats { display: flex; gap: 16px; margin-top: 40px; margin-bottom: 40px; }
+  .stat { background: rgba(255,255,255,0.06); padding: 10px 20px; border-radius: 12px; color: rgba(255,255,255,0.5); font-size: 14px; font-weight: 500; }
+  .stat strong { color: white; }
+
+  .buttons { display: flex; gap: 16px; }
+  .btn { padding: 16px 40px; border-radius: 14px; font-size: 17px; font-weight: 600; }
+  .btn.secondary { background: #374151; color: white; }
+  .btn.primary { background: linear-gradient(135deg, #F4A261, #E07A5F); color: white; }
+
+  .disclaimer { margin-top: 32px; color: rgba(255,255,255,0.25); font-size: 13px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="badge">🔥 NOUVEAU</div>
+  <h1>L'app qui <em>roast</em> ton alimentation</h1>
+  <p class="sub">210 punchlines personnalisées basées sur tes vrais repas</p>
+
+  <div class="roast-card">
+    <div class="roast-header">
+      <span class="roast-title">🔥 Roast my diet</span>
+      <span class="mode-toggle">Mode bienveillant 😇</span>
+    </div>
+
+    <div class="punchline">
+      <p>"Tu as mangé du poulet-riz 4 fois cette semaine. T'es en sèche ou juste en panne d'inspiration ?"</p>
+    </div>
+    <div class="punchline">
+      <p>"Nutri-Score A 5 jours d'affilée — t'es devenu(e) nutritionniste sans nous le dire ?"</p>
+    </div>
+    <div class="punchline">
+      <p>"Tes brocolis vapeur te détestent autant que tu les détestes. Score plaisir : 1/5."</p>
+    </div>
+
+    <div class="stats">
+      <span class="stat"><strong>3</strong> repas validés</span>
+      <span class="stat"><strong>9</strong> ingrédients</span>
+      <span class="stat"><strong>B</strong> score moyen</span>
+    </div>
+
+    <div class="buttons">
+      <span class="btn secondary">↻ Autre roast</span>
+      <span class="btn primary">↗ Partager</span>
+    </div>
+
+    <p class="disclaimer">Si tu as des difficultés avec l'alimentation, parle à un professionnel.</p>
+  </div>
+</div>
+</body>
+</html>

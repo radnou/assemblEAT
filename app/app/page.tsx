@@ -4,7 +4,6 @@ import { useEffect, useCallback, useState, useMemo } from 'react';
 import { useMealStore } from '@/lib/store/useMealStore';
 import { useSubscriptionStore } from '@/lib/store/useSubscriptionStore';
 import { AssemblyCard } from '@/components/AssemblyCard';
-import { StreakBadge } from '@/components/streak/StreakBadge';
 import { WeeklyScoreCard } from '@/components/WeeklyScoreCard';
 import { generateRandomAssembly, detectDayConflicts } from '@/lib/engine/assemblyEngine';
 import { getSmartSuggestions } from '@/lib/engine/smartSuggestions';
@@ -32,10 +31,6 @@ export default function Dashboard() {
   const [proDialogOpen, setProDialogOpen] = useState(false);
   const [showTrialPrompt, setShowTrialPrompt] = useState(false);
 
-  // Streak recovery state
-  const [streakBroken, setStreakBroken] = useState(false);
-  const [previousStreak, setPreviousStreak] = useState(0);
-
   // Clean URL when the upgrade welcome modal is first shown
   useEffect(() => {
     if (searchParams.get('upgraded') === 'true') {
@@ -43,20 +38,6 @@ export default function Dashboard() {
     }
   }, [searchParams]);
 
-  // Detect broken streak on mount
-  useEffect(() => {
-    const lastDate = localStorage.getItem('streak-last-date');
-    const lastCount = parseInt(localStorage.getItem('streak-count') ?? '0', 10);
-    if (lastDate && lastCount > 0) {
-      const last = new Date(lastDate);
-      const today = new Date();
-      const diffDays = Math.floor((today.getTime() - last.getTime()) / (1000 * 60 * 60 * 24));
-      if (diffDays >= 2) {
-        setStreakBroken(true);
-        setPreviousStreak(lastCount);
-      }
-    }
-  }, []);
   const {
     todayBreakfast,
     todayLunch,
@@ -67,8 +48,6 @@ export default function Dashboard() {
     settings,
     feedbacks,
     addFeedback,
-    streakCount,
-    checkAndUpdateStreak,
     onboardingCompleted,
     tourCompleted,
     completeTour,
@@ -125,8 +104,7 @@ export default function Dashboard() {
     if (current.protein) {
       addRecentProtein(current.protein.id);
     }
-    checkAndUpdateStreak();
-  }, [todayBreakfast, todayLunch, todayDinner, setTodayMeal, addRecentProtein, checkAndUpdateStreak]);
+  }, [todayBreakfast, todayLunch, todayDinner, setTodayMeal, addRecentProtein]);
 
   const handleFeedbackSubmit = useCallback((feedback: MealFeedback) => {
     addFeedback(feedback);
@@ -241,25 +219,8 @@ export default function Dashboard() {
               </div>
             </div>
           )}
-          {streakCount > 0 && <StreakBadge count={streakCount} size="md" />}
         </div>
       </div>
-
-      {/* Streak recovery banner */}
-      {streakBroken && (
-        <div className="bg-orange-50 border border-orange-200 rounded-xl p-4 flex items-center gap-3">
-          <span className="text-2xl">😢</span>
-          <div className="flex-1">
-            <p className="text-sm font-semibold text-orange-800">
-              Votre série de {previousStreak} jours est interrompue
-            </p>
-            <p className="text-xs text-orange-600">
-              Validez un repas aujourd&apos;hui pour repartir de zéro !
-            </p>
-          </div>
-          <button onClick={() => setStreakBroken(false)} className="text-orange-400 hover:text-orange-600">✕</button>
-        </div>
-      )}
 
       {/* Weekly Score Card (FREE feature) */}
       {weeklyScore && weeklyScore.mealsValidated >= 3 && (
@@ -419,18 +380,12 @@ export default function Dashboard() {
       </div>
 
       {/* Quick stats */}
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-2 gap-3">
         <div className="bg-white rounded-xl border p-4 text-center">
           <p className="text-2xl font-bold text-[var(--color-meal-breakfast)]">
             {feedbacks.filter(f => f.pleasure >= 4).length}
           </p>
           <p className="text-xs text-gray-500 mt-1">{t('goodMeals')}</p>
-        </div>
-        <div className="bg-white rounded-xl border p-4 text-center">
-          <p className="text-2xl font-bold text-[var(--color-cta)]">
-            {streakCount}
-          </p>
-          <p className="text-xs text-gray-500 mt-1">{t('streakDays')}</p>
         </div>
         <div className="bg-white rounded-xl border p-4 text-center">
           <p className="text-2xl font-bold text-[var(--color-meal-dinner)]">

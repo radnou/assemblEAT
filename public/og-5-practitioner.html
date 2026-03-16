@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { width: 1600px; height: 1200px; font-family: 'Inter', system-ui; background: linear-gradient(160deg, #F8F9FA 0%, #EEF2FF 100%); display: flex; align-items: center; justify-content: center; }
+
+  .container { width: 1400px; text-align: center; }
+  .badge { display: inline-block; background: #EEF2FF; color: #6366F1; padding: 8px 20px; border-radius: 20px; font-size: 14px; font-weight: 600; margin-bottom: 24px; }
+  h1 { font-size: 52px; font-weight: 800; color: #1A1A2E; margin-bottom: 16px; }
+  h1 em { font-style: normal; color: #048A81; }
+  .sub { font-size: 22px; color: #6B7280; margin-bottom: 56px; }
+
+  .thread { background: white; border-radius: 24px; box-shadow: 0 8px 40px rgba(0,0,0,0.08); padding: 48px; text-align: left; max-width: 1000px; margin: 0 auto; }
+  .thread-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; padding-bottom: 20px; border-bottom: 1px solid #F3F4F6; }
+  .thread-header h3 { font-size: 20px; font-weight: 700; color: #1A1A2E; }
+  .thread-header .week { color: #9CA3AF; font-size: 14px; }
+
+  .meal-row { display: flex; align-items: flex-start; gap: 20px; padding: 20px 0; border-bottom: 1px solid #F9FAFB; }
+  .meal-row:last-child { border-bottom: none; }
+
+  .meal-info { flex: 1; }
+  .meal-info .label { font-size: 13px; color: #9CA3AF; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .meal-info .items { display: flex; gap: 6px; margin-bottom: 8px; }
+  .meal-info .item { padding: 4px 10px; border-radius: 6px; font-size: 13px; font-weight: 500; }
+  .item.breakfast { background: #E6F7F6; color: #048A81; }
+  .item.lunch { background: #FDE8E3; color: #E07A5F; }
+  .item.dinner { background: #E8E9EF; color: #3D405B; }
+
+  .feedback { display: flex; align-items: center; gap: 8px; }
+  .feedback .emoji { font-size: 20px; }
+  .feedback .score { font-size: 13px; color: #9CA3AF; }
+
+  .comment { background: #F0FDF4; border-radius: 12px; padding: 14px 18px; margin-top: 8px; display: flex; align-items: flex-start; gap: 10px; }
+  .comment.warning { background: #FFF7ED; }
+  .comment.suggestion { background: #EFF6FF; }
+  .comment-icon { font-size: 18px; flex-shrink: 0; margin-top: 2px; }
+  .comment-text { font-size: 14px; color: #374151; line-height: 1.5; }
+  .comment-author { font-size: 12px; color: #9CA3AF; margin-top: 4px; }
+
+  .nutri-badge { width: 32px; height: 32px; border-radius: 8px; color: white; font-weight: 700; font-size: 15px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .nutri-badge.a { background: #037F2D; }
+  .nutri-badge.b { background: #7DC243; }
+
+  .pro-badge { display: inline-block; background: linear-gradient(135deg, #F4A261, #E07A5F); color: white; padding: 10px 28px; border-radius: 14px; font-weight: 600; font-size: 16px; margin-top: 40px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="badge">👩‍⚕️ Fonctionnalité Pro</div>
+  <h1>Votre praticien <em>commente en temps réel</em></h1>
+  <p class="sub">Il voit vos repas, votre ressenti, et vous guide chaque semaine</p>
+
+  <div class="thread">
+    <div class="thread-header">
+      <h3>Semaine du 9 Mars</h3>
+      <span class="week">Dr. Martin — Diététicienne</span>
+    </div>
+
+    <div class="meal-row">
+      <span class="nutri-badge b">B</span>
+      <div class="meal-info">
+        <div class="label">Lundi — Déjeuner</div>
+        <div class="items">
+          <span class="item lunch">Poulet</span>
+          <span class="item lunch">Quinoa</span>
+          <span class="item lunch">Brocolis</span>
+        </div>
+        <div class="feedback"><span class="emoji">😊</span><span class="score">Plaisir 4/5</span></div>
+        <div class="comment">
+          <span class="comment-icon">👍</span>
+          <div>
+            <div class="comment-text">Parfait ! Bel équilibre protéine-féculent-légume.</div>
+            <div class="comment-author">Dr. Martin</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="meal-row">
+      <span class="nutri-badge a">A</span>
+      <div class="meal-info">
+        <div class="label">Mardi — Dîner</div>
+        <div class="items">
+          <span class="item dinner">Lentilles</span>
+          <span class="item dinner">Épinards</span>
+        </div>
+        <div class="feedback"><span class="emoji">😐</span><span class="score">Plaisir 3/5</span></div>
+        <div class="comment warning">
+          <span class="comment-icon">⚠️</span>
+          <div>
+            <div class="comment-text">La portion semble faible. Ajoutez du pain complet pour l'énergie du soir.</div>
+            <div class="comment-author">Dr. Martin</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="meal-row">
+      <span class="nutri-badge a">A</span>
+      <div class="meal-info">
+        <div class="label">Mercredi — Déjeuner</div>
+        <div class="items">
+          <span class="item lunch">Saumon</span>
+          <span class="item lunch">Patate douce</span>
+          <span class="item lunch">Haricots</span>
+        </div>
+        <div class="feedback"><span class="emoji">🤩</span><span class="score">Plaisir 5/5</span></div>
+        <div class="comment suggestion">
+          <span class="comment-icon">💡</span>
+          <div>
+            <div class="comment-text">Excellent choix ! Ajoutez des graines de chia pour les oméga-3.</div>
+            <div class="comment-author">Dr. Martin</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <span class="pro-badge">Essayer Pro — 7 jours gratuits</span>
+</div>
+</body>
+</html>

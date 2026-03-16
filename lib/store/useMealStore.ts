@@ -61,11 +61,6 @@ interface MealStore {
   tourCompleted: boolean;
   completeTour: () => void;
 
-  // ─── Streak ──────────────────────────────
-  streakCount: number;
-  streakLastDate: string | null; // YYYY-MM-DD in local time
-  checkAndUpdateStreak: () => void;
-
   // ─── Hydration ───────────────────────────
   hydrated: boolean;
   hydrate: () => void;
@@ -188,30 +183,6 @@ export const useMealStore = create<MealStore>((set, get) => ({
     });
   },
 
-  streakCount: 0,
-  streakLastDate: null,
-  checkAndUpdateStreak: () => {
-    const today = new Date().toLocaleDateString('en-CA'); // YYYY-MM-DD
-    const { streakLastDate, streakCount } = get();
-
-    if (streakLastDate === today) return; // already validated today
-
-    const yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
-    const yesterdayStr = yesterday.toLocaleDateString('en-CA');
-
-    let newCount: number;
-    if (streakLastDate === yesterdayStr) {
-      newCount = streakCount + 1;
-    } else {
-      newCount = 1;
-    }
-
-    setLocalStorage('streak-count', newCount);
-    setLocalStorage('streak-last-date', today);
-    set({ streakCount: newCount, streakLastDate: today });
-  },
-
   tourCompleted: false,
   completeTour: () => {
     setLocalStorage('tourCompleted', true);
@@ -248,8 +219,6 @@ export const useMealStore = create<MealStore>((set, get) => ({
     const feedbacks = getLocalStorage<MealFeedback[]>('meal-feedbacks', []);
     const onboardingCompleted = getLocalStorage<boolean>('onboardingCompleted', false);
     const tourCompleted = getLocalStorage<boolean>('tourCompleted', false);
-    const streakCount = getLocalStorage<number>('streak-count', 0);
-    const streakLastDate = getLocalStorage<string | null>('streak-last-date', null);
     // food preferences are stored inside userProfile; also kept separately for convenience
     getLocalStorage<{ id: string; rating: 'like' | 'neutral' | 'dislike' }[]>('food-preferences', []);
 
@@ -261,8 +230,6 @@ export const useMealStore = create<MealStore>((set, get) => ({
       feedbacks,
       onboardingCompleted,
       tourCompleted,
-      streakCount,
-      streakLastDate,
       hydrated: true,
     });
   },
@@ -279,8 +246,6 @@ export const useMealStore = create<MealStore>((set, get) => ({
       recentProteins: [],
       batchItems: batchCookItems.map((i) => ({ ...i, checked: false })),
       settings: defaultSettings,
-      streakCount: 0,
-      streakLastDate: null,
     });
   },
 
@@ -294,10 +259,9 @@ export const useMealStore = create<MealStore>((set, get) => ({
   syncFromPersistence: async () => {
     const { persistence } = get();
     try {
-      const [settingsResult, feedbacksResult, streakResult] = await Promise.all([
+      const [settingsResult, feedbacksResult] = await Promise.all([
         persistence.getSettings(),
         persistence.getFeedbacks(),
-        persistence.getStreak(),
       ]);
 
       const patch: Partial<MealStore> = {};
@@ -314,10 +278,6 @@ export const useMealStore = create<MealStore>((set, get) => ({
       }
       if (feedbacksResult.length > 0) {
         patch.feedbacks = feedbacksResult;
-      }
-      if (streakResult.count > 0 || streakResult.lastDate !== null) {
-        patch.streakCount = streakResult.count;
-        patch.streakLastDate = streakResult.lastDate;
       }
 
       if (Object.keys(patch).length > 0) {

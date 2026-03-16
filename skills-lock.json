@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "skills": {
+    "frontend-design": {
+      "source": "smithery.ai",
+      "sourceType": "well-known",
+      "computedHash": "cde819a3e6d2556ffb3255b0502db9090364427dec4a8d5f432206ac1fa93a44"
+    },
+    "ux-decisions": {
+      "source": "smithery.ai",
+      "sourceType": "well-known",
+      "computedHash": "d4adc5946dd1cabcb403253af97a75c3deef18330884ed7cccc48e5a0ed1bf7f"
+    }
+  }
+}

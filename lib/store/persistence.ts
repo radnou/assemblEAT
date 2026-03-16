@@ -28,9 +28,6 @@ export interface PersistenceLayer {
   getSettings(): Promise<UserSettings | null>;
   saveSettings(settings: Partial<UserSettings>): Promise<void>;
 
-  // Streak
-  getStreak(): Promise<{ count: number; lastDate: string | null }>;
-  updateStreak(count: number, lastDate: string): Promise<void>;
 }
 
 // ─── Local implementation ─────────────────────────────────────────────────────
@@ -78,16 +75,6 @@ export function createLocalPersistence(): PersistenceLayer {
     async saveSettings(settings) {
       const current = localGet<UserSettings | null>('settings', null);
       localSet('settings', { ...current, ...settings });
-    },
-    async getStreak() {
-      return {
-        count: localGet<number>('streak-count', 0),
-        lastDate: localGet<string | null>('streak-last-date', null),
-      };
-    },
-    async updateStreak(count, lastDate) {
-      localSet('streak-count', count);
-      localSet('streak-last-date', lastDate);
     },
   };
 }
@@ -211,35 +198,5 @@ export function createSupabasePersistence(supabase: SupabaseClient): Persistence
       }
     },
 
-    async getStreak() {
-      try {
-        const userId = await getUserId();
-        if (!userId) return { count: 0, lastDate: null };
-        const { data, error } = await supabase
-          .from('profiles')
-          .select('streak_count, streak_last_date')
-          .eq('id', userId)
-          .single();
-        if (error || !data) return { count: 0, lastDate: null };
-        return {
-          count: (data.streak_count as number) ?? 0,
-          lastDate: (data.streak_last_date as string) ?? null,
-        };
-      } catch {
-        return { count: 0, lastDate: null };
-      }
-    },
-
-    async updateStreak(count, lastDate) {
-      try {
-        const userId = await getUserId();
-        if (!userId) return;
-        await supabase
-          .from('profiles')
-          .upsert({ id: userId, streak_count: count, streak_last_date: lastDate }, { onConflict: 'id' });
-      } catch {
-        // silently ignore
-      }
-    },
   };
 }

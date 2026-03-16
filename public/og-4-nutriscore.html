@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { width: 1600px; height: 1200px; font-family: 'Inter', system-ui; background: #F8F9FA; display: flex; align-items: center; justify-content: center; }
+
+  .container { display: flex; gap: 60px; align-items: center; width: 1400px; }
+
+  .left { flex: 1; }
+  .badge { display: inline-block; background: #FEF3E6; color: #F4A261; padding: 8px 20px; border-radius: 20px; font-size: 14px; font-weight: 600; margin-bottom: 24px; text-transform: uppercase; letter-spacing: 1px; }
+  h1 { font-size: 52px; font-weight: 800; color: #1A1A2E; line-height: 1.15; margin-bottom: 20px; }
+  .desc { font-size: 20px; color: #6B7280; line-height: 1.6; margin-bottom: 36px; }
+  .checks { display: flex; flex-direction: column; gap: 14px; }
+  .check { display: flex; align-items: center; gap: 12px; font-size: 18px; color: #374151; font-weight: 500; }
+  .check-icon { width: 28px; height: 28px; background: #048A81; border-radius: 8px; color: white; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; }
+
+  .right { flex: 1; display: flex; flex-direction: column; gap: 16px; }
+  .score-row { display: flex; align-items: center; gap: 20px; padding: 28px 32px; border-radius: 20px; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+  .score-row.active { box-shadow: 0 4px 20px rgba(0,0,0,0.1); transform: scale(1.03); }
+  .score-badge { width: 56px; height: 56px; border-radius: 14px; color: white; font-weight: 800; font-size: 26px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .score-badge.a { background: #037F2D; }
+  .score-badge.b { background: #7DC243; }
+  .score-badge.c { background: #FFCC01; color: #333; }
+  .score-badge.d { background: #F5860F; }
+  .score-badge.e { background: #E63312; }
+
+  .score-info { flex: 1; }
+  .score-info h3 { font-size: 20px; font-weight: 700; color: #1A1A2E; }
+  .score-info p { font-size: 15px; color: #9CA3AF; margin-top: 2px; }
+  .score-bar { width: 120px; height: 8px; background: #E5E7EB; border-radius: 4px; overflow: hidden; }
+  .score-bar-fill { height: 100%; border-radius: 4px; }
+  .score-bar-fill.a { background: #037F2D; width: 100%; }
+  .score-bar-fill.b { background: #7DC243; width: 80%; }
+  .score-bar-fill.c { background: #FFCC01; width: 60%; }
+  .score-bar-fill.d { background: #F5860F; width: 40%; }
+  .score-bar-fill.e { background: #E63312; width: 20%; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="left">
+    <div class="badge">🏆 Nutri-Score v2 natif</div>
+    <h1>La première app avec le Nutri-Score v2 intégré</h1>
+    <p class="desc">Chaque repas généré est automatiquement noté de A à E. Vos assemblages sont optimisés pour viser le A.</p>
+    <div class="checks">
+      <div class="check"><span class="check-icon">✓</span> Score calculé par ingrédient</div>
+      <div class="check"><span class="check-icon">✓</span> Objectif A/B par défaut</div>
+      <div class="check"><span class="check-icon">✓</span> Alertes si score faible</div>
+      <div class="check"><span class="check-icon">✓</span> Algorithme officiel v2 (2024)</div>
+    </div>
+  </div>
+  <div class="right">
+    <div class="score-row active">
+      <span class="score-badge a">A</span>
+      <div class="score-info"><h3>Excellent</h3><p>Très bonne qualité nutritionnelle</p></div>
+      <div class="score-bar"><div class="score-bar-fill a"></div></div>
+    </div>
+    <div class="score-row">
+      <span class="score-badge b">B</span>
+      <div class="score-info"><h3>Bon</h3><p>Bonne qualité nutritionnelle</p></div>
+      <div class="score-bar"><div class="score-bar-fill b"></div></div>
+    </div>
+    <div class="score-row">
+      <span class="score-badge c">C</span>
+      <div class="score-info"><h3>Correct</h3><p>Qualité nutritionnelle moyenne</p></div>
+      <div class="score-bar"><div class="score-bar-fill c"></div></div>
+    </div>
+    <div class="score-row">
+      <span class="score-badge d">D</span>
+      <div class="score-info"><h3>Limité</h3><p>Qualité nutritionnelle médiocre</p></div>
+      <div class="score-bar"><div class="score-bar-fill d"></div></div>
+    </div>
+    <div class="score-row">
+      <span class="score-badge e">E</span>
+      <div class="score-info"><h3>À éviter</h3><p>Mauvaise qualité nutritionnelle</p></div>
+      <div class="score-bar"><div class="score-bar-fill e"></div></div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

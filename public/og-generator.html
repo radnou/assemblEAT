@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1600px;
+    height: 1200px;
+    font-family: 'Inter', system-ui, sans-serif;
+    background: linear-gradient(135deg, #FFF8F3 0%, #FEF3E6 50%, #F8F9FA 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .card {
+    width: 1440px;
+    height: 1080px;
+    background: white;
+    border-radius: 32px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+    display: flex;
+    overflow: hidden;
+  }
+
+  .left {
+    flex: 1;
+    background: linear-gradient(160deg, #2E4057 0%, #1a2a3a 100%);
+    padding: 80px 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .left::after {
+    content: '';
+    position: absolute;
+    top: -100px;
+    right: -100px;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(244,162,97,0.15) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  .logo {
+    font-size: 28px;
+    font-weight: 700;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .logo span { font-size: 36px; }
+
+  .hero-text h1 {
+    font-size: 56px;
+    font-weight: 800;
+    color: white;
+    line-height: 1.15;
+    margin-bottom: 20px;
+  }
+
+  .hero-text h1 em {
+    font-style: normal;
+    color: #F4A261;
+  }
+
+  .hero-text p {
+    font-size: 22px;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.5;
+  }
+
+  .price-block {
+    background: rgba(255,255,255,0.08);
+    border-radius: 20px;
+    padding: 28px 36px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .price-block .price {
+    font-size: 48px;
+    font-weight: 800;
+    color: white;
+  }
+
+  .price-block .price small {
+    font-size: 22px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.5);
+  }
+
+  .price-block .trial {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 6px 16px;
+    background: #F4A261;
+    color: white;
+    border-radius: 20px;
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  .right {
+    flex: 1;
+    padding: 80px 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 28px;
+  }
+
+  .right h2 {
+    font-size: 26px;
+    font-weight: 700;
+    color: #1A1A2E;
+    margin-bottom: 8px;
+  }
+
+  .feature {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 22px 28px;
+    background: #F8F9FA;
+    border-radius: 16px;
+    transition: all 0.2s;
+  }
+
+  .feature-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+
+  .feature-icon.teal { background: #048A81; color: white; }
+  .feature-icon.orange { background: #F4A261; color: white; }
+  .feature-icon.indigo { background: #3D405B; color: white; }
+  .feature-icon.green { background: #7DC243; color: white; }
+  .feature-icon.blue { background: #4A90D9; color: white; }
+
+  .feature-text h3 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #1A1A2E;
+    margin-bottom: 4px;
+  }
+
+  .feature-text p {
+    font-size: 16px;
+    color: #6B7280;
+    line-height: 1.4;
+  }
+
+  .nutri-bar {
+    display: flex;
+    gap: 6px;
+    margin-top: 4px;
+  }
+
+  .nutri-bar span {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 16px;
+    color: white;
+  }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="left">
+      <div class="logo">
+        <span>🥗</span> AssemblEat Pro
+      </div>
+
+      <div class="hero-text">
+        <h1>Planifiez.<br>Mangez mieux.<br><em>Sans effort.</em></h1>
+        <p>Le seul planning repas avec<br>Nutri-Score v2 intégré.</p>
+      </div>
+
+      <div class="price-block">
+        <div class="price">3,99€ <small>/mois</small></div>
+        <div class="trial">7 jours d'essai gratuit</div>
+      </div>
+    </div>
+
+    <div class="right">
+      <h2>Tout ce qui est inclus</h2>
+
+      <div class="feature">
+        <div class="feature-icon teal">👩‍⚕️</div>
+        <div class="feature-text">
+          <h3>Partage praticien</h3>
+          <p>Votre diététicien commente vos repas en temps réel</p>
+        </div>
+      </div>
+
+      <div class="feature">
+        <div class="feature-icon orange">✨</div>
+        <div class="feature-text">
+          <h3>Suggestions intelligentes</h3>
+          <p>L'app apprend vos goûts et s'adapte</p>
+        </div>
+      </div>
+
+      <div class="feature">
+        <div class="feature-icon indigo">📊</div>
+        <div class="feature-text">
+          <h3>Historique 12 semaines</h3>
+          <p>Suivez votre Nutri-Score dans le temps</p>
+        </div>
+      </div>
+
+      <div class="feature">
+        <div class="feature-icon green">🛒</div>
+        <div class="feature-text">
+          <h3>Liste de courses auto</h3>
+          <p>Générée depuis votre semainier</p>
+        </div>
+      </div>
+
+      <div class="feature">
+        <div class="feature-icon blue">☁️</div>
+        <div class="feature-text">
+          <h3>Sync cloud</h3>
+          <p>Vos données sur tous vos appareils</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
