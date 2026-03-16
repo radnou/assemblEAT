@@ -3,14 +3,14 @@ import { InstallBanner } from '@/components/InstallBanner';
 import { Toaster } from '@/components/ui/sonner';
 import { HydrationProvider } from '@/components/HydrationProvider';
 import { OnboardingGate } from '@/components/OnboardingGate';
-import { AuthSyncProvider } from '@/components/AuthSyncProvider';
+import { ClerkSyncProvider } from '@/components/ClerkSyncProvider';
 import { NotificationPrompt } from '@/components/NotificationPrompt';
 import { NotificationReminderProvider } from '@/components/NotificationReminderProvider';
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <HydrationProvider>
-      <AuthSyncProvider>
+      <ClerkSyncProvider>
         <OnboardingGate>
           <NotificationPrompt />
           <NotificationReminderProvider />
@@ -21,7 +21,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           <InstallBanner />
         </OnboardingGate>
         <Toaster position="top-center" />
-      </AuthSyncProvider>
+      </ClerkSyncProvider>
     </HydrationProvider>
   );
 }
