@@ -2,21 +2,18 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, CalendarDays, ChefHat, FileDown, Settings } from 'lucide-react';
+import { Home, CalendarDays, ChefHat, Settings } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useTranslations } from 'next-intl';
 
 const navRoutes = [
-  { href: '/app', key: 'dashboard', icon: Home },
-  { href: '/app/semainier', key: 'weekPlanner', icon: CalendarDays },
-  { href: '/app/batch-cook', key: 'batchCook', icon: ChefHat },
-  { href: '/app/export', key: 'export', icon: FileDown },
-  { href: '/app/settings', key: 'settings', icon: Settings },
+  { href: '/app', key: 'dashboard', icon: Home, label: 'Accueil' },
+  { href: '/app/semainier', key: 'weekPlanner', icon: CalendarDays, label: 'Semainier' },
+  { href: '/app/batch-cook', key: 'batchCook', icon: ChefHat, label: 'Préparer' },
+  { href: '/app/settings', key: 'settings', icon: Settings, label: 'Réglages' },
 ] as const;
 
 export function BottomNav() {
   const pathname = usePathname();
-  const t = useTranslations('nav');
 
   return (
     <nav
@@ -25,7 +22,7 @@ export function BottomNav() {
       aria-label="Navigation principale"
     >
       <div className="max-w-5xl mx-auto flex items-center justify-around h-16">
-        {navRoutes.map(({ href, key, icon: Icon }) => {
+        {navRoutes.map(({ href, icon: Icon, label }) => {
           const isActive = href === '/app' ? pathname === href : pathname.startsWith(href);
           return (
             <Link
@@ -38,10 +35,10 @@ export function BottomNav() {
                   : 'text-gray-500 hover:text-gray-600'
               )}
               aria-current={isActive ? 'page' : undefined}
-              title={t(key)}
+              title={label}
             >
               <Icon size={24} strokeWidth={isActive ? 2.5 : 1.5} />
-              <span className="text-xs font-medium">{t(key)}</span>
+              <span className="text-xs font-medium">{label}</span>
             </Link>
           );
         })}
