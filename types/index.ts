@@ -149,7 +149,7 @@ export interface CiqualEntry {
 
 export interface UserSettings {
   firstName: string;
-  language: 'fr' | 'en';
+  language: 'fr' | 'en' | 'de';
   rules: {
     antiRedundancy: boolean;
     starchWarning: boolean;
