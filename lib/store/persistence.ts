@@ -11,6 +11,7 @@
  * localStorage (non-destructive).
  */
 
+import type { SupabaseClient } from '@supabase/supabase-js';
 import type { WeekPlan, MealFeedback, UserSettings } from '@/types';
 
 // ─── Interface ────────────────────────────────────────────────────────────────
@@ -81,19 +82,10 @@ export function createLocalPersistence(): PersistenceLayer {
 
 // ─── Supabase implementation ──────────────────────────────────────────────────
 
-type SupabaseClient = ReturnType<typeof import('@/lib/supabase/client').createAssembleatClient>;
-
-export function createSupabasePersistence(supabase: SupabaseClient): PersistenceLayer {
-  async function getUserId(): Promise<string | null> {
-    const { data } = await supabase.auth.getUser();
-    return data.user?.id ?? null;
-  }
-
+export function createSupabasePersistence(supabase: SupabaseClient, userId: string): PersistenceLayer {
   return {
     async getWeekPlan(weekKey) {
       try {
-        const userId = await getUserId();
-        if (!userId) return null;
         const { data, error } = await supabase
           .from('week_plans')
           .select('data')
@@ -109,8 +101,6 @@ export function createSupabasePersistence(supabase: SupabaseClient): Persistence
 
     async saveWeekPlan(weekKey, plan) {
       try {
-        const userId = await getUserId();
-        if (!userId) return;
         await supabase
           .from('week_plans')
           .upsert({ user_id: userId, week_key: weekKey, data: plan }, { onConflict: 'user_id,week_key' });
@@ -121,8 +111,6 @@ export function createSupabasePersistence(supabase: SupabaseClient): Persistence
 
     async saveFeedback(feedback) {
       try {
-        const userId = await getUserId();
-        if (!userId) return;
         await supabase.from('meal_feedbacks').upsert(
           {
             user_id: userId,
@@ -141,8 +129,6 @@ export function createSupabasePersistence(supabase: SupabaseClient): Persistence
 
     async getFeedbacks() {
       try {
-        const userId = await getUserId();
-        if (!userId) return [];
         const { data, error } = await supabase
           .from('meal_feedbacks')
           .select('*')
@@ -163,12 +149,10 @@ export function createSupabasePersistence(supabase: SupabaseClient): Persistence
 
     async getSettings() {
       try {
-        const userId = await getUserId();
-        if (!userId) return null;
         const { data, error } = await supabase
           .from('profiles')
           .select('first_name, language, rules')
-          .eq('id', userId)
+          .eq('clerk_user_id', userId)
           .single();
         if (error || !data) return null;
         return {
@@ -186,13 +170,11 @@ export function createSupabasePersistence(supabase: SupabaseClient): Persistence
 
     async saveSettings(settings) {
       try {
-        const userId = await getUserId();
-        if (!userId) return;
-        const patch: Record<string, unknown> = { id: userId };
+        const patch: Record<string, unknown> = { clerk_user_id: userId };
         if (settings.firstName !== undefined) patch.first_name = settings.firstName;
         if (settings.language !== undefined) patch.language = settings.language;
         if (settings.rules !== undefined) patch.rules = settings.rules;
-        await supabase.from('profiles').upsert(patch, { onConflict: 'id' });
+        await supabase.from('profiles').upsert(patch, { onConflict: 'clerk_user_id' });
       } catch {
         // silently ignore
       }
