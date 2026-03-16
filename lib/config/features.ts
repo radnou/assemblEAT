@@ -7,16 +7,13 @@ import type { FeatureFlag, SubscriptionPlan } from '@/types';
 const featureMatrix: Record<FeatureFlag, Record<SubscriptionPlan, boolean>> = {
   SHARE_WITH_DIETITIAN: { free: false, pro: true },
   ADVANCED_REPERTOIRE: { free: false, pro: true },
-  WEEKLY_STATS: { free: false, pro: true },
-  MULTI_PROFILE: { free: false, pro: true },
+  WEEKLY_STATS: { free: true, pro: true },
   PRACTITIONER_THREAD: { free: false, pro: true },
   PRACTITIONER_GOALS: { free: false, pro: true },
   SMART_SUGGESTIONS: { free: false, pro: true },
   PHOTO_JOURNAL: { free: false, pro: true },
   GROCERY_LIST: { free: false, pro: true },
   CLOUD_SYNC: { free: false, pro: true },
-  FRIDGE_MODE: { free: false, pro: true },
-  FRIEND_COMPARE: { free: false, pro: true },
 };
 
 export function isFeatureEnabled(feature: FeatureFlag, plan: SubscriptionPlan): boolean {
@@ -35,10 +32,6 @@ export const featureDescriptions: Record<FeatureFlag, { title: string; descripti
   WEEKLY_STATS: {
     title: 'Statistiques hebdo',
     description: 'Tableau de bord nutritionnel avec évolution du Nutri-Score moyen sur 4 semaines.',
-  },
-  MULTI_PROFILE: {
-    title: 'Multi-profils',
-    description: 'Gérez plusieurs profils dans le même compte (famille, couple).',
   },
   PRACTITIONER_THREAD: {
     title: 'Thread praticien',
@@ -63,13 +56,5 @@ export const featureDescriptions: Record<FeatureFlag, { title: string; descripti
   CLOUD_SYNC: {
     title: 'Sync cloud',
     description: 'Synchronisez vos données entre tous vos appareils.',
-  },
-  FRIDGE_MODE: {
-    title: 'Mode frigo',
-    description: "Sélectionnez vos ingrédients dispo — l'app propose des assemblages.",
-  },
-  FRIEND_COMPARE: {
-    title: 'Comparaison amis',
-    description: 'Comparez votre Nutri-Score avec vos amis.',
   },
 };

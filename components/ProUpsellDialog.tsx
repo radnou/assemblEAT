@@ -10,7 +10,6 @@ import {
   BarChart3,
   Cloud,
   Sparkles,
-  Users,
   Utensils,
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
@@ -66,13 +65,6 @@ const heroContent: Partial<Record<FeatureFlag, HeroContent>> = {
     headline: 'Suggestions intelligentes',
     description: "L'app apprend vos goûts et propose des assemblages adaptés à votre profil.",
     preview: '🍽️ Vos préférences → ✨ Suggestions → 🎯 Assemblages parfaits',
-  },
-  MULTI_PROFILE: {
-    gradient: 'from-pink-500 to-rose-600',
-    icon: Users,
-    headline: 'Profils pour toute la famille',
-    description: 'Gérez plusieurs profils dans le même compte. Idéal pour famille ou couple.',
-    preview: '👨 Papa → 👩 Maman → 🧒 Enfant → Chacun son assemblage',
   },
   GROCERY_LIST: {
     gradient: 'from-green-500 to-teal-600',

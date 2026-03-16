@@ -7,26 +7,21 @@ const ALL_FLAGS: FeatureFlag[] = [
   'SHARE_WITH_DIETITIAN',
   'ADVANCED_REPERTOIRE',
   'WEEKLY_STATS',
-  'MULTI_PROFILE',
   'PRACTITIONER_THREAD',
   'PRACTITIONER_GOALS',
   'SMART_SUGGESTIONS',
   'PHOTO_JOURNAL',
   'GROCERY_LIST',
   'CLOUD_SYNC',
-  'FRIDGE_MODE',
-  'FRIEND_COMPARE',
 ];
 
 describe('isFeatureEnabled – free plan', () => {
-  it('returns false for every feature flag on the free plan', () => {
-    for (const flag of ALL_FLAGS) {
-      expect(isFeatureEnabled(flag, 'free')).toBe(false);
-    }
-  });
-
   it('SHARE_WITH_DIETITIAN is disabled on free', () => {
     expect(isFeatureEnabled('SHARE_WITH_DIETITIAN', 'free')).toBe(false);
+  });
+
+  it('WEEKLY_STATS is enabled on free', () => {
+    expect(isFeatureEnabled('WEEKLY_STATS', 'free')).toBe(true);
   });
 
   it('GROCERY_LIST is disabled on free', () => {
@@ -57,9 +52,6 @@ describe('isFeatureEnabled – pro plan', () => {
     expect(isFeatureEnabled('SMART_SUGGESTIONS', 'pro')).toBe(true);
   });
 
-  it('MULTI_PROFILE is enabled on pro', () => {
-    expect(isFeatureEnabled('MULTI_PROFILE', 'pro')).toBe(true);
-  });
 });
 
 describe('isFeatureEnabled – unknown feature / plan', () => {
@@ -82,9 +74,8 @@ describe('isFeatureEnabled – unknown feature / plan', () => {
 describe('isFeatureEnabled – exhaustive plan check', () => {
   const plans: SubscriptionPlan[] = ['free', 'pro'];
 
-  it('every feature behaves consistently: false on free, true on pro', () => {
+  it('every feature is enabled on pro', () => {
     for (const flag of ALL_FLAGS) {
-      expect(isFeatureEnabled(flag, 'free')).toBe(false);
       expect(isFeatureEnabled(flag, 'pro')).toBe(true);
     }
   });
