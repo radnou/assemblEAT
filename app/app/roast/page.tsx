@@ -119,34 +119,41 @@ export default function RoastPage() {
   }, []);
 
   const handleExport = useCallback(async () => {
-    if (typeof window === 'undefined') return;
-    const card = document.getElementById('roast-card-export');
-    if (!card) return;
+    if (typeof window === 'undefined' || !roast) return;
+
+    // Build the shareable payload
+    const payload = {
+      firstName: settings.firstName || 'Anonyme',
+      roastText: roast.punchlines.join('\n\n'),
+      score: roast.stats.avgScore,
+      mode,
+      date: new Date().toISOString(),
+    };
+    const encoded = btoa(encodeURIComponent(JSON.stringify(payload)))
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
+      .replace(/=+$/, '');
+    const shareUrl = `https://assembleat.app/roast/${encoded}`;
+
+    const shareTitle = 'Mon roast assemblEAT 🔥';
+    const shareText =
+      roast.punchlines.join(' ').slice(0, 100) + '...';
 
     try {
-      // Use native share if available
       if (navigator.share) {
-        const text =
-          roast?.punchlines.join('\n\n') ??
-          'Roast my diet — AssemblEat';
         await navigator.share({
-          title: 'Roast my diet',
-          text: `🔥 AssemblEat a analysé ma semaine :\n\n${text}\n\nassembleat.app`,
+          title: shareTitle,
+          text: shareText,
+          url: shareUrl,
         });
       } else {
-        // Fallback: copy to clipboard
-        const text =
-          roast?.punchlines.join('\n\n') ??
-          'Roast my diet — AssemblEat';
-        await navigator.clipboard.writeText(
-          `🔥 AssemblEat a analysé ma semaine :\n\n${text}\n\nassembleat.app`
-        );
-        alert('Copié dans le presse-papiers !');
+        await navigator.clipboard.writeText(shareUrl);
+        alert('Lien copié dans le presse-papiers !');
       }
     } catch {
       // user cancelled share
     }
-  }, [roast]);
+  }, [roast, mode, settings.firstName]);
 
   const plan = buildWeekPlan();
   const totalMeals = plan.reduce(
