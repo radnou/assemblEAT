@@ -4,11 +4,14 @@
     "tagline": "Meals without decisions"
   },
   "nav": {
+    "home": "Home",
+    "planner": "Week Planner",
+    "prepare": "Prepare",
+    "settings": "Settings",
     "dashboard": "Today",
     "weekPlanner": "Week Planner",
     "batchCook": "Batch Cook",
-    "export": "Export",
-    "settings": "Settings"
+    "export": "Export"
   },
   "dashboard": {
     "greeting": "Hello",
@@ -21,7 +24,30 @@
     "noMeal": "No meal selected",
     "goodMeals": "enjoyed meals",
     "streakDays": "streak days",
-    "totalFeedbacks": "feedbacks given"
+    "totalFeedbacks": "feedbacks given",
+    "section": {
+      "meals": "Today's meals",
+      "review": "My review",
+      "tools": "My tools"
+    },
+    "guide": {
+      "skip": "Skip guide",
+      "step": "Step"
+    },
+    "season": {
+      "winter": "Winter",
+      "spring": "Spring",
+      "summer": "Summer",
+      "autumn": "Autumn",
+      "seasonal": "Seasonal vegetables"
+    },
+    "coaching": {
+      "starting": "Great start!",
+      "rhythm": "You're finding your rhythm",
+      "halfway": "Over halfway! Keep going",
+      "final": "Final stretch!",
+      "achieved": "Goal achieved! Set a new challenge?"
+    }
   },
   "weekPlanner": {
     "title": "Week Planner",

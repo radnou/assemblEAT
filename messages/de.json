@@ -1,0 +1,360 @@
+{
+  "app": {
+    "name": "AssemblEat",
+    "tagline": "Mahlzeiten ohne Entscheidungen"
+  },
+  "nav": {
+    "home": "Startseite",
+    "planner": "Wochenplaner",
+    "prepare": "Vorbereiten",
+    "settings": "Einstellungen",
+    "dashboard": "Heute",
+    "weekPlanner": "Wochenplaner",
+    "batchCook": "Batch Cook",
+    "export": "Export"
+  },
+  "dashboard": {
+    "greeting": "Hallo",
+    "breakfast": "Frühstück",
+    "lunch": "Mittagessen",
+    "dinner": "Abendessen",
+    "regenerate": "Neu generieren",
+    "validate": "Bestätigen",
+    "lightDinner": "Leichtes Abendessen ✓",
+    "noMeal": "Keine Mahlzeit ausgewählt",
+    "goodMeals": "genossene Mahlzeiten",
+    "totalFeedbacks": "Bewertungen abgegeben",
+    "section": {
+      "meals": "Mahlzeiten des Tages",
+      "review": "Mein Überblick",
+      "tools": "Meine Werkzeuge"
+    },
+    "guide": {
+      "skip": "Anleitung überspringen",
+      "step": "Schritt"
+    },
+    "season": {
+      "winter": "Winter",
+      "spring": "Frühling",
+      "summer": "Sommer",
+      "autumn": "Herbst",
+      "seasonal": "Saisonales Gemüse"
+    },
+    "coaching": {
+      "starting": "Guter Start!",
+      "rhythm": "Du findest deinen Rhythmus",
+      "halfway": "Über die Hälfte! Weiter so",
+      "final": "Auf der Zielgeraden!",
+      "achieved": "Ziel erreicht! Ein neues setzen?"
+    }
+  },
+  "weekPlanner": {
+    "title": "Wochenplaner",
+    "generate": "Automatisch generieren",
+    "physicalActivity": "Körperliche Aktivität",
+    "notes": "Notizen",
+    "previousWeek": "Vorherige Woche",
+    "nextWeek": "Nächste Woche",
+    "currentWeek": "Diese Woche"
+  },
+  "batchCook": {
+    "title": "Sonntags-Batch-Cook",
+    "estimated": "Min. geschätzt",
+    "prepared": "vorbereitet",
+    "reset": "Zurücksetzen",
+    "resetConfirm": "Gesamte Checkliste zurücksetzen?",
+    "proteins": "Proteine",
+    "cereals": "Beilagen",
+    "vegetables": "Gemüse",
+    "sauces": "Soßen",
+    "timeline": {
+      "oven": "Ofen",
+      "steam": "Dampf",
+      "pan": "Pfanne",
+      "eggs": "Eier"
+    }
+  },
+  "export": {
+    "title": "Gesundheitsexport",
+    "selectWeek": "Woche auswählen",
+    "generatePdf": "PDF erstellen",
+    "copyText": "Zusammenfassung kopieren",
+    "copied": "Kopiert!",
+    "offlineMessage": "PDF-Export offline nicht verfügbar",
+    "preview": "Vorschau",
+    "fullExport": "Vollständiger Export",
+    "detailedSummary": "Detaillierte Zusammenfassung"
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "firstName": "Vorname",
+    "language": "Sprache",
+    "rules": "Geschäftsregeln",
+    "antiRedundancy": "Anti-Protein-Redundanz",
+    "starchWarning": "Beilagen-Warnung",
+    "repertoire": "Repertoire bearbeiten",
+    "resetAll": "Alle Daten zurücksetzen",
+    "resetConfirm": "Diese Aktion ist unwiderruflich. Fortfahren?",
+    "modePro": "Pro-Modus",
+    "modeProSoon": "Funktion bald verfügbar",
+    "notifications": "Benachrichtigungen",
+    "mealReminders": "Mahlzeiterinnerungen",
+    "mealRemindersDesc": "Mittag- und Abendessen",
+    "notifEnabled": "Aktiviert ✓",
+    "notifEnable": "Aktivieren",
+    "notifDenied": "Benachrichtigungen blockiert. Aktivieren Sie diese in Ihren Browsereinstellungen.",
+    "notifPromptTitle": "Mahlzeiterinnerungen aktivieren?",
+    "notifPromptEnable": "Aktivieren",
+    "notifPromptLater": "Später"
+  },
+  "nutriScore": {
+    "calculated": "Gleichgewichtsindex berechnet",
+    "assembly": "Gleichgewichtsindex der Zusammenstellung"
+  },
+  "pro": {
+    "badge": "Pro 🔒",
+    "unlock": "Für 3,99 €/Monat freischalten",
+    "title": "Upgrade auf AssemblEat Pro",
+    "mainBenefit": "Teilen Sie Ihren Wochenplaner direkt mit Ihrem Ernährungsberater — er erhält einen Echtzeit-Leselink, kein Ausdrucken oder Übertragen von Dateien nötig.",
+    "trialBadge": "7 Tage kostenlos",
+    "price": "3,99 €/Monat",
+    "priceContext": "Weniger als ein Kaffee pro Woche",
+    "cta": "Kostenlos testen",
+    "cancel": "Kündigung mit 1 Klick",
+    "alsoIncluded": "Ebenfalls enthalten",
+    "processing": "Verarbeitung...",
+    "subscribed": "Sie sind Pro!",
+    "manageSubscription": "Mein Abo verwalten"
+  },
+  "install": {
+    "android": "AssemblEat installieren",
+    "ios": "Tippen Sie auf Teilen und dann 'Zum Home-Bildschirm'",
+    "dismiss": "Später"
+  },
+  "feedback": {
+    "title": "Wie war es?",
+    "pleasureLabel": "Hat es geschmeckt?",
+    "quantityLabel": "War es genug?",
+    "notEnough": "Zu wenig",
+    "justRight": "Genau richtig",
+    "tooMuch": "Zu viel",
+    "noteLabel": "Etwas anzumerken?",
+    "notePlaceholder": "z.B. Soße zu salzig, Brokkoli perfekt...",
+    "submit": "Absenden",
+    "skip": "Überspringen",
+    "photoLabel": "Foto des Gerichts (optional)",
+    "addPhoto": "Foto hinzufügen"
+  },
+  "tour": {
+    "next": "Weiter",
+    "skip": "Tour überspringen",
+    "finish": "Fertig",
+    "discoverPro": "Pro entdecken",
+    "step1": {
+      "title": "Deine Mahlzeiten heute",
+      "description": "Jeden Tag 3 ausgewogene Zusammenstellungen für dich. Neu generieren 🎲 oder bestätigen ✓."
+    },
+    "step2": {
+      "title": "Plane deine Woche",
+      "description": "Visualisiere und organisiere alle 7 Tage Mahlzeiten auf einen Blick."
+    },
+    "step3": {
+      "title": "Sonntags vorbereiten",
+      "description": "Eine Checkliste, um alles in 45 Min. vorzubereiten. Hake ab, was fertig ist."
+    },
+    "step4": {
+      "title": "Sag uns deine Meinung",
+      "description": "Bewerte nach jeder Mahlzeit dein Vergnügen. Die App lernt deinen Geschmack."
+    },
+    "step5": {
+      "title": "Mit dem Ernährungsberater teilen",
+      "description": "Dein Berater kann deine Mahlzeiten in Echtzeit kommentieren. 7 Tage kostenlos testen."
+    }
+  },
+  "share": {
+    "weekButton": "Meine Woche teilen",
+    "generating": "Wird erstellt...",
+    "downloaded": "Bild heruntergeladen!",
+    "error": "Fehler bei der Erstellung"
+  },
+  "shareLink": {
+    "title": "Geteilter Wochenplan",
+    "subtitle": "Woche",
+    "poweredBy": "Erstellt mit AssemblEat",
+    "tryFree": "Kostenlos testen",
+    "copied": "Berater-Link kopiert!",
+    "generate": "Berater-Link",
+    "breakfast": "Frühstück",
+    "lunch": "Mittagessen",
+    "dinner": "Abendessen",
+    "noMeal": "Nicht geplant"
+  },
+  "auth": {
+    "title": "Anmeldung",
+    "googleButton": "Mit Google fortfahren",
+    "or": "oder",
+    "emailLabel": "Ihre E-Mail",
+    "emailPlaceholder": "marie@beispiel.de",
+    "magicLinkButton": "Anmeldelink erhalten",
+    "magicLinkSent": "Link gesendet! Überprüfen Sie Ihr Postfach.",
+    "magicLinkDesc": "Kein Passwort nötig — ein sicherer Link wird Ihnen zugesendet.",
+    "error": "Fehler. Bitte überprüfen Sie Ihre E-Mail und versuchen Sie es erneut.",
+    "back": "Zurück",
+    "login": "Anmelden"
+  },
+  "roast": {
+    "title": "Roast my diet",
+    "subtitle": "Die App analysiert deine Woche und sagt dir, was sie davon hält.",
+    "regenerate": "Neuer Roast",
+    "share": "Teilen",
+    "kindMode": "Freundlicher Modus",
+    "disclaimer": "Wenn du Schwierigkeiten mit der Ernährung hast, sprich mit einem Fachmann.",
+    "helpline": "Hilfe-Hotline: 0 800 00 00 67",
+    "noData": "Bestätige mindestens 3 Mahlzeiten diese Woche, um deinen Roast freizuschalten!",
+    "stats": {
+      "meals": "bestätigte Mahlzeiten",
+      "avgScore": "Durchschnittsnote",
+      "ingredients": "verschiedene Zutaten",
+      "lightDinners": "leichte Abendessen"
+    }
+  },
+  "tierlist": {
+    "title": "Meine Tier List",
+    "subtitle": "Deine Mahlzeiten nach Genuss und Nährwert sortiert",
+    "noData": "Bestätige und bewerte mindestens 3 Mahlzeiten, um deine Tier List zu sehen!",
+    "export": "Exportieren",
+    "meals": "Mahlzeiten"
+  },
+  "grocery": {
+    "title": "Einkaufsliste",
+    "subtitle": "Aus deinem Wochenplaner generiert",
+    "empty": "Plane mindestens einen Tag, um die Liste zu erstellen",
+    "copy": "Liste kopieren",
+    "share": "Teilen",
+    "copied": "Liste kopiert!",
+    "proteins": "Proteine",
+    "vegetables": "Gemüse",
+    "cereals": "Beilagen",
+    "sauces": "Soßen & Gewürze",
+    "dairy": "Milchprodukte",
+    "fruits": "Obst",
+    "other": "Sonstiges",
+    "times": "mal"
+  },
+  "onboarding": {
+    "back": "Zurück",
+    "next": "Weiter",
+    "skip": "Überspringen",
+    "step1": {
+      "title": "Wie heißt du?",
+      "subtitle": "Lass uns einander kennenlernen.",
+      "firstNameLabel": "Dein Vorname",
+      "firstNamePlaceholder": "z.B. Marie",
+      "avatarLabel": "Wähle dein Emoji"
+    },
+    "step2": {
+      "title": "Dein Ziel",
+      "subtitle": "Was motiviert dich, besser zu essen?",
+      "balanced": "Ausgewogener essen",
+      "timeSaving": "Zeit sparen",
+      "weightLoss": "Gewicht verlieren",
+      "moreProtein": "Mehr Protein",
+      "lessMeat": "Weniger Fleisch"
+    },
+    "step3": {
+      "title": "Ernährung und Allergien",
+      "subtitle": "Wir passen deine Zusammenstellungen an deine Bedürfnisse an.",
+      "dietsLabel": "Ernährungsformen",
+      "allergiesLabel": "Allergien / Unverträglichkeiten",
+      "allergiesPlaceholder": "Eingeben und Enter drücken…",
+      "noRestrictions": "Keine Einschränkungen",
+      "diets": {
+        "none": "Keine",
+        "vegetarian": "Vegetarisch",
+        "vegan": "Vegan",
+        "pescatarian": "Pescetarisch",
+        "glutenFree": "Glutenfrei",
+        "lactoseFree": "Laktosefrei",
+        "halal": "Halal",
+        "kosher": "Koscher"
+      }
+    },
+    "step4": {
+      "title": "Deine erste Mahlzeit",
+      "subtitle": "Für Zusammenstellungen, die wirklich zu deinem Alltag passen.",
+      "householdLabel": "Anzahl Personen",
+      "cookingTimeLabel": "Kochzeit",
+      "mealsLabel": "Zu planende Mahlzeiten",
+      "express": "Express — unter 5 Min.",
+      "moderate": "Schnell — 10-15 Min.",
+      "batch": "Batch Cook — ich bereite vor",
+      "breakfast": "Frühstück",
+      "lunch": "Mittagessen",
+      "dinner": "Abendessen"
+    },
+    "foodPrefs": {
+      "title": "Dein Geschmack",
+      "subtitle": "Sag uns, was du magst, um deine Mahlzeiten zu personalisieren",
+      "proteins": "Proteine",
+      "vegetables": "Gemüse",
+      "starches": "Beilagen",
+      "like": "Mag ich",
+      "neutral": "Neutral",
+      "dislike": "Nicht so"
+    },
+    "step5": {
+      "title": "Los geht's, {name}!",
+      "subtitle": "Hier ist dein Profil und ein erster Vorschlag.",
+      "summaryLabel": "Dein Profil",
+      "cta": "Los geht's!"
+    }
+  },
+  "suggestions": {
+    "title": "Vorschläge für dich",
+    "basedOn": "Basierend auf deinen Vorlieben"
+  },
+  "weeklyScore": {
+    "title": "Wöchentlicher Gleichgewichtsindex",
+    "meals": "bestätigte Mahlzeiten",
+    "pleasure": "durchschnittliches Vergnügen",
+    "share": "Meinen Score teilen",
+    "insights": {
+      "excellent": "Ausgezeichnete Woche! Deine Mahlzeiten sind gut ausgewogen.",
+      "good": "Guter Score! Weiter so.",
+      "average": "Ordentlicher Score. Mehr Gemüse würde dein Gleichgewicht verbessern.",
+      "belowAverage": "Gemischte Woche. Morgen ein kleiner Schub?",
+      "poor": "Schwierige Woche. Fang langsam an — jede Mahlzeit zählt!"
+    }
+  },
+  "goals": {
+    "title": "Ernährungsziele",
+    "addGoal": "Ziel hinzufügen",
+    "goalPlaceholder": "z.B. 3 Mahlzeiten mit Hülsenfrüchten",
+    "target": "Ziel",
+    "presets": {
+      "legumes": "3 Mahlzeiten mit Hülsenfrüchten",
+      "greens": "5 Tage mit grünem Gemüse",
+      "reduceSauce": "Diese Woche weniger Soßen"
+    },
+    "progress": "Fortschritt",
+    "completed": "Ziel erreicht!"
+  },
+  "history": {
+    "title": "Meine Ernährungshistorie",
+    "subtitle": "Entwicklung der letzten 12 Wochen",
+    "totalFeedbacks": "Bewertungen abgegeben",
+    "avgPleasure": "durchschnittliches Vergnügen",
+    "bestWeek": "beste Woche",
+    "week": "Woche",
+    "meals": "Mahlzeiten",
+    "noData": "Noch nicht genügend Daten. Bestätige deine Mahlzeiten, um deine Historie zu sehen!",
+    "expand": "Details"
+  },
+  "repertoire": {
+    "title": "Mein Repertoire",
+    "addCustom": "Hinzufügen",
+    "newCustomAssembly": "Neue eigene Zusammenstellung",
+    "deleteConfirm": "Diese Zusammenstellung löschen?",
+    "proHint": "Pro-Funktion — eigene Zusammenstellungen hinzufügen"
+  }
+}
