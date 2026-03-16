@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { Trash2, LogIn, LogOut, Plus, X, Copy, Check, FileDown, Lock, Link as LinkIcon } from 'lucide-react';
+import { Trash2, LogIn, LogOut, Plus, X, Copy, Check, FileDown, Lock, Link as LinkIcon, BarChart3 } from 'lucide-react';
 import {
   isNotificationSupported,
   getNotificationPermission,
@@ -410,6 +410,12 @@ export default function SettingsPage() {
             )}
           </Button>
         </Link>
+        <Link href="/app/wrapped">
+          <Button variant="outline" className="w-full flex items-center gap-2 mt-2">
+            <BarChart3 size={16} />
+            Voir mon bilan du mois
+          </Button>
+        </Link>
       </SettingsSection>
 
       {/* ─── 6. NOTIFICATIONS ───────────────────────────────────────────── */}
@@ -589,21 +595,40 @@ export default function SettingsPage() {
       </SettingsSection>
 
       {/* ─── 8. LANGUE ──────────────────────────────────────────────────── */}
-      <SettingsSection title="Langue">
+      <SettingsSection title={t('language')}>
         <div className="flex gap-2">
           <Button
             variant={settings.language === 'fr' ? 'default' : 'outline'}
             size="sm"
-            onClick={() => updateSettings({ language: 'fr' })}
+            onClick={() => {
+              updateSettings({ language: 'fr' });
+              document.cookie = 'NEXT_LOCALE=fr;path=/;max-age=31536000';
+              window.location.reload();
+            }}
           >
             Français
           </Button>
           <Button
             variant={settings.language === 'en' ? 'default' : 'outline'}
             size="sm"
-            onClick={() => updateSettings({ language: 'en' })}
+            onClick={() => {
+              updateSettings({ language: 'en' });
+              document.cookie = 'NEXT_LOCALE=en;path=/;max-age=31536000';
+              window.location.reload();
+            }}
           >
             English
+          </Button>
+          <Button
+            variant={settings.language === 'de' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => {
+              updateSettings({ language: 'de' });
+              document.cookie = 'NEXT_LOCALE=de;path=/;max-age=31536000';
+              window.location.reload();
+            }}
+          >
+            Deutsch
           </Button>
         </div>
       </SettingsSection>
