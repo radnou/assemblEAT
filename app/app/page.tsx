@@ -11,6 +11,7 @@ import { computeWeeklyScore } from '@/lib/engine/weeklyScore';
 import { useTimeContext } from '@/lib/hooks/useTimeContext';
 import { useProgressiveGuide } from '@/lib/hooks/useProgressiveGuide';
 import { useObjectiveCoaching } from '@/lib/hooks/useObjectiveCoaching';
+import { useWeeklyChallenge } from '@/lib/hooks/useWeeklyChallenge';
 import { useFeatureFlag } from '@/lib/hooks/useFeatureFlag';
 import { useLocalStorage } from '@/lib/hooks/useLocalStorage';
 import { COLORS, FOOD_EMOJIS } from '@/components/onboarding/AvatarGenerator';
@@ -42,6 +43,9 @@ export default function Dashboard() {
 
   // ---- Objective coaching -------------------------------------------------
   const coaching = useObjectiveCoaching();
+
+  // ---- Weekly challenge ---------------------------------------------------
+  const { challenge, shareChallenge } = useWeeklyChallenge();
 
   // ---- Feature flags ------------------------------------------------------
   const hasGrocery = useFeatureFlag('GROCERY_LIST');
@@ -356,6 +360,39 @@ export default function Dashboard() {
           <p className="text-sm font-semibold text-green-800">
             Nouvelle semaine, c&apos;est parti 💪
           </p>
+        </div>
+      )}
+
+      {/* ─── Weekly Challenge Card ──────────────────────────────────────── */}
+      {challenge && (
+        <div className="mx-0 p-3 bg-gradient-to-r from-amber-50 to-orange-50 rounded-xl border border-amber-200">
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-2">
+              <span className="text-xl">{challenge.emoji}</span>
+              <div>
+                <div className="text-sm font-semibold">{challenge.title}</div>
+                <div className="text-xs text-muted-foreground">{challenge.description}</div>
+              </div>
+            </div>
+            {challenge.completed && <span className="text-green-500 text-lg">✅</span>}
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="flex-1 bg-amber-100 rounded-full h-2">
+              <div
+                className="bg-amber-500 rounded-full h-2 transition-all"
+                style={{ width: `${Math.min(100, (challenge.currentCount / challenge.targetCount) * 100)}%` }}
+              />
+            </div>
+            <span className="text-xs text-muted-foreground">{challenge.currentCount}/{challenge.targetCount}</span>
+          </div>
+          {challenge.completed && (
+            <button
+              onClick={() => shareChallenge()}
+              className="mt-2 w-full text-center text-sm font-medium text-amber-700 hover:text-amber-900"
+            >
+              📤 Partager mon défi réussi
+            </button>
+          )}
         </div>
       )}
 
