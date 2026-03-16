@@ -4,11 +4,14 @@
     "tagline": "Repas sans décision"
   },
   "nav": {
+    "home": "Accueil",
+    "planner": "Semainier",
+    "prepare": "Préparer",
+    "settings": "Réglages",
     "dashboard": "Aujourd'hui",
     "weekPlanner": "Semainier",
     "batchCook": "Batch Cook",
-    "export": "Export",
-    "settings": "Réglages"
+    "export": "Export"
   },
   "dashboard": {
     "greeting": "Bonjour",
@@ -20,8 +23,30 @@
     "lightDinner": "Dîner léger ✓",
     "noMeal": "Aucun repas sélectionné",
     "goodMeals": "repas appréciés",
-    "streakDays": "jours de streak",
-    "totalFeedbacks": "feedbacks donnés"
+    "totalFeedbacks": "feedbacks donnés",
+    "section": {
+      "meals": "Repas du jour",
+      "review": "Mon bilan",
+      "tools": "Mes outils"
+    },
+    "guide": {
+      "skip": "Passer le guide",
+      "step": "Étape"
+    },
+    "season": {
+      "winter": "Hiver",
+      "spring": "Printemps",
+      "summer": "Été",
+      "autumn": "Automne",
+      "seasonal": "Légumes de saison"
+    },
+    "coaching": {
+      "starting": "Tu démarres bien !",
+      "rhythm": "Tu prends le rythme",
+      "halfway": "Plus de la moitié ! Continue",
+      "final": "Dernière ligne droite !",
+      "achieved": "Objectif atteint ! Fixe un nouveau défi ?"
+    }
   },
   "weekPlanner": {
     "title": "Semainier",
@@ -74,17 +99,13 @@
     "modeProSoon": "Fonctionnalité bientôt disponible",
     "notifications": "Notifications",
     "mealReminders": "Rappels de repas",
-    "mealRemindersDesc": "Midi, soir, et streak en danger",
+    "mealRemindersDesc": "Midi et soir",
     "notifEnabled": "Activé ✓",
     "notifEnable": "Activer",
     "notifDenied": "Notifications bloquées. Activez-les dans les paramètres de votre navigateur.",
     "notifPromptTitle": "Activer les rappels de repas ?",
     "notifPromptEnable": "Activer",
-    "notifPromptLater": "Plus tard",
-    "profiles": "Profils",
-    "addProfile": "Ajouter un profil",
-    "profileNamePlaceholder": "Ex : Famille",
-    "profilesProHint": "Gérez plusieurs profils avec un abonnement Pro"
+    "notifPromptLater": "Plus tard"
   },
   "nutriScore": {
     "calculated": "Score nutritionnel calculé",
@@ -123,13 +144,6 @@
     "skip": "Passer",
     "photoLabel": "Photo du plat (optionnel)",
     "addPhoto": "Ajouter une photo"
-  },
-  "streak": {
-    "days": "jours",
-    "milestone7": "1 semaine !",
-    "milestone30": "1 mois !",
-    "milestone90": "3 mois !",
-    "milestone365": "1 an !"
   },
   "tour": {
     "next": "Suivant",
@@ -232,14 +246,14 @@
     "next": "Continuer",
     "skip": "Passer",
     "step1": {
-      "title": "Bienvenue !",
+      "title": "Comment tu t'appelles ?",
       "subtitle": "Commençons par faire connaissance.",
       "firstNameLabel": "Votre prénom",
       "firstNamePlaceholder": "Ex : Marie",
       "avatarLabel": "Choisissez votre emoji"
     },
     "step2": {
-      "title": "Votre objectif",
+      "title": "Ton objectif",
       "subtitle": "Qu'est-ce qui vous motive à mieux manger ?",
       "balanced": "Manger plus équilibré",
       "timeSaving": "Gagner du temps",
@@ -248,7 +262,7 @@
       "lessMeat": "Réduire la viande"
     },
     "step3": {
-      "title": "Restrictions alimentaires",
+      "title": "Régime et allergies",
       "subtitle": "On adapte vos assemblages à vos besoins.",
       "dietsLabel": "Régimes",
       "allergiesLabel": "Allergies / intolérances",
@@ -266,7 +280,7 @@
       }
     },
     "step4": {
-      "title": "Vos habitudes",
+      "title": "Voici ton premier repas",
       "subtitle": "Pour des assemblages vraiment adaptés à votre quotidien.",
       "householdLabel": "Nombre de personnes",
       "cookingTimeLabel": "Temps de cuisine",
@@ -331,7 +345,6 @@
     "totalFeedbacks": "feedbacks donnés",
     "avgPleasure": "plaisir moyen",
     "bestWeek": "meilleure semaine",
-    "currentStreak": "streak actuel",
     "week": "Semaine",
     "meals": "repas",
     "noData": "Pas encore assez de données. Validez vos repas pour voir votre historique !",
