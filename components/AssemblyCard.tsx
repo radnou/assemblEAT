@@ -11,7 +11,7 @@ import { FlavorBadge } from '@/components/FlavorBadge';
 import { FeedbackSheet } from '@/components/feedback/FeedbackSheet';
 import type { AssemblyRow, MealType, NutriGrade, MealFeedback } from '@/types';
 import { calculateSimplicity, isLightDinner } from '@/lib/engine/assemblyEngine';
-import { computeAssemblyScore } from '@/lib/nutriscore/assemblyScore';
+import { computeAssemblyScore, getProteinGrams } from '@/lib/nutriscore/assemblyScore';
 import { cn } from '@/lib/utils';
 import { useTranslations } from 'next-intl';
 
@@ -111,6 +111,7 @@ export function AssemblyCard({
 
   const simplicity = calculateSimplicity(assembly);
   const lightDinner = isLightDinner(assembly);
+  const proteinGrams = getProteinGrams(assembly);
   const components = [assembly.protein, assembly.vegetable, assembly.cereal, assembly.sauce, ...(assembly.extras ?? [])].filter(Boolean);
 
   return (
@@ -120,6 +121,11 @@ export function AssemblyCard({
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
             {nutriGrade && <NutriGradeBadge grade={nutriGrade} size="sm" showLabel={false} />}
+            {proteinGrams !== null && (
+              <span className="text-xs text-muted-foreground" title="Protéines estimées">
+                🥩 {proteinGrams}g prot.
+              </span>
+            )}
             <span className="text-sm font-semibold">{mealLabels[mealType]}</span>
           </div>
           <span className="text-xs text-gray-500">{simplicity}</span>

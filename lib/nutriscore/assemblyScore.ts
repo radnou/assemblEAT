@@ -1,4 +1,4 @@
-import type { AssemblyRow, AssemblyNutriScore, NutrientInput, NutriGrade } from '@/types';
+import type { AssemblyRow, AssemblyNutriScore, NutrientInput, NutriGrade, MealComponent } from '@/types';
 import { calculateNutriScore } from './algorithm';
 import { getCiqualEntry } from './ciqual-ref';
 import { fetchNutriScore } from './offApi';
@@ -12,6 +12,48 @@ const DEFAULT_WEIGHTS: Record<string, number> = {
   cereal: 120,
   sauce: 30,
 };
+
+/**
+ * Calcule les grammes de protéines estimés pour un assemblage complet.
+ *
+ * Méthode : pour chaque composant, on récupère la valeur protéines/100g
+ * depuis la base CIQUAL locale, puis on applique le poids réel (weightG)
+ * ou le poids par défaut de la catégorie.
+ *
+ * Source des données : base CIQUAL (ANSES) — valeurs pour 100g d'aliment.
+ *
+ * @returns grammes de protéines totaux, ou null si aucune donnée disponible
+ */
+export function getProteinGrams(assembly: AssemblyRow): number | null {
+  const slots: { component: MealComponent | null; role: string }[] = [
+    { component: assembly.protein, role: 'protein' },
+    { component: assembly.vegetable, role: 'vegetable' },
+    { component: assembly.cereal, role: 'cereal' },
+    { component: assembly.sauce, role: 'sauce' },
+  ];
+
+  // Include extras if present
+  if (assembly.extras) {
+    for (const extra of assembly.extras) {
+      slots.push({ component: extra, role: extra.category });
+    }
+  }
+
+  let totalProtein = 0;
+  let hasData = false;
+
+  for (const { component, role } of slots) {
+    if (!component || !component.ciqualRefId) continue;
+    const entry = getCiqualEntry(component.ciqualRefId);
+    if (!entry) continue;
+
+    const weightG = component.weightG ?? DEFAULT_WEIGHTS[role] ?? 100;
+    totalProtein += (entry.nutrients.protein * weightG) / 100;
+    hasData = true;
+  }
+
+  return hasData ? Math.round(totalProtein) : null;
+}
 
 /**
  * Résout les données nutritionnelles d'un composant :
