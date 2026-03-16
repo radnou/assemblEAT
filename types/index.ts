@@ -40,6 +40,10 @@ export interface NutrientInput {
   fiber: number;
   /** g pour 100g */
   protein: number;
+  /** g pour 100g — matières grasses totales, nécessaire pour le ratio AG sat / lipides (catégorie fat) */
+  total_fat?: number;
+  /** Catégorie Nutri-Score de l'aliment */
+  category?: FoodCategory;
 }
 
 export interface NutriScoreResult {
@@ -84,6 +88,14 @@ export interface MealComponent {
   weightG?: number;
 }
 
+export interface BonGrasItem {
+  id: string;
+  label: string;
+  emoji: string;
+  tags: string[];
+  weightG?: number;
+}
+
 export interface AssemblyRow {
   id: string;
   mealType: MealType;
@@ -91,6 +103,7 @@ export interface AssemblyRow {
   vegetable: MealComponent | null;
   cereal: MealComponent | null;
   sauce: MealComponent | null;
+  bonGras?: BonGrasItem;
   extras?: MealComponent[];
   flavorProfile?: FlavorProfile;
   validated?: boolean;

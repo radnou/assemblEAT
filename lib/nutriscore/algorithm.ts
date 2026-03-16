@@ -1,6 +1,6 @@
 import type { NutrientInput, NutriGrade, NutriScoreResult, FoodCategory } from '@/types';
 
-// ─── Barèmes Nutri-Score v2 (aliments généraux, hors boissons/corps gras) ───
+// ─── Barèmes Nutri-Score v2 — aliments généraux ───────────────────
 
 function scoreEnergy(kj: number): number {
   const thresholds = [335, 670, 1005, 1340, 1675, 2010, 2345, 2680, 3015, 3350];
@@ -57,6 +57,42 @@ function scoreFruitVeg(percent: number): number {
   return 5;
 }
 
+// ─── Barèmes Nutri-Score v2 — boissons ─────────────────────────────
+
+function scoreEnergyBeverage(kj: number): number {
+  const thresholds = [0, 30, 60, 90, 120, 150, 180, 210, 240, 270];
+  for (let i = 0; i < thresholds.length; i++) {
+    if (kj <= thresholds[i]) return i;
+  }
+  return 10;
+}
+
+function scoreSugarsBeverage(g: number): number {
+  const thresholds = [0, 1.5, 3, 4.5, 6, 7.5, 9, 10.5, 12, 13.5];
+  for (let i = 0; i < thresholds.length; i++) {
+    if (g <= thresholds[i]) return i;
+  }
+  return 10;
+}
+
+// ─── Barèmes Nutri-Score v2 — corps gras ───────────────────────────
+
+/**
+ * Score le ratio AG saturés / lipides totaux (en %)
+ * Spécifique à la catégorie "fat" du Nutri-Score v2
+ */
+function scoreSaturatedFatRatio(saturatedFat: number, totalFat: number): number {
+  if (totalFat <= 0) return 0;
+  const ratio = (saturatedFat / totalFat) * 100;
+  const thresholds = [10, 16, 22, 28, 34, 40, 46, 52, 58, 64];
+  for (let i = 0; i < thresholds.length; i++) {
+    if (ratio <= thresholds[i]) return i;
+  }
+  return 10;
+}
+
+// ─── Conversion score → grade ──────────────────────────────────────
+
 /**
  * Convertit le score numérique final en grade Nutri-Score (A-E)
  * Barème aliments généraux v2
@@ -70,9 +106,33 @@ function scoreToGrade(score: number): NutriGrade {
 }
 
 /**
- * Calcule le Nutri-Score v2 pour un aliment général.
+ * Grade Nutri-Score v2 pour les boissons
+ */
+function scoreToGradeBeverage(score: number): NutriGrade {
+  if (score <= 1) return 'A';
+  if (score <= 5) return 'B';
+  if (score <= 9) return 'C';
+  if (score <= 13) return 'D';
+  return 'E';
+}
+
+/**
+ * Grade Nutri-Score v2 pour les corps gras (huiles, beurre, margarines…)
+ */
+function scoreToGradeFat(score: number): NutriGrade {
+  if (score <= -6) return 'A';
+  if (score <= 2) return 'B';
+  if (score <= 10) return 'C';
+  if (score <= 18) return 'D';
+  return 'E';
+}
+
+// ─── Fonction principale ───────────────────────────────────────────
+
+/**
+ * Calcule le Nutri-Score v2 pour un aliment.
  *
- * @param nutrients - Valeurs nutritionnelles pour 100g
+ * @param nutrients - Valeurs nutritionnelles pour 100g (ou 100ml pour les boissons)
  * @param fruitVegPercent - Pourcentage fruits/légumes/légumineuses (0-100)
  * @param category - Catégorie alimentaire (défaut: 'general')
  */
@@ -81,10 +141,19 @@ export function calculateNutriScore(
   fruitVegPercent: number,
   category: FoodCategory = 'general'
 ): NutriScoreResult {
-  // Points négatifs (N)
-  const energyPts = scoreEnergy(nutrients.energy_kj);
-  const sugarsPts = scoreSugars(nutrients.sugars);
-  const satFatPts = scoreSaturatedFat(nutrients.saturated_fat);
+  // Points négatifs (N) — adaptés selon la catégorie
+  const energyPts = category === 'beverage'
+    ? scoreEnergyBeverage(nutrients.energy_kj)
+    : scoreEnergy(nutrients.energy_kj);
+
+  const sugarsPts = category === 'beverage'
+    ? scoreSugarsBeverage(nutrients.sugars)
+    : scoreSugars(nutrients.sugars);
+
+  const satFatPts = category === 'fat'
+    ? scoreSaturatedFatRatio(nutrients.saturated_fat, nutrients.total_fat ?? 0)
+    : scoreSaturatedFat(nutrients.saturated_fat);
+
   const saltPts = scoreSalt(nutrients.salt);
   const nPoints = energyPts + sugarsPts + satFatPts + saltPts;
 
@@ -101,7 +170,16 @@ export function calculateNutriScore(
     : fiberPts + proteinPts + fruitVegPts;
 
   const score = nPoints - pPoints;
-  const grade = scoreToGrade(score);
+
+  // Grade selon la catégorie
+  let grade: NutriGrade;
+  if (category === 'beverage') {
+    grade = scoreToGradeBeverage(score);
+  } else if (category === 'fat') {
+    grade = scoreToGradeFat(score);
+  } else {
+    grade = scoreToGrade(score);
+  }
 
   return {
     grade,

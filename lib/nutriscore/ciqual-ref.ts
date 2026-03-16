@@ -170,9 +170,9 @@ export const ciqualDatabase: Record<string, CiqualEntry> = {
   'vinaigrette-maison': {
     id: 'vinaigrette-maison',
     name: 'Vinaigrette maison',
-    nutrients: { energy_kj: 1400, sugars: 1.5, saturated_fat: 1.8, salt: 1.0, fiber: 0, protein: 0.2 },
+    nutrients: { energy_kj: 1400, sugars: 1.5, saturated_fat: 1.8, salt: 1.0, fiber: 0, protein: 0.2, total_fat: 34 },
     fruitVegPercent: 0,
-    category: 'general',
+    category: 'fat',
   },
   'sauce-soja': {
     id: 'sauce-soja',
