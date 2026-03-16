@@ -350,18 +350,21 @@ export function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
                 )}
 
                 <Button
-                  onClick={handleComplete}
+                  onClick={() => {
+                    handleComplete();
+                    window.location.href = '/sign-up';
+                  }}
                   size="lg"
                   className="w-full h-12 text-base font-semibold"
                 >
-                  🚀 Voir ma semaine complète
+                  🚀 Créer mon compte pour continuer
                 </Button>
 
                 <Link
-                  href="/sign-up"
+                  href="/sign-in"
                   className="text-sm text-muted-foreground hover:text-foreground transition-colors underline-offset-2 hover:underline"
                 >
-                  Créer un compte pour sauvegarder
+                  Déjà un compte ? Se connecter
                 </Link>
               </div>
             )}
