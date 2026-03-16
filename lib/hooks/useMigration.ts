@@ -1,9 +1,15 @@
 'use client';
 
 import { useCallback, useState } from 'react';
-import { createAssembleatClient } from '@/lib/supabase/client';
+import { createClient } from '@supabase/supabase-js';
 
 const MIGRATION_KEY = 'supabase-migrated';
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+  { db: { schema: 'assembleat' } }
+);
 
 /**
  * One-shot migration hook.
@@ -15,7 +21,7 @@ const MIGRATION_KEY = 'supabase-migrated';
  *
  * Idempotent: subsequent calls are no-ops if already migrated.
  */
-export function useMigration() {
+export function useMigration(userId: string | null) {
   const [migrating, setMigrating] = useState(false);
   const [migrated, setMigrated] = useState(
     () => typeof window !== 'undefined' && localStorage.getItem(MIGRATION_KEY) === 'true'
@@ -24,12 +30,7 @@ export function useMigration() {
   const migrate = useCallback(async () => {
     if (migrated) return;
     if (typeof window === 'undefined') return;
-
-    const supabase = createAssembleatClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    if (!user) return;
+    if (!userId) return;
 
     setMigrating(true);
     try {
@@ -39,12 +40,12 @@ export function useMigration() {
         const parsed = JSON.parse(rawSettings) as Record<string, unknown>;
         await supabase.from('profiles').upsert(
           {
-            id: user.id,
+            clerk_user_id: userId,
             first_name: (parsed.firstName as string) ?? '',
             language: (parsed.language as string) ?? 'fr',
             rules: parsed.rules ?? { antiRedundancy: true, starchWarning: true },
           },
-          { onConflict: 'id' }
+          { onConflict: 'clerk_user_id' }
         );
       }
 
@@ -56,7 +57,7 @@ export function useMigration() {
           if (!raw) continue;
           const data = JSON.parse(raw);
           await supabase.from('week_plans').upsert(
-            { user_id: user.id, week_key: weekKey, data },
+            { user_id: userId, week_key: weekKey, data },
             { onConflict: 'user_id,week_key' }
           );
         }
@@ -75,7 +76,7 @@ export function useMigration() {
         for (const fb of parsed) {
           await supabase.from('meal_feedbacks').upsert(
             {
-              user_id: user.id,
+              user_id: userId,
               assembly_id: fb.assemblyId,
               date: fb.date,
               pleasure: fb.pleasure,
@@ -96,7 +97,7 @@ export function useMigration() {
     } finally {
       setMigrating(false);
     }
-  }, [migrated]);
+  }, [migrated, userId]);
 
   return { migrate, migrating, migrated };
 }
