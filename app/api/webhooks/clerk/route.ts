@@ -3,11 +3,14 @@ import { headers } from 'next/headers';
 import type { WebhookEvent } from '@clerk/nextjs/server';
 import { createClient } from '@supabase/supabase-js';
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  { db: { schema: 'assembleat' } }
-);
+function getSupabaseAdmin() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url || !key) {
+    throw new Error('Missing SUPABASE_SERVICE_ROLE_KEY or NEXT_PUBLIC_SUPABASE_URL');
+  }
+  return createClient(url, key, { db: { schema: 'assembleat' } });
+}
 
 export async function POST(req: Request) {
   const WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET;
@@ -39,6 +42,8 @@ export async function POST(req: Request) {
   } catch {
     return new Response('Invalid signature', { status: 400 });
   }
+
+  const supabase = getSupabaseAdmin();
 
   if (evt.type === 'user.created' || evt.type === 'user.updated') {
     const { id, first_name, email_addresses } = evt.data;
