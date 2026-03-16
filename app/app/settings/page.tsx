@@ -184,7 +184,7 @@ export default function SettingsPage() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm">Rappels de repas</p>
-              <p className="text-xs text-gray-500">Midi, soir, et streak en danger</p>
+              <p className="text-xs text-gray-500">Rappels midi et soir</p>
             </div>
             <Button
               variant={notifEnabled ? 'default' : 'outline'}

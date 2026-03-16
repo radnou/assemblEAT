@@ -24,7 +24,6 @@ export default function RoastPage() {
   const t = useTranslations('roast');
   const {
     feedbacks,
-    streakCount,
     settings,
     weekPlans,
     getWeekPlan,
@@ -110,10 +109,10 @@ export default function RoastPage() {
       setRoast(null);
       return;
     }
-    const result = generateRoast(plan, feedbacks, streakCount, objective, mode);
+    const result = generateRoast(plan, feedbacks, objective, mode);
     setRoast(result);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mode, seed, feedbacks, streakCount]);
+  }, [mode, seed, feedbacks]);
 
   const handleRegenerate = useCallback(() => {
     setSeed((s) => s + 1);

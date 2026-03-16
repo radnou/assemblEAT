@@ -9,7 +9,6 @@ export interface RoastTemplate {
     | 'sauce_lover'
     | 'light_dinner'
     | 'variety'
-    | 'streak'
     | 'general';
   template: string;
   tone: 'roast' | 'kind';
@@ -1050,68 +1049,6 @@ export const roastTemplates: RoastTemplate[] = [
     id: 'var_05k',
     category: 'variety',
     template: 'Excellente variété ! Maintenir cette diversité sur la durée, c\'est l\'objectif ultime.',
-    tone: 'kind',
-  },
-
-  // ─── STREAK (5 roast + 5 kind) ────────────────────
-  {
-    id: 'str_01',
-    category: 'streak',
-    template: '🔥 {streak} jours consécutifs. Même Duolingo est jaloux.',
-    tone: 'roast',
-  },
-  {
-    id: 'str_01k',
-    category: 'streak',
-    template: '🔥 {streak} jours d\'affilée — une régularité qui montre ton vrai engagement !',
-    tone: 'kind',
-  },
-  {
-    id: 'str_02',
-    category: 'streak',
-    template: '{streak} jours de streak. T\'as pas d\'autres ambitions ou c\'est juste pour nous impressionner ?',
-    tone: 'roast',
-  },
-  {
-    id: 'str_02k',
-    category: 'streak',
-    template: '{streak} jours consécutifs — tu construis une habitude solide et durable. Continue !',
-    tone: 'kind',
-  },
-  {
-    id: 'str_03',
-    category: 'streak',
-    template: '{streak} jours de suite sans craquer. T\'as signé un contrat avec ta volonté ou quoi ?',
-    tone: 'roast',
-  },
-  {
-    id: 'str_03k',
-    category: 'streak',
-    template: '{streak} jours de régularité ! C\'est comme ça que les bonnes habitudes se forment.',
-    tone: 'kind',
-  },
-  {
-    id: 'str_04',
-    category: 'streak',
-    template: 'Streak de {streak} jours. Même les marathoniens font des pauses, toi non.',
-    tone: 'roast',
-  },
-  {
-    id: 'str_04k',
-    category: 'streak',
-    template: 'Streak de {streak} jours — cette régularité est vraiment admirable et bénéfique !',
-    tone: 'kind',
-  },
-  {
-    id: 'str_05',
-    category: 'streak',
-    template: '{streak} jours consécutifs. Si on pouvait mettre ça sur un CV…',
-    tone: 'roast',
-  },
-  {
-    id: 'str_05k',
-    category: 'streak',
-    template: '{streak} jours de suite — tu es un exemple de régularité. Garde cette énergie !',
     tone: 'kind',
   },
 

@@ -7,7 +7,7 @@ import { useFeatureFlag } from '@/lib/hooks/useFeatureFlag';
 import { useMealStore } from '@/lib/store/useMealStore';
 import { ProUpsellDialog } from '@/components/ProUpsellDialog';
 import { computeWeeklyHistory } from '@/lib/history/historyEngine';
-import { ChevronDown, ChevronUp, TrendingUp, Calendar, Star, Flame } from 'lucide-react';
+import { ChevronDown, ChevronUp, TrendingUp, Calendar, Star } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 function pleasureEmoji(avg: number): string {
@@ -29,18 +29,6 @@ function weekLabel(weekKey: string): string {
   const parts = weekKey.split('-W');
   if (parts.length === 2) return `S${parts[1]}`;
   return weekKey;
-}
-
-function currentStreak(history: ReturnType<typeof computeWeeklyHistory>): number {
-  let streak = 0;
-  for (let i = history.length - 1; i >= 0; i--) {
-    if (history[i].totalMeals > 0) {
-      streak++;
-    } else {
-      break;
-    }
-  }
-  return streak;
 }
 
 export default function HistoryPage() {
@@ -85,8 +73,6 @@ export default function HistoryPage() {
     (best, w) => (w.totalMeals > (best?.totalMeals ?? 0) ? w : best),
     history[0]
   );
-  const streak = currentStreak(history);
-
   const maxMeals = 21; // 3 meals/day × 7 days
 
   const summaryCards = [
@@ -104,11 +90,6 @@ export default function HistoryPage() {
       icon: <Calendar size={20} className="text-green-500" />,
       value: bestWeek?.totalMeals ?? 0,
       label: t('bestWeek'),
-    },
-    {
-      icon: <Flame size={20} className="text-orange-500" />,
-      value: streak,
-      label: t('currentStreak'),
     },
   ];
 

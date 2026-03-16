@@ -70,8 +70,6 @@ beforeEach(() => {
       feedbacks: [],
       onboardingCompleted: false,
       tourCompleted: false,
-      streakCount: 0,
-      streakLastDate: null,
       hydrated: false,
       settings: {
         firstName: '',
@@ -224,64 +222,11 @@ describe('useMealStore — completeOnboarding', () => {
   });
 });
 
-describe('useMealStore — checkAndUpdateStreak', () => {
-  it('starts streak at 1 on first call', () => {
-    act(() => {
-      useMealStore.getState().checkAndUpdateStreak();
-    });
-    expect(useMealStore.getState().streakCount).toBe(1);
-  });
-
-  it('does not increment when called twice the same day', () => {
-    act(() => {
-      useMealStore.getState().checkAndUpdateStreak();
-      useMealStore.getState().checkAndUpdateStreak();
-    });
-    expect(useMealStore.getState().streakCount).toBe(1);
-  });
-
-  it('increments streak on consecutive days', () => {
-    const today = new Date();
-    const yesterday = new Date(today);
-    yesterday.setDate(today.getDate() - 1);
-    const yesterdayStr = yesterday.toLocaleDateString('en-CA');
-
-    // Simulate that we already validated yesterday
-    act(() => {
-      useMealStore.setState({ streakCount: 3, streakLastDate: yesterdayStr });
-    });
-
-    act(() => {
-      useMealStore.getState().checkAndUpdateStreak();
-    });
-
-    expect(useMealStore.getState().streakCount).toBe(4);
-  });
-
-  it('resets streak to 1 when there is a gap', () => {
-    // Last validated 3 days ago — not yesterday
-    const threeDaysAgo = new Date();
-    threeDaysAgo.setDate(threeDaysAgo.getDate() - 3);
-    const threeDaysAgoStr = threeDaysAgo.toLocaleDateString('en-CA');
-
-    act(() => {
-      useMealStore.setState({ streakCount: 5, streakLastDate: threeDaysAgoStr });
-    });
-
-    act(() => {
-      useMealStore.getState().checkAndUpdateStreak();
-    });
-
-    expect(useMealStore.getState().streakCount).toBe(1);
-  });
-});
-
 describe('useMealStore — resetAll', () => {
-  it('clears today meals, streak, weekPlans, and recentProteins', () => {
+  it('clears today meals, weekPlans, and recentProteins', () => {
     // Populate some state
     act(() => {
       useMealStore.getState().setTodayMeal('lunch', makeAssembly('asm-1'));
-      useMealStore.setState({ streakCount: 5, streakLastDate: '2024-01-01' });
       useMealStore.getState().addRecentProtein('chicken');
     });
 
@@ -293,8 +238,6 @@ describe('useMealStore — resetAll', () => {
     expect(state.todayLunch).toBeNull();
     expect(state.todayBreakfast).toBeNull();
     expect(state.todayDinner).toBeNull();
-    expect(state.streakCount).toBe(0);
-    expect(state.streakLastDate).toBeNull();
     expect(state.weekPlans).toEqual({});
     expect(state.recentProteins).toHaveLength(0);
   });

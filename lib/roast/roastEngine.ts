@@ -48,7 +48,6 @@ function pickTemplates(
 export function generateRoast(
   weekPlan: WeekDay[],
   feedbacks: MealFeedback[],
-  streakCount: number,
   objective: string,
   mode: 'roast' | 'kind'
 ): RoastAnalysis {
@@ -131,7 +130,6 @@ export function generateRoast(
     protein: topProtein,
     count: topProteinCount,
     avgScore: avgScoreLabel,
-    streak: streakCount,
     totalMeals,
     uniqueIngredients,
     possible: 21,
@@ -165,7 +163,6 @@ export function generateRoast(
     { category: 'sauce_lover', condition: mealsWithSauce >= 5 },
     { category: 'light_dinner', condition: lightDinners >= 3 },
     { category: 'variety', condition: uniqueIngredients >= 10 },
-    { category: 'streak', condition: streakCount >= 5 },
   ];
 
   for (const { category, condition } of priorities) {

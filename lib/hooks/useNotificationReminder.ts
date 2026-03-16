@@ -34,13 +34,5 @@ export function useNotificationReminder() {
       );
     }
 
-    // Streak reminder: 21:00, no meals validated today
-    if (hour >= 21 && hour < 22 && todayFeedbacks.length === 0) {
-      scheduleReminder(
-        '🔥 Ton streak est en danger !',
-        'Valide au moins un repas aujourd\'hui pour garder ta série.',
-        'streak-reminder-' + today
-      );
-    }
   }, [feedbacks, todayLunch, todayDinner]);
 }

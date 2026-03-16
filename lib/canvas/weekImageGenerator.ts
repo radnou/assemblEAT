@@ -148,7 +148,6 @@ function renderDayRow(
 
 function renderFooter(
   ctx: CanvasRenderingContext2D,
-  streak: number
 ): void {
   const footerY = H - FOOTER_H;
 
@@ -159,16 +158,6 @@ function renderFooter(
   ctx.moveTo(PAD, footerY + 20);
   ctx.lineTo(W - PAD, footerY + 20);
   ctx.stroke();
-
-  // Streak badge
-  if (streak > 0) {
-    const streakText = `🔥 ${streak} jour${streak > 1 ? 's' : ''} de suite`;
-    ctx.fillStyle = COLORS.dayLabel;
-    ctx.font = `600 36px system-ui, -apple-system, sans-serif`;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(streakText, W / 2, footerY + 80);
-  }
 
   // Watermark
   ctx.fillStyle = COLORS.footerText;
@@ -203,7 +192,6 @@ function renderFooter(
 // ─── Public API ───────────────────────────────────────────────────────────────
 
 export interface GenerateWeekImageOptions {
-  streak?: number;
   userName?: string;
 }
 
@@ -215,7 +203,7 @@ export async function generateWeekImage(
   weekPlan: WeekPlan,
   options: GenerateWeekImageOptions = {}
 ): Promise<Blob> {
-  const { streak = 0, userName = '' } = options;
+  const { userName = '' } = options;
 
   // Attempt to load Inter; Canvas falls back to system-ui silently
   await loadFont('Inter', 'https://fonts.gstatic.com/s/inter/v13/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiA.woff2');
@@ -243,7 +231,7 @@ export async function generateWeekImage(
     renderDayRow(ctx, i, dayPlan, i === 6);
   }
 
-  renderFooter(ctx, streak);
+  renderFooter(ctx);
 
   // ── Export as PNG blob ───────────────────────────────────────────────────
   return new Promise<Blob>((resolve, reject) => {

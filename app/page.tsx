@@ -61,7 +61,7 @@ const steps = [
     number: '03',
     title: 'Cuisinez et profitez',
     description:
-      'Suivez la checklist batch cook du dimanche, donnez votre feedback, et regardez votre streak monter.',
+      'Suivez la checklist batch cook du dimanche, donnez votre feedback, et améliorez vos repas semaine après semaine.',
     color: 'var(--color-meal-dinner)',
   },
 ];
@@ -79,7 +79,7 @@ const freeFeatures = [
   'Nutri-Score sur chaque repas',
   'Régénération illimitée',
   'Checklist batch cook',
-  'Suivi de streak',
+  'Score nutritionnel',
 ];
 
 const proFeatures = [

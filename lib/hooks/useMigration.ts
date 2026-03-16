@@ -87,21 +87,7 @@ export function useMigration() {
         }
       }
 
-      // 4. Migrate streak → profiles
-      const streakCount = localStorage.getItem('streak-count');
-      const streakLastDate = localStorage.getItem('streak-last-date');
-      if (streakCount !== null || streakLastDate !== null) {
-        await supabase.from('profiles').upsert(
-          {
-            id: user.id,
-            streak_count: streakCount ? Number(JSON.parse(streakCount)) : 0,
-            streak_last_date: streakLastDate ? JSON.parse(streakLastDate) : null,
-          },
-          { onConflict: 'id' }
-        );
-      }
-
-      // 5. Mark complete — only after all uploads succeeded
+      // 4. Mark complete — only after all uploads succeeded
       localStorage.setItem(MIGRATION_KEY, 'true');
       setMigrated(true);
     } catch (error) {

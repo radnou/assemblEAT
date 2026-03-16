@@ -17,7 +17,7 @@ import { useTranslations } from 'next-intl';
 export default function SemainierPage() {
   const t = useTranslations('weekPlanner');
   const { weekKey, weekDates, dayNames, goToPreviousWeek, goToNextWeek, goToCurrentWeek, isCurrentWeek } = useWeekNavigation();
-  const { getWeekPlan, setDayPlan, recentProteins, settings, streakCount } = useMealStore();
+  const { getWeekPlan, setDayPlan, recentProteins, settings } = useMealStore();
   const { plan } = useSubscriptionStore();
   const [proOpen, setProOpen] = useState(false);
 
@@ -71,7 +71,6 @@ export default function SemainierPage() {
       <div className="flex justify-end gap-2">
         <ShareWeekButton
           weekPlan={weekPlan}
-          streak={streakCount}
           userName={settings.firstName}
         />
         {plan === 'pro' && (

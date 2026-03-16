@@ -10,13 +10,12 @@ import { generateWeekImage } from '@/lib/canvas/weekImageGenerator';
 
 export interface ShareWeekButtonProps {
   weekPlan: WeekPlan;
-  streak: number;
   userName: string;
 }
 
 type Status = 'idle' | 'generating' | 'done' | 'error';
 
-export function ShareWeekButton({ weekPlan, streak, userName }: ShareWeekButtonProps) {
+export function ShareWeekButton({ weekPlan, userName }: ShareWeekButtonProps) {
   const t = useTranslations('share');
   const [status, setStatus] = useState<Status>('idle');
 
@@ -25,7 +24,7 @@ export function ShareWeekButton({ weekPlan, streak, userName }: ShareWeekButtonP
     setStatus('generating');
 
     try {
-      const blob = await generateWeekImage(weekPlan, { streak, userName });
+      const blob = await generateWeekImage(weekPlan, { userName });
       const filename = `assembleat-semaine-${weekPlan.weekKey}.png`;
 
       if (
