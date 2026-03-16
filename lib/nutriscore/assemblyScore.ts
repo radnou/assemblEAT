@@ -1,4 +1,4 @@
-import type { AssemblyRow, AssemblyNutriScore, NutrientInput, NutriGrade, MealComponent } from '@/types';
+import type { AssemblyRow, AssemblyNutriScore, NutrientInput, NutriGrade, MealComponent, FoodCategory } from '@/types';
 import { calculateNutriScore } from './algorithm';
 import { getCiqualEntry } from './ciqual-ref';
 import { fetchNutriScore } from './offApi';
@@ -12,6 +12,18 @@ const DEFAULT_WEIGHTS: Record<string, number> = {
   cereal: 120,
   sauce: 30,
 };
+
+/**
+ * Sauces à base de matière grasse — catégorie Nutri-Score "fat".
+ * Les sauces non listées ici restent en catégorie "general".
+ */
+const FAT_SAUCE_IDS = new Set([
+  'vinaigrette',
+  'huile-olive',
+  'mayonnaise',
+  'pesto',
+  'sauce-beurre',
+]);
 
 /**
  * Calcule les grammes de protéines estimés pour un assemblage complet.

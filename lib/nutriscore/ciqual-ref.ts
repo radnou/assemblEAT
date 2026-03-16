@@ -188,6 +188,34 @@ export const ciqualDatabase: Record<string, CiqualEntry> = {
     fruitVegPercent: 40,
     category: 'general',
   },
+  'huile-olive': {
+    id: 'huile-olive',
+    name: "Huile d'olive vierge extra",
+    nutrients: { energy_kj: 3700, sugars: 0, saturated_fat: 15, salt: 0, fiber: 0, protein: 0, total_fat: 100 },
+    fruitVegPercent: 0,
+    category: 'fat',
+  },
+  'mayonnaise': {
+    id: 'mayonnaise',
+    name: 'Mayonnaise',
+    nutrients: { energy_kj: 2900, sugars: 1.1, saturated_fat: 8, salt: 1.2, fiber: 0, protein: 1.3, total_fat: 78 },
+    fruitVegPercent: 0,
+    category: 'fat',
+  },
+  'pesto': {
+    id: 'pesto',
+    name: 'Pesto alla genovese',
+    nutrients: { energy_kj: 1700, sugars: 2.1, saturated_fat: 5.5, salt: 2.5, fiber: 1.5, protein: 4.5, total_fat: 40 },
+    fruitVegPercent: 10,
+    category: 'fat',
+  },
+  'sauce-beurre': {
+    id: 'sauce-beurre',
+    name: 'Sauce au beurre',
+    nutrients: { energy_kj: 2400, sugars: 0.5, saturated_fat: 36, salt: 0.6, fiber: 0, protein: 0.8, total_fat: 55 },
+    fruitVegPercent: 0,
+    category: 'fat',
+  },
 
   // ─── Petit-déjeuner ───────────────────────────
   'yaourt-nature': {
