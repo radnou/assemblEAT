@@ -11,8 +11,8 @@ export function OnboardingGate({ children }: { children: React.ReactNode }) {
   const settings = useMealStore((s) => s.settings);
   const completeOnboarding = useMealStore((s) => s.completeOnboarding);
 
-  // Skip gate for the login page so users can always access it
-  if (pathname === '/app/login') {
+  // Skip gate for the sign-in page so users can always access it
+  if (pathname === '/sign-in') {
     return <>{children}</>;
   }
 

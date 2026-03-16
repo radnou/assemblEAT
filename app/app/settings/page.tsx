@@ -15,8 +15,7 @@ import { useMealStore } from '@/lib/store/useMealStore';
 import { ProBadge, ProUpsellDialog } from '@/components/ProUpsellDialog';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
-import { createClient } from '@/lib/supabase/client';
-import type { User } from '@supabase/supabase-js';
+import { useUser, useClerk } from '@clerk/nextjs';
 import { useGoalsStore } from '@/lib/store/useGoalsStore';
 import { useSubscriptionStore } from '@/lib/store/useSubscriptionStore';
 export default function SettingsPage() {
@@ -28,8 +27,9 @@ export default function SettingsPage() {
   const { goals, addGoal, removeGoal } = useGoalsStore();
   const [showResetDialog, setShowResetDialog] = useState(false);
   const [proOpen, setProOpen] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
   const [notifPermission, setNotifPermission] = useState<string>('unsupported');
+  const { user, isSignedIn } = useUser();
+  const { signOut } = useClerk();
   const [goalText, setGoalText] = useState('');
   const [goalTarget, setGoalTarget] = useState(3);
 
@@ -73,21 +73,8 @@ export default function SettingsPage() {
     setNotifPermission(granted ? 'granted' : 'denied');
   }, [notifPermission]);
 
-  useEffect(() => {
-    const supabase = createClient();
-    supabase.auth.getUser().then(({ data }) => {
-      setUser(data.user);
-    });
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-    });
-    return () => subscription.unsubscribe();
-  }, []);
-
   const handleSignOut = async () => {
-    const supabase = createClient();
-    await supabase.auth.signOut();
-    setUser(null);
+    await signOut();
   };
 
   return (
@@ -96,16 +83,16 @@ export default function SettingsPage() {
 
       {/* Auth */}
       <Card className="p-4">
-        {user ? (
+        {isSignedIn ? (
           <div className="flex items-center justify-between">
-            <p className="text-sm text-gray-700 truncate">{user.email}</p>
+            <p className="text-sm text-gray-700 truncate">{user?.primaryEmailAddress?.emailAddress}</p>
             <Button variant="outline" size="sm" onClick={handleSignOut} className="ml-2 flex items-center gap-1">
               <LogOut size={14} />
               <span className="text-xs">Déconnexion</span>
             </Button>
           </div>
         ) : (
-          <Link href="/app/login">
+          <Link href="/sign-in">
             <Button variant="outline" className="w-full flex items-center gap-2">
               <LogIn size={16} />
               {tAuth('login')}

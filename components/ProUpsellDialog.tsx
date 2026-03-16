@@ -16,7 +16,7 @@ import { useTranslations } from 'next-intl';
 import { motion } from 'framer-motion';
 import type { FeatureFlag } from '@/types';
 import { useLemonSqueezy, openCheckout } from '@/components/LemonSqueezyCheckout';
-import { useAuth } from '@/lib/hooks/useAuth';
+import { useUser } from '@clerk/nextjs';
 
 type LucideIcon = typeof Share2;
 
@@ -97,7 +97,7 @@ interface ProUpsellDialogProps {
 
 export function ProUpsellDialog({ open, onOpenChange, feature }: ProUpsellDialogProps) {
   const t = useTranslations('pro');
-  const { user } = useAuth();
+  const { user } = useUser();
   useLemonSqueezy();
 
   const hero = (feature && heroContent[feature]) ?? DEFAULT_HERO;
@@ -108,7 +108,7 @@ export function ProUpsellDialog({ open, onOpenChange, feature }: ProUpsellDialog
   function handleCtaClick() {
     openCheckout({
       userId: user?.id,
-      email: user?.email,
+      email: user?.primaryEmailAddress?.emailAddress,
     });
   }
 

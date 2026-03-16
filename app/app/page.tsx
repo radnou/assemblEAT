@@ -15,7 +15,7 @@ import { ProUpsellDialog } from '@/components/ProUpsellDialog';
 import Link from 'next/link';
 import { Flame, Trophy, ShoppingCart, UserCircle, BookOpen } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
-import { useAuth } from '@/lib/hooks/useAuth';
+import { useUser } from '@clerk/nextjs';
 import { useGoalsStore } from '@/lib/store/useGoalsStore';
 
 export default function Dashboard() {
@@ -23,7 +23,7 @@ export default function Dashboard() {
   const tGoals = useTranslations('goals');
   const locale = useLocale();
   const searchParams = useSearchParams();
-  const { user, isAuthenticated } = useAuth();
+  const { user, isSignedIn: isAuthenticated } = useUser();
   const { plan } = useSubscriptionStore();
   const [showUpgradeWelcome, setShowUpgradeWelcome] = useState(
     () => searchParams.get('upgraded') === 'true'
@@ -208,14 +208,14 @@ export default function Dashboard() {
         </div>
         <div className="flex items-center gap-2">
           {!isAuthenticated ? (
-            <Link href="/app/login" className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700">
+            <Link href="/sign-in" className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700">
               <UserCircle size={20} />
               <span className="hidden sm:inline">Connexion</span>
             </Link>
           ) : (
-            <div className="flex items-center gap-1 text-sm text-gray-500" title={user?.email ?? ''}>
+            <div className="flex items-center gap-1 text-sm text-gray-500" title={user?.primaryEmailAddress?.emailAddress ?? ''}>
               <div className="w-7 h-7 rounded-full bg-[var(--color-cta)] text-white flex items-center justify-center text-xs font-bold">
-                {settings.firstName?.charAt(0)?.toUpperCase() || user?.email?.charAt(0)?.toUpperCase() || '?'}
+                {settings.firstName?.charAt(0)?.toUpperCase() || user?.primaryEmailAddress?.emailAddress?.charAt(0)?.toUpperCase() || '?'}
               </div>
             </div>
           )}

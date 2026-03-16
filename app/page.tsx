@@ -136,7 +136,7 @@ export default function LandingPage() {
             </span>
             <div className="flex items-center gap-3">
               <a
-                href="/app/login"
+                href="/sign-in"
                 className="text-sm text-gray-600 hover:text-gray-900 transition"
               >
                 Se connecter
@@ -197,7 +197,7 @@ export default function LandingPage() {
 
           <p className="mt-3 text-sm text-gray-400">
             Déjà un compte ?{' '}
-            <a href="/app/login" className="text-[var(--color-cta)] hover:underline">
+            <a href="/sign-in" className="text-[var(--color-cta)] hover:underline">
               Se connecter
             </a>
           </p>

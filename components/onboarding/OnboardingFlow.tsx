@@ -209,7 +209,7 @@ export function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
                 perdues si vous fermez l&apos;onglet.
               </p>
               <Link
-                href="/app/login"
+                href="/sign-in"
                 className="block w-full py-3 rounded-xl font-semibold text-white mb-3 transition hover:opacity-90"
                 style={{ background: 'var(--color-cta)' }}
               >
