@@ -12,6 +12,7 @@ import { useTimeContext } from '@/lib/hooks/useTimeContext';
 import { useProgressiveGuide } from '@/lib/hooks/useProgressiveGuide';
 import { useObjectiveCoaching } from '@/lib/hooks/useObjectiveCoaching';
 import { useWeeklyChallenge } from '@/lib/hooks/useWeeklyChallenge';
+import { useFruitVegCounter } from '@/lib/hooks/useFruitVegCounter';
 import { useFeatureFlag } from '@/lib/hooks/useFeatureFlag';
 import { useLocalStorage } from '@/lib/hooks/useLocalStorage';
 import { COLORS, FOOD_EMOJIS } from '@/components/onboarding/AvatarGenerator';
@@ -46,6 +47,9 @@ export default function Dashboard() {
 
   // ---- Weekly challenge ---------------------------------------------------
   const { challenge, shareChallenge } = useWeeklyChallenge();
+
+  // ---- Fruit & vegetable counter -------------------------------------------
+  const fruitVeg = useFruitVegCounter();
 
   // ---- Feature flags ------------------------------------------------------
   const hasGrocery = useFeatureFlag('GROCERY_LIST');
@@ -451,6 +455,23 @@ export default function Dashboard() {
             />
           </div>
         )}
+
+        {/* Fruit & vegetable counter */}
+        <div className="flex items-center gap-2 p-3 bg-green-50 rounded-lg mt-3">
+          <span className="text-lg">🥬</span>
+          <div className="flex-1">
+            <div className="text-xs font-medium text-green-900">Fruits & légumes aujourd&apos;hui</div>
+            <div className="flex gap-1 mt-1">
+              {[1, 2, 3, 4, 5].map((i) => (
+                <div
+                  key={i}
+                  className={`w-4 h-4 rounded-full ${i <= fruitVeg.count ? 'bg-green-500' : 'bg-green-200'}`}
+                />
+              ))}
+            </div>
+          </div>
+          <span className="text-sm font-bold text-green-600">{fruitVeg.count}/5</span>
+        </div>
       </section>
 
       {/* ─── Seasonal Banner ────────────────────────────────────────────── */}
