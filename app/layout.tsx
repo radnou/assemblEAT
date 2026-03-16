@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
+import { ClerkProvider } from '@clerk/nextjs';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getLocale } from 'next-intl/server';
 import { MatomoTracker } from '@/components/MatomoTracker';
@@ -30,16 +31,18 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const messages = await getMessages();
 
   return (
-    <html lang={locale} className={inter.variable}>
-      <head>
-        <link rel="apple-touch-icon" href="/icons/icon-192.png" />
-      </head>
-      <body className="bg-[var(--color-surface)] text-[var(--color-text-main)] font-sans antialiased">
-        <NextIntlClientProvider messages={messages}>
-          {children}
-        </NextIntlClientProvider>
-        <MatomoTracker />
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang={locale} className={inter.variable}>
+        <head>
+          <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+        </head>
+        <body className="bg-[var(--color-surface)] text-[var(--color-text-main)] font-sans antialiased">
+          <NextIntlClientProvider messages={messages}>
+            {children}
+          </NextIntlClientProvider>
+          <MatomoTracker />
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
