@@ -7,6 +7,7 @@ import { OnboardingProgress } from './OnboardingProgress';
 import { AvatarGenerator } from './AvatarGenerator';
 import { NutriGradeBadge } from '@/components/NutriGradeBadge';
 import { generateRandomAssembly } from '@/lib/engine/assemblyEngine';
+import { useUser } from '@clerk/nextjs';
 import type { UserProfile, MealType } from '@/types';
 import Link from 'next/link';
 
@@ -54,6 +55,7 @@ interface OnboardingFlowProps {
 }
 
 export function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
+  const { isSignedIn } = useUser();
   const [step, setStep] = useState(1);
   const [direction, setDirection] = useState(1);
   const [profile, setProfile] = useState<UserProfile>(DEFAULT_PROFILE);
@@ -352,20 +354,25 @@ export function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
                 <Button
                   onClick={() => {
                     handleComplete();
-                    window.location.href = '/sign-up';
+                    // Small delay to ensure localStorage is written before navigation
+                    setTimeout(() => {
+                      window.location.href = isSignedIn ? '/app' : '/sign-up';
+                    }, 100);
                   }}
                   size="lg"
                   className="w-full h-12 text-base font-semibold"
                 >
-                  🚀 Créer mon compte pour continuer
+                  {isSignedIn ? '🚀 Voir ma semaine complète' : '🚀 Créer mon compte pour continuer'}
                 </Button>
 
-                <Link
-                  href="/sign-in"
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors underline-offset-2 hover:underline"
-                >
-                  Déjà un compte ? Se connecter
-                </Link>
+                {!isSignedIn && (
+                  <Link
+                    href="/sign-in"
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors underline-offset-2 hover:underline"
+                  >
+                    Déjà un compte ? Se connecter
+                  </Link>
+                )}
               </div>
             )}
           </motion.div>

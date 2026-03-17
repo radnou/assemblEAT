@@ -18,8 +18,17 @@ export function OnboardingGate({ children }: { children: React.ReactNode }) {
   const [disclaimerAccepted] = useLocalStorage('assembleat-disclaimer-accepted', false);
 
   // Skip gate for auth pages so users can always access them
-  if (pathname === '/sign-in' || pathname === '/sign-up') {
+  if (pathname === '/sign-in' || pathname === '/sign-up' || pathname?.startsWith('/sign-in') || pathname?.startsWith('/sign-up')) {
     return <>{children}</>;
+  }
+
+  // Wait for Clerk to load before making auth decisions
+  if (!isLoaded) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-pulse text-2xl">🥗</div>
+      </div>
+    );
   }
 
   // Show onboarding if not completed and no firstName set
