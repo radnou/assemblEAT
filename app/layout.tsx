@@ -1,12 +1,9 @@
 import type { Metadata, Viewport } from 'next';
-import { Inter } from 'next/font/google';
 import './globals.css';
 import { ClerkProvider } from '@clerk/nextjs';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getLocale } from 'next-intl/server';
 import { MatomoTracker } from '@/components/MatomoTracker';
-
-const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
 export const metadata: Metadata = {
   title: 'AssemblEat — Planifiez vos repas avec le Nutri-Score',
@@ -32,7 +29,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
   return (
     <ClerkProvider>
-      <html lang={locale} className={inter.variable}>
+      <html lang={locale}>
         <head>
           <link rel="apple-touch-icon" href="/icons/icon-192.png" />
         </head>
