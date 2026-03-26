@@ -1,4 +1,4 @@
-import type { WeekPlan, MealFeedback } from '@/types';
+import type { WeekPlan, MealFeedback, ActualMeal } from '@/types';
 
 export interface SharePayload {
   weekPlan: WeekPlan;
@@ -7,6 +7,8 @@ export interface SharePayload {
   weekKey: string;
   /** Optional weekly balance grade (A–E) to display on shared page */
   grade?: 'A' | 'B' | 'C' | 'D' | 'E';
+  /** Optional actual meals for prévu vs réel comparison */
+  actuals?: ActualMeal[];
 }
 
 export interface DecodedShareData {
@@ -16,6 +18,8 @@ export interface DecodedShareData {
   feedbacks: { p: number; d: string }[];
   /** Optional weekly balance grade (A–E) */
   grade?: 'A' | 'B' | 'C' | 'D' | 'E';
+  /** Optional actual meals for prévu vs réel comparison */
+  actuals?: Array<{ d: string; t: string; s: string; desc?: string }>;
 }
 
 /**
@@ -41,6 +45,17 @@ export function encodeShareData(data: SharePayload): string {
     f: data.feedbacks.slice(0, 14).map(f => ({ p: f.pleasure, d: f.date.slice(5) })), // MM-DD only
     // Optional grade (single char, negligible size)
     ...(data.grade ? { s: data.grade } : {}),
+    // Optional actual meals for prévu vs réel
+    ...(data.actuals && data.actuals.length > 0
+      ? {
+          a: data.actuals.map((m) => ({
+            d: m.date,
+            t: m.mealType,
+            s: m.status,
+            ...(m.description ? { desc: m.description } : {}),
+          })),
+        }
+      : {}),
   };
 
   const json = JSON.stringify(payload);
@@ -72,6 +87,7 @@ export function decodeShareData(encoded: string): DecodedShareData | null {
       days: data.d,
       feedbacks: Array.isArray(data.f) ? data.f : [],
       grade,
+      actuals: Array.isArray(data.a) ? data.a : undefined,
     };
   } catch {
     return null;

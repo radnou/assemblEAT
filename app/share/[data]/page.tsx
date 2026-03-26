@@ -7,6 +7,12 @@ interface Props {
 
 const DAY_NAMES = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
 
+const STATUS_ICON: Record<string, string> = {
+  confirmed: '✅',
+  different: '⚠️',
+  skipped: '⏭️',
+};
+
 const PLEASURE_EMOJI: Record<number, string> = {
   1: '😕',
   2: '😐',
@@ -140,6 +146,67 @@ export default async function SharePage({ params }: Props) {
             </div>
           </div>
         )}
+
+        {/* Prévu vs Réel comparison */}
+        {shareData.actuals && shareData.actuals.length > 0 && (() => {
+          const actuals = shareData.actuals!;
+          const confirmed = actuals.filter((a) => a.s === 'confirmed').length;
+          const conformityRate = Math.round((confirmed / actuals.length) * 100);
+
+          // Group actuals by date
+          const byDate = new Map<string, typeof actuals>();
+          for (const a of actuals) {
+            const list = byDate.get(a.d) || [];
+            list.push(a);
+            byDate.set(a.d, list);
+          }
+
+          const MEAL_TYPE_LABEL: Record<string, string> = {
+            breakfast: 'Petit-déjeuner',
+            lunch: 'Déjeuner',
+            dinner: 'Dîner',
+          };
+
+          return (
+            <div className="space-y-3">
+              <h3 className="font-semibold text-sm text-gray-700">Prévu vs Réel</h3>
+
+              {Array.from(byDate.entries()).map(([date, meals]) => (
+                <div
+                  key={date}
+                  className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden"
+                >
+                  <div className="bg-[#2E4057]/5 px-4 py-2 border-b border-gray-100">
+                    <span className="text-sm font-semibold text-[#2E4057]">{date}</span>
+                  </div>
+                  <div className="divide-y divide-gray-50">
+                    {meals.map((m, j) => (
+                      <div key={j} className="px-4 py-2.5 flex items-start gap-3">
+                        <span className="text-base shrink-0">{STATUS_ICON[m.s] ?? '—'}</span>
+                        <div className="min-w-0">
+                          <span className="text-xs font-medium text-gray-400">
+                            {MEAL_TYPE_LABEL[m.t] ?? m.t}
+                          </span>
+                          <p className="text-sm text-gray-700">
+                            {m.s === 'confirmed' && 'Comme prévu'}
+                            {m.s === 'skipped' && 'Sauté'}
+                            {m.s === 'different' && (m.desc || 'Autre chose')}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+
+              <div className="p-3 bg-blue-50 rounded-xl text-center text-sm">
+                <span className="font-medium">Conformité : </span>
+                <span>{conformityRate}%</span>
+                <span className="text-muted-foreground"> · {actuals.length} repas notés</span>
+              </div>
+            </div>
+          );
+        })()}
       </main>
 
       {/* Viral CTA section */}
