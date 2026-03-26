@@ -19,7 +19,7 @@ const MEAL_LABELS: Record<MealType, { label: string; emoji: string }> = {
 
 function getPlannedSummary(planned: AssemblyRow | null): string {
   if (!planned) return '—';
-  const parts = [planned.protein?.label, planned.vegetable?.label, planned.cereal?.label].filter(Boolean);
+  const parts = [planned.protein?.name, planned.vegetable?.name, planned.cereal?.name].filter(Boolean);
   return parts.join(' + ') || '—';
 }
 

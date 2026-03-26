@@ -19,7 +19,10 @@ import { useFeatureFlag } from '@/lib/hooks/useFeatureFlag';
 import { useLocalStorage } from '@/lib/hooks/useLocalStorage';
 import { COLORS, FOOD_EMOJIS } from '@/components/onboarding/AvatarGenerator';
 import { useTranslations, useLocale } from 'next-intl';
-import type { AssemblyRow, MealFeedback, MealType } from '@/types';
+import type { AssemblyRow, MealFeedback, MealType, ActualMeal } from '@/types';
+import { DayComparison } from '@/components/DayComparison';
+import { WeekComparison } from '@/components/WeekComparison';
+import { MealLogger } from '@/components/MealLogger';
 import { AppTour } from '@/components/tour/AppTour';
 import { ProUpsellDialog } from '@/components/ProUpsellDialog';
 import Link from 'next/link';
@@ -106,6 +109,8 @@ export default function Dashboard() {
     onboardingCompleted,
     tourCompleted,
     completeTour,
+    getDayComparison,
+    getWeekConformity,
   } = useMealStore();
 
   // ---- Advance guide on first render --------------------------------------
@@ -189,6 +194,9 @@ export default function Dashboard() {
     day: 'numeric',
     month: 'long',
   });
+
+  const dayComparison = getDayComparison(todayISO);
+  const hasLoggedToday = dayComparison.some((c) => c.actual !== null);
 
   const getFeedbackForAssembly = (assemblyId: string | undefined) => {
     if (!assemblyId) return null;
@@ -374,6 +382,16 @@ export default function Dashboard() {
         </div>
       )}
 
+      {/* ─── Week Comparison ──────────────────────────────────────────── */}
+      {isWeekend && (
+        <div className="mx-0">
+          <WeekComparison
+            conformity={getWeekConformity(currentWeekKey)}
+            weekLabel={`Semaine ${currentWeekKey.split('-W')[1]}`}
+          />
+        </div>
+      )}
+
       {isMondayMorning && !isWeekend && (
         <div className="rounded-xl bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 p-4 text-center">
           <p className="text-sm font-semibold text-green-800">
@@ -448,6 +466,13 @@ export default function Dashboard() {
             );
           })}
         </div>
+
+        {/* Day comparison */}
+        {hasLoggedToday && (
+          <div className="mt-3">
+            <DayComparison date={todayISO} comparison={dayComparison} />
+          </div>
+        )}
 
         {/* Global warnings */}
         {warnings.length > 0 && (
