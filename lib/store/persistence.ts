@@ -13,7 +13,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type AnySupabaseClient = import('@supabase/supabase-js').SupabaseClient<any, any, any>;
-import type { WeekPlan, MealFeedback, UserSettings } from '@/types';
+import type { WeekPlan, MealFeedback, UserSettings, ActualMeal } from '@/types';
 
 // ─── Interface ────────────────────────────────────────────────────────────────
 
@@ -30,6 +30,9 @@ export interface PersistenceLayer {
   getSettings(): Promise<UserSettings | null>;
   saveSettings(settings: Partial<UserSettings>): Promise<void>;
 
+  // Actual meals (journal)
+  saveActualMeal(meal: ActualMeal): Promise<void>;
+  getActualMeals(dateFrom: string, dateTo: string): Promise<ActualMeal[]>;
 }
 
 // ─── Local implementation ─────────────────────────────────────────────────────
@@ -77,6 +80,17 @@ export function createLocalPersistence(): PersistenceLayer {
     async saveSettings(settings) {
       const current = localGet<UserSettings | null>('settings', null);
       localSet('settings', { ...current, ...settings });
+    },
+    async saveActualMeal(meal: ActualMeal) {
+      const existing = localGet<ActualMeal[]>('actual-meals', []);
+      const filtered = existing.filter(
+        (m) => !(m.date === meal.date && m.mealType === meal.mealType)
+      );
+      localSet('actual-meals', [...filtered, meal]);
+    },
+    async getActualMeals(dateFrom: string, dateTo: string) {
+      const all = localGet<ActualMeal[]>('actual-meals', []);
+      return all.filter((m) => m.date >= dateFrom && m.date <= dateTo);
     },
   };
 }
@@ -179,6 +193,42 @@ export function createSupabasePersistence(supabase: AnySupabaseClient, userId: s
       } catch {
         // silently ignore
       }
+    },
+
+    async saveActualMeal(meal: ActualMeal) {
+      try {
+        await supabase.from('actual_meals').upsert(
+          {
+            user_id: userId,
+            date: meal.date,
+            meal_type: meal.mealType,
+            status: meal.status,
+            description: meal.description ?? null,
+            pills: meal.pills ?? null,
+            logged_at: meal.loggedAt,
+          },
+          { onConflict: 'user_id,date,meal_type' }
+        );
+      } catch { /* silently ignore */ }
+    },
+    async getActualMeals(dateFrom: string, dateTo: string) {
+      try {
+        const { data, error } = await supabase
+          .from('actual_meals')
+          .select('*')
+          .eq('user_id', userId)
+          .gte('date', dateFrom)
+          .lte('date', dateTo);
+        if (error || !data) return [];
+        return data.map((row: Record<string, unknown>) => ({
+          date: row.date as string,
+          mealType: row.meal_type as ActualMeal['mealType'],
+          status: row.status as ActualMeal['status'],
+          description: (row.description as string) ?? undefined,
+          pills: (row.pills as string[]) ?? undefined,
+          loggedAt: row.logged_at as string,
+        }));
+      } catch { return []; }
     },
 
   };
