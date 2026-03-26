@@ -1,7 +1,7 @@
 'use client';
 
 import { create } from 'zustand';
-import type { AssemblyRow, DayPlan, WeekPlan, UserSettings, UserProfile, BatchItem, MealFeedback } from '@/types';
+import type { AssemblyRow, DayPlan, WeekPlan, UserSettings, UserProfile, BatchItem, MealFeedback, ActualMeal, MealType } from '@/types';
 import { batchCookItems } from '@/lib/data/repertoire';
 import { createLocalPersistence, type PersistenceLayer } from '@/lib/store/persistence';
 
@@ -52,6 +52,13 @@ interface MealStore {
   // ─── Feedbacks ───────────────────────────
   feedbacks: MealFeedback[];
   addFeedback: (feedback: MealFeedback) => void;
+
+  // ─── Journal (actual meals) ─────────────
+  actualMeals: ActualMeal[];
+  logMeal: (meal: ActualMeal) => void;
+  getActualMeal: (date: string, mealType: MealType) => ActualMeal | null;
+  getDayComparison: (date: string) => { mealType: MealType; planned: AssemblyRow | null; actual: ActualMeal | null }[];
+  getWeekConformity: (weekKey: string) => { rate: number; logged: number; skipped: number };
 
   // ─── Onboarding ──────────────────────────
   onboardingCompleted: boolean;
@@ -164,6 +171,58 @@ export const useMealStore = create<MealStore>((set, get) => ({
     setLocalStorage('batch-items', reset);
   },
 
+  actualMeals: [],
+  logMeal: (meal) => {
+    const { actualMeals, persistence } = get();
+    const filtered = actualMeals.filter(
+      (m) => !(m.date === meal.date && m.mealType === meal.mealType)
+    );
+    set({ actualMeals: [...filtered, meal] });
+    persistence.saveActualMeal(meal);
+  },
+
+  getActualMeal: (date, mealType) => {
+    return get().actualMeals.find(
+      (m) => m.date === date && m.mealType === mealType
+    ) ?? null;
+  },
+
+  getDayComparison: (date) => {
+    const { todayBreakfast, todayLunch, todayDinner, actualMeals } = get();
+    const today = new Date().toISOString().split('T')[0];
+    const mealTypes: MealType[] = ['breakfast', 'lunch', 'dinner'];
+    const planned = date === today
+      ? [todayBreakfast, todayLunch, todayDinner]
+      : [null, null, null];
+    return mealTypes.map((mt, i) => ({
+      mealType: mt,
+      planned: planned[i],
+      actual: actualMeals.find((m) => m.date === date && m.mealType === mt) ?? null,
+    }));
+  },
+
+  getWeekConformity: (weekKey) => {
+    const { actualMeals } = get();
+    const [yearStr, weekStr] = weekKey.split('-W');
+    const year = parseInt(yearStr);
+    const week = parseInt(weekStr);
+    const jan1 = new Date(year, 0, 1);
+    const days = (week - 1) * 7;
+    const monday = new Date(jan1);
+    monday.setDate(jan1.getDate() + days - ((jan1.getDay() + 6) % 7));
+    const sunday = new Date(monday);
+    sunday.setDate(monday.getDate() + 6);
+    const fromDate = monday.toISOString().split('T')[0];
+    const toDate = sunday.toISOString().split('T')[0];
+    const weekMeals = actualMeals.filter((m) => m.date >= fromDate && m.date <= toDate);
+    const logged = weekMeals.length;
+    const skipped = weekMeals.filter((m) => m.status === 'skipped').length;
+    const confirmed = weekMeals.filter((m) => m.status === 'confirmed').length;
+    const total = logged || 1;
+    const rate = Math.round((confirmed / total) * 100);
+    return { rate, logged, skipped };
+  },
+
   feedbacks: [],
   addFeedback: (feedback) => {
     set((s) => {
@@ -217,6 +276,7 @@ export const useMealStore = create<MealStore>((set, get) => ({
     const recentProteins = getLocalStorage<string[]>('recent-proteins', []);
     const storedBatch = getLocalStorage<BatchItem[] | null>('batch-items', null);
     const feedbacks = getLocalStorage<MealFeedback[]>('meal-feedbacks', []);
+    const actualMeals = getLocalStorage<ActualMeal[]>('actual-meals', []);
     const onboardingCompleted = getLocalStorage<boolean>('onboardingCompleted', false);
     const tourCompleted = getLocalStorage<boolean>('tourCompleted', false);
     // food preferences are stored inside userProfile; also kept separately for convenience
@@ -228,6 +288,7 @@ export const useMealStore = create<MealStore>((set, get) => ({
       recentProteins,
       batchItems: storedBatch ?? batchCookItems,
       feedbacks,
+      actualMeals,
       onboardingCompleted,
       tourCompleted,
       hydrated: true,
@@ -259,12 +320,21 @@ export const useMealStore = create<MealStore>((set, get) => ({
   syncFromPersistence: async () => {
     const { persistence } = get();
     try {
-      const [settingsResult, feedbacksResult] = await Promise.all([
+      const now = new Date();
+      const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString().split('T')[0];
+      const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0).toISOString().split('T')[0];
+
+      const [settingsResult, feedbacksResult, actualMealsResult] = await Promise.all([
         persistence.getSettings(),
         persistence.getFeedbacks(),
+        persistence.getActualMeals(monthStart, monthEnd),
       ]);
 
       const patch: Partial<MealStore> = {};
+
+      if (actualMealsResult.length > 0) {
+        patch.actualMeals = actualMealsResult;
+      }
 
       if (settingsResult) {
         // Preserve the locally-hydrated firstName if the remote value is empty,
