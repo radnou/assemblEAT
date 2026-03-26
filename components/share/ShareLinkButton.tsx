@@ -17,7 +17,7 @@ interface ShareLinkButtonProps {
 
 export function ShareLinkButton({ size = 'sm', className }: ShareLinkButtonProps) {
   const { weekKey } = useWeekNavigation();
-  const { getWeekPlan, settings, feedbacks } = useMealStore();
+  const { getWeekPlan, settings, feedbacks, actualMeals } = useMealStore();
   const [copied, setCopied] = useState(false);
 
   const weekPlan = getWeekPlan(weekKey);
@@ -28,6 +28,7 @@ export function ShareLinkButton({ size = 'sm', className }: ShareLinkButtonProps
       weekPlan.days.map(d => d.date).filter(Boolean)
     );
     const weekFeedbacks = feedbacks.filter(f => weekDates.has(f.date));
+    const weekActuals = actualMeals.filter(m => weekDates.has(m.date));
 
     const weeklyScore = computeWeeklyScore(weekPlan, weekFeedbacks);
 
@@ -37,6 +38,7 @@ export function ShareLinkButton({ size = 'sm', className }: ShareLinkButtonProps
       userName: settings.firstName || 'Utilisateur',
       weekKey,
       grade: weeklyScore.grade,
+      actuals: weekActuals,
     });
 
     const url = buildShareUrl(encoded);
