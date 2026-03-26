@@ -23,6 +23,7 @@ import type { AssemblyRow, MealFeedback, MealType, ActualMeal } from '@/types';
 import { DayComparison } from '@/components/DayComparison';
 import { WeekComparison } from '@/components/WeekComparison';
 import { MealLogger } from '@/components/MealLogger';
+import { toast } from 'sonner';
 import { AppTour } from '@/components/tour/AppTour';
 import { ProUpsellDialog } from '@/components/ProUpsellDialog';
 import Link from 'next/link';
@@ -87,6 +88,8 @@ export default function Dashboard() {
   );
   const [proDialogOpen, setProDialogOpen] = useState(false);
   const [showTrialPrompt, setShowTrialPrompt] = useState(false);
+  const [loggerOpen, setLoggerOpen] = useState(false);
+  const [loggerMealType, setLoggerMealType] = useState<MealType>('lunch');
 
   // Clean URL on upgrade redirect
   useEffect(() => {
@@ -111,6 +114,8 @@ export default function Dashboard() {
     completeTour,
     getDayComparison,
     getWeekConformity,
+    logMeal,
+    getActualMeal,
   } = useMealStore();
 
   // ---- Advance guide on first render --------------------------------------
@@ -182,6 +187,40 @@ export default function Dashboard() {
       addFeedback(feedback);
     },
     [addFeedback],
+  );
+
+  // ---- Journal handlers ---------------------------------------------------
+  const todayDate = new Date().toISOString().split('T')[0];
+
+  const handleLogConfirmed = useCallback(
+    (mealType: MealType) => {
+      logMeal({ date: todayDate, mealType, status: 'confirmed', loggedAt: new Date().toISOString() });
+      toast.success("C'est not\u00e9 !");
+    },
+    [logMeal, todayDate],
+  );
+
+  const handleLogDifferent = useCallback(
+    (mealType: MealType) => {
+      setLoggerMealType(mealType);
+      setLoggerOpen(true);
+    },
+    [],
+  );
+
+  const handleLogSkipped = useCallback(
+    (mealType: MealType) => {
+      logMeal({ date: todayDate, mealType, status: 'skipped', loggedAt: new Date().toISOString() });
+      toast('Repas saut\u00e9');
+    },
+    [logMeal, todayDate],
+  );
+
+  const handleLogFromDrawer = useCallback(
+    (meal: ActualMeal) => {
+      logMeal(meal);
+    },
+    [logMeal],
   );
 
   // ---- Derived data -------------------------------------------------------
@@ -461,6 +500,10 @@ export default function Dashboard() {
                   existingFeedback={getFeedbackForAssembly(assembly?.id)}
                   onFeedbackSubmit={handleFeedbackSubmit}
                   today={todayISO}
+                  actualMeal={getActualMeal(todayDate, type)}
+                  onLogConfirmed={() => handleLogConfirmed(type)}
+                  onLogDifferent={() => handleLogDifferent(type)}
+                  onLogSkipped={() => handleLogSkipped(type)}
                 />
               </div>
             );
@@ -711,6 +754,14 @@ export default function Dashboard() {
           </div>
         </div>
       )}
+
+      <MealLogger
+        open={loggerOpen}
+        onOpenChange={setLoggerOpen}
+        mealType={loggerMealType}
+        date={todayDate}
+        onLog={handleLogFromDrawer}
+      />
 
       <ProUpsellDialog open={proDialogOpen} onOpenChange={setProDialogOpen} />
 

@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { NutriGradeBadge } from '@/components/NutriGradeBadge';
 import { FlavorBadge } from '@/components/FlavorBadge';
 import { FeedbackSheet } from '@/components/feedback/FeedbackSheet';
-import type { AssemblyRow, MealType, NutriGrade, MealFeedback } from '@/types';
+import type { AssemblyRow, MealType, NutriGrade, MealFeedback, ActualMeal } from '@/types';
 import { calculateSimplicity, isLightDinner } from '@/lib/engine/assemblyEngine';
 import { computeAssemblyScore, getProteinGrams } from '@/lib/nutriscore/assemblyScore';
 import { cn } from '@/lib/utils';
@@ -44,6 +44,10 @@ interface AssemblyCardProps {
   existingFeedback?: MealFeedback | null;
   onFeedbackSubmit?: (feedback: MealFeedback) => void;
   today?: string;
+  actualMeal?: ActualMeal | null;
+  onLogConfirmed?: () => void;
+  onLogDifferent?: () => void;
+  onLogSkipped?: () => void;
 }
 
 export function AssemblyCard({
@@ -55,6 +59,10 @@ export function AssemblyCard({
   existingFeedback,
   onFeedbackSubmit,
   today = new Date().toISOString().split('T')[0],
+  actualMeal,
+  onLogConfirmed,
+  onLogDifferent,
+  onLogSkipped,
 }: AssemblyCardProps) {
   const t = useTranslations('dashboard');
   const [nutriGrade, setNutriGrade] = useState<NutriGrade | null>(null);
@@ -187,7 +195,7 @@ export function AssemblyCard({
               <Dice5 size={22} />
             </Button>
           </motion.div>
-          {!assembly.validated && (
+          {!assembly.validated && !actualMeal && (
             <Button
               variant="ghost"
               size="icon"
@@ -199,7 +207,7 @@ export function AssemblyCard({
               <Check size={22} />
             </Button>
           )}
-          {assembly.validated && (
+          {assembly.validated && !actualMeal && (
             <div className="flex items-center gap-1.5">
               {existingFeedback && (
                 <span className="text-lg" title={`Plaisir: ${existingFeedback.pleasure}/5`}>
@@ -219,6 +227,51 @@ export function AssemblyCard({
             </div>
           )}
         </div>
+
+        {/* Journal actions */}
+        {actualMeal ? (
+          <div className="mt-2 text-xs">
+            {actualMeal.status === 'confirmed' && (
+              <p className="text-green-600 font-medium">
+                Mangé à {new Date(actualMeal.loggedAt).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
+              </p>
+            )}
+            {actualMeal.status === 'different' && (
+              <p className="text-amber-600 font-medium">
+                Mangé : {actualMeal.description}{' '}
+                <span className="text-muted-foreground">
+                  à {new Date(actualMeal.loggedAt).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
+                </span>
+              </p>
+            )}
+            {actualMeal.status === 'skipped' && (
+              <p className="text-gray-400 font-medium">Sauté</p>
+            )}
+          </div>
+        ) : (onLogConfirmed || onLogDifferent || onLogSkipped) ? (
+          <div className="mt-3 space-y-2">
+            <div className="flex gap-2">
+              {onLogConfirmed && (
+                <Button size="sm" className="flex-1 h-8 text-xs" onClick={onLogConfirmed}>
+                  Mangé
+                </Button>
+              )}
+              {onLogDifferent && (
+                <Button size="sm" variant="outline" className="flex-1 h-8 text-xs" onClick={onLogDifferent}>
+                  Autre chose
+                </Button>
+              )}
+            </div>
+            {onLogSkipped && (
+              <button
+                onClick={onLogSkipped}
+                className="w-full text-center text-xs text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Sauté
+              </button>
+            )}
+          </div>
+        ) : null}
       </Card>
 
       <FeedbackSheet
