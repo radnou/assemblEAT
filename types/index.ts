@@ -181,6 +181,18 @@ export interface MealFeedback {
   note: string | null;
 }
 
+// ─── Actual Meal (Journal) ────────────────────────────────────
+
+export interface ActualMeal {
+  date: string;          // YYYY-MM-DD
+  mealType: MealType;    // breakfast | lunch | dinner
+  status: 'confirmed' | 'different' | 'skipped';
+  description?: string;  // free text if "autre chose"
+  pills?: string[];      // selected pills if "autre chose"
+  photoUrl?: string;     // local URL if photo added (v2)
+  loggedAt: string;      // ISO timestamp
+}
+
 // ─── Monthly Summary ────────────────────────────────────
 
 export interface MonthlySummary {
